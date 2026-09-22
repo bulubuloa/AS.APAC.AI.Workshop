@@ -1,0 +1,19 @@
+{
+  "name": "roadside-web-e2e",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Playwright smoke suite for the RSA / RoadSide agent portal (MSU) on UAT - Vietnam 2026 workshop demo",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "report": "playwright show-report",
+    "codegen": "playwright codegen https://roadside-uat.aspireasia.net/auth/login"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0",
+    "@types/node": "^22.0.0",
+    "dotenv": "^16.4.5",
+    "typescript": "^5.6.0"
+  }
+}
