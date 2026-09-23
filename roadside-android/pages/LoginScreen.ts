@@ -1,39 +1,42 @@
+import { Ids, byId } from './ids';
+
 /**
  * Login screen of the RSA provider app.
  *
- * Addressed by the test ids the app now exposes (Compose testTag surfaced as resource-id).
- * Stable across layout changes and language switches - unlike the class/index/text selectors
- * this file used before the ids existed.
+ * Everything is addressed by the test ids the app exposes (ABMR commit b589b43), so the suite
+ * survives layout changes and language switches.
  */
-const id = (resourceId: string) => `android=new UiSelector().resourceId("${resourceId}")`;
-
 class LoginScreen {
   get root() {
-    return $(id('login_screen'));
+    return $(byId(Ids.login.screen));
   }
 
   get userName() {
-    return $(id('login_email_input'));
+    return $(byId(Ids.login.email));
   }
 
   get password() {
-    return $(id('login_password_input'));
+    return $(byId(Ids.login.password));
   }
 
   get signIn() {
-    return $(id('login_sign_in_button'));
+    return $(byId(Ids.login.signIn));
+  }
+
+  get loading() {
+    return $(byId(Ids.login.loading));
   }
 
   get version() {
-    return $(id('login_version_text'));
+    return $(byId(Ids.login.version));
   }
 
   get languageButton() {
-    return $(id('login_language_button'));
+    return $(byId(Ids.login.language));
   }
 
   get callBackOffice() {
-    return $(id('login_call_back_office_button'));
+    return $(byId(Ids.login.callBackOffice));
   }
 
   async isDisplayed() {

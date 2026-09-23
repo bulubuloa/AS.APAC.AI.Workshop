@@ -1,4 +1,5 @@
 import LoginScreen from '../pages/LoginScreen';
+import { Ids, byId } from '../pages/ids';
 
 const USER = process.env.PMWS_USER!;
 const PASSWORD = process.env.PMWS_PASSWORD!;
@@ -36,8 +37,7 @@ describe('01 Login', () => {
 
 /** First run shows the policy/consent screen before login. */
 async function acceptPolicyIfShown() {
-  // the policy screen has no test id yet, so it is still matched by its button text
-  const accept = await $('android=new UiSelector().textContains("Accept")');
+  const accept = await $(byId(Ids.policy.accept));
   if (await accept.isExisting()) {
     await accept.click();
     await browser.pause(2_000);
