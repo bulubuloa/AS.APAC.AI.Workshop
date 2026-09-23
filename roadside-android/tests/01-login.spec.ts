@@ -7,8 +7,10 @@ const PACKAGE = process.env.APP_PACKAGE ?? 'com.aspire.partner.uat';
 
 describe('01 Login', () => {
   beforeEach(async () => {
-    // each test starts from a cold login screen
-    await driver.terminateApp(PACKAGE);
+    // a successful login is remembered, so wipe app data - otherwise the next test lands on the dashboard
+    await driver.execute('mobile: clearApp', { appId: PACKAGE });
+    // clearApp also revokes the runtime permissions autoGrantPermissions gave us at session start
+    await driver.execute('mobile: changePermissions', { appPackage: PACKAGE, action: 'grant', permissions: 'all' });
     await driver.activateApp(PACKAGE);
     await acceptPolicyIfShown();
     await expect(await LoginScreen.isDisplayed()).toBe(true);

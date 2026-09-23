@@ -6,6 +6,7 @@
   "scripts": {
     "test": "wdio run wdio.conf.ts",
     "appium": "appium --port 4723 --log-level error",
+    "proxy": "node tools/dns-proxy.js",
     "sms": "node tools/pmws-sms.js",
     "report": "node tools/report.js"
   },

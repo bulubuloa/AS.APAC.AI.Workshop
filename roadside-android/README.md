@@ -45,7 +45,7 @@ Outputs: `reports/video/*.webm` (one per test), `reports/screenshots/*.png`, `re
 
 | Case | What it proves | Status |
 |---|---|---|
-| TC01.1 valid credentials leave the login screen | login succeeds and the app navigates off `LoginActivity` | **blocked** - needs emulator network (below) |
+| TC01.1 valid credentials leave the login screen | login succeeds and the app navigates off `LoginActivity` | passing (needs the DNS proxy below) |
 | TC01.2 a wrong password keeps the user on the login screen | rejected login stays on `LoginActivity` with Sign In visible | passing |
 
 ## OTP helper (`tools/pmws-sms.js`)
@@ -82,15 +82,23 @@ matches its button text, so it needs one when that screen gets tagged.
 
 ## Known environment issues
 
-- **Emulator has no network on this machine.** `eth0` DOWN, `wlan0` NO-CARRIER, `Active default network: none`,
-  and the app logs `UnknownHostException: Unable to resolve host "partner-roadside-uat.aspireasia.net"`. The host
-  resolves the same name fine, so it is the emulator's virtual NIC, not DNS. Tried and did **not** fix it:
-  `-dns-server 1.1.1.1`, `-feature -VirtioWifi`, `svc wifi disable/enable`, `-wipe-data`, an http_proxy setting.
-  The Play Store image is a production build, so `adb root` / `ifconfig eth0 up` / `dhcptool eth0` are refused.
-  Likely the corporate network filter (the host's DNS is 1.1.1.1 through the Zscaler tunnel) blocking QEMU's
-  user-mode networking. Ways out: run on a **USB device** (`ANDROID_DEVICE=<serial>` in `.env`), or install the
-  non-Play-Store `system-images;android-36;google_apis;x86_64` image, which is rootable and can be fixed from
-  inside with `adb root; ifconfig eth0 up; dhcptool eth0`.
+- **The emulator cannot resolve DNS - run the proxy.** The app fails with
+  `UnknownHostException: Unable to resolve host "partner-roadside-uat.aspireasia.net"` on a fresh emulator.
+  The network itself is fine (Wi-Fi `AndroidWifi`, IP `10.0.2.16`, default route via `10.0.2.2`, and raw TCP to
+  `1.1.1.1:443` succeeds); only **DNS over UDP 53** through QEMU's forwarder (`10.0.2.3`) is blocked on this
+  corporate network. `ping` proves nothing here - QEMU's user-mode networking does not forward ICMP at all.
+
+  Fix, no root needed - resolve names on the host instead:
+
+  ```bash
+  node tools/dns-proxy.js                                   # terminal 1, listens on 8888
+  adb shell settings put global http_proxy 10.0.2.2:8888    # 10.0.2.2 is the host as seen by the guest
+  # undo with: adb shell settings delete global http_proxy
+  ```
+
+  Things that did **not** help: `-dns-server`, `-feature -VirtioWifi`, `svc wifi disable/enable`, `-wipe-data`,
+  Private DNS (DoT cannot bootstrap - it has to resolve its own hostname first). The Play Store image is a
+  production build, so `adb root` is refused; a `google_apis` image would allow a `/etc/hosts` entry instead.
 - First launch shows a **policy/consent screen** before login - the spec accepts it if present.
 - Runtime permissions (location, notifications) are handled by `appium:autoGrantPermissions`.
 - The emulator threw a **SystemUI ANR** on first boot; dismissing it is a one-off, not something the tests handle.
