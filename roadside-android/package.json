@@ -6,7 +6,7 @@
   "scripts": {
     "test": "wdio run wdio.conf.ts",
     "sms": "node tools/pmws-sms.js",
-    "report": "echo see reports/html/index.html"
+    "report": "node tools/report.js"
   },
   "devDependencies": {
     "@wdio/appium-service": "^9.4.1",
