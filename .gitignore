@@ -7,3 +7,4 @@ reports/
 *.apk
 presentations/node_modules/
 presentations/preview/
+~$*
