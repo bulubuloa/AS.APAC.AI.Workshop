@@ -14,8 +14,12 @@ export const config: WebdriverIO.Config = {
   connectionRetryTimeout: 180_000,
   connectionRetryCount: 2,
 
-  // Appium is started by the runner, so `npm test` is the only command needed.
-  services: [['appium', { args: { relaxedSecurity: true }, logPath: './reports' } as any]],
+  // The runner starts Appium itself. On machines where the uiautomator2 driver takes longer to
+  // load than the service's start timeout, run `npm run appium` in another terminal and set
+  // APPIUM_EXTERNAL=1 so this connects to that server instead.
+  services: process.env.APPIUM_EXTERNAL
+    ? []
+    : [['appium', { args: { relaxedSecurity: true }, logPath: './reports' } as any]],
   port: 4723,
 
   capabilities: [

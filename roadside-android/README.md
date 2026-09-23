@@ -26,7 +26,16 @@ export MSYS_NO_PATHCONV=1     # or adb turns /sdcard/... into C:\Program Files\G
 
 ```bash
 npm test          # starts Appium itself, runs tests/*.spec.ts
+npm run report    # build reports/index.html from the run
 npm run sms       # latest OTP SMS from UAT (see below)
+```
+
+Appium's uiautomator2 driver can take ~90s to load on this machine, longer than the wdio service waits
+("Timeout: Appium did not start within expected time"). When that happens, run the server yourself:
+
+```bash
+npm run appium                 # terminal 1, wait for "Appium REST http interface listener started"
+APPIUM_EXTERNAL=1 npm test     # terminal 2
 ```
 
 Outputs: `reports/video/*.webm` (one per test), `reports/screenshots/*.png`, `reports/junit-0-0.xml`,
@@ -52,20 +61,24 @@ node tools/pmws-sms.js 0641632923   # one number
 Phone numbers are masked in its output. **UAT sends the OTP in Thai** (`รหัส OTP 630367 สำหรับเลขอ้างอิง R3411`),
 so the parser matches the digits after "OTP" in any locale, not the English wording.
 
-## Selector findings (a workshop input)
+## Test ids
 
-The app is Jetpack Compose and exposes **no `resource-id`, no `testTag`, no `content-desc`** on the login fields.
-Everything has to be addressed by class + index or by visible text:
+The app now ships Compose `testTag`s exposed as resource-ids (`app_ID.apk`, built 23 Sep 2026), so the suite
+selects by id instead of by class index or visible text - stable across layout changes and language switches:
 
-| Element | Selector |
+| Element | resource-id |
 |---|---|
-| Username | `new UiSelector().className("android.widget.EditText").instance(0)` |
-| Password | `new UiSelector().className("android.widget.EditText").instance(1)` (UiSelector has no `password()` matcher) |
-| Sign In | `new UiSelector().text("Sign In")` - breaks in any other app language |
+| Screen root | `login_screen` |
+| Username | `login_email_input` |
+| Password | `login_password_input` |
+| Sign In | `login_sign_in_button` |
+| Version label | `login_version_text` |
+| Language button | `login_language_button` |
+| Call Back Office | `login_call_back_office_button` |
 
-**Recommendation for ABMR:** add `Modifier.testTag("login_username")` etc. plus
-`semantics { testTagsAsResourceId = true }` so tags surface as resource-ids. Two lines per screen turns every
-selector above into a stable one. Without it the suite breaks on any layout reorder or language switch.
+Before these existed the fields had to be addressed as `EditText.instance(0)/(1)` and `text("Sign In")`, which
+broke on any reorder or language switch. **Still without an id:** the policy/consent screen - `acceptPolicyIfShown()`
+matches its button text, so it needs one when that screen gets tagged.
 
 ## Known environment issues
 

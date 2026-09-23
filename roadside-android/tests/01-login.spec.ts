@@ -36,6 +36,7 @@ describe('01 Login', () => {
 
 /** First run shows the policy/consent screen before login. */
 async function acceptPolicyIfShown() {
+  // the policy screen has no test id yet, so it is still matched by its button text
   const accept = await $('android=new UiSelector().textContains("Accept")');
   if (await accept.isExisting()) {
     await accept.click();

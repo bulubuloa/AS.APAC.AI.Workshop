@@ -5,6 +5,7 @@
   "description": "Appium + WebdriverIO suite for the RSA provider app (com.aspire.partner.uat) - Vietnam 2026 workshop demo",
   "scripts": {
     "test": "wdio run wdio.conf.ts",
+    "appium": "appium --port 4723 --log-level error",
     "sms": "node tools/pmws-sms.js",
     "report": "node tools/report.js"
   },

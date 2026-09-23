@@ -1,33 +1,39 @@
 /**
  * Login screen of the RSA provider app.
  *
- * The app is Jetpack Compose with no testTags, no resource-ids and no content-descriptions on the
- * fields, so everything is addressed by class, index or visible text. Adding `Modifier.testTag` in
- * ABMR would make all of this stable - see README "Selector findings".
+ * Addressed by the test ids the app now exposes (Compose testTag surfaced as resource-id).
+ * Stable across layout changes and language switches - unlike the class/index/text selectors
+ * this file used before the ids existed.
  */
+const id = (resourceId: string) => `android=new UiSelector().resourceId("${resourceId}")`;
+
 class LoginScreen {
-  /** First EditText on the screen. */
-  get userName() {
-    return $('android=new UiSelector().className("android.widget.EditText").instance(0)');
+  get root() {
+    return $(id('login_screen'));
   }
 
-  /** Second EditText - UiSelector has no password() matcher, so it is addressed by index. */
+  get userName() {
+    return $(id('login_email_input'));
+  }
+
   get password() {
-    return $('android=new UiSelector().className("android.widget.EditText").instance(1)');
+    return $(id('login_password_input'));
   }
 
   get signIn() {
-    return $('android=new UiSelector().text("Sign In")');
+    return $(id('login_sign_in_button'));
   }
 
-  /** Version label under the button, e.g. "2.0.20-uat" - proves which build is under test. */
   get version() {
-    return $('android=new UiSelector().textMatches("^[0-9]+\\\\.[0-9]+\\\\.[0-9]+.*")');
+    return $(id('login_version_text'));
   }
 
-  /** The app reports a rejected login in a snackbar/toast; match on any of the wordings. */
-  get errorMessage() {
-    return $('android=new UiSelector().textContains("incorrect")');
+  get languageButton() {
+    return $(id('login_language_button'));
+  }
+
+  get callBackOffice() {
+    return $(id('login_call_back_office_button'));
   }
 
   async isDisplayed() {
