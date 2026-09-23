@@ -1,0 +1,12 @@
+{
+  "name": "workshop-presentations",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Generators for the Vietnam 2026 workshop decks (web + mobile automation)",
+  "scripts": {
+    "build": "node build-web-deck.js && node build-mobile-deck.js"
+  },
+  "devDependencies": {
+    "pptxgenjs": "^3.12.0"
+  }
+}

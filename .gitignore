@@ -5,3 +5,5 @@ test-results/
 playwright-report/
 reports/
 *.apk
+presentations/node_modules/
+presentations/preview/
