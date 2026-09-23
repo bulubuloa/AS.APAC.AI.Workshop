@@ -45,8 +45,15 @@ Outputs: `reports/video/*.webm` (one per test), `reports/screenshots/*.png`, `re
 
 | Case | What it proves | Status |
 |---|---|---|
-| TC01.1 valid credentials leave the login screen | login succeeds and the app navigates off `LoginActivity` | passing (needs the DNS proxy below) |
+| TC01.1 valid credentials leave the login screen | login succeeds and the app navigates off `LoginActivity` | passing |
 | TC01.2 a wrong password keeps the user on the login screen | rejected login stays on `LoginActivity` with Sign In visible | passing |
+| TC02.1 sign in, pick a vehicle, confirm the OTP, land on the dashboard | the whole real login: credentials -> `vehlst` -> vehicle -> driver name + mobile -> `bindvehdev` -> OTP read back from `api/pmws/smslatest` -> `confirmvehdev` -> `MainActivity` | passing |
+
+All three need the DNS proxy below. The OTP test needs `PMWS_TEST_MOBILE` in `.env`: **exactly 10 digits**, or the app
+keeps Request OTP disabled and the tap is swallowed (`OtpViewModel.isValidPhone`); `OtpScreen` asserts the button is
+enabled so that fails immediately instead of timing out. Each run sends a real SMS through the vendor, so use a
+dedicated test number. The code is never read off a handset - `tools/pmws-sms.js` takes the highest `smsId` for that
+number *before* the request and then polls `smslatest` for a newer row, so a stale OTP can never be picked up.
 
 ## OTP helper (`tools/pmws-sms.js`)
 

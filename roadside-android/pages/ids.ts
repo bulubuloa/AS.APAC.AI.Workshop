@@ -19,10 +19,13 @@ export const Ids = {
   },
   otp: {
     screen: 'otp_screen',
+    driverName: 'otp_driver_name_input',
     mobile: 'otp_mobile_input',
     code: 'otp_code_input',
     confirm: 'otp_confirm_button',
     request: 'otp_request_button',
+    changePhone: 'otp_change_phone_button',
+    instruction: 'otp_instruction_text',
   },
   home: {
     view: 'home_view',
