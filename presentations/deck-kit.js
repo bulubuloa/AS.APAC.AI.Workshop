@@ -325,6 +325,32 @@ function cards(s, items, { y, h = 3.4, x = M, w = W - M * 2, gap = 0.28 } = {}) 
   });
 }
 
+/**
+ * Horizontal comparison bars - label, bar scaled to the largest value, then the value in words.
+ * The point is the length difference, so the bars share one scale.
+ */
+function bars(s, items, { y, x = M, w = W - M * 2, h = 0.66, gap = 0.34, labelW = 3.0, valueW = 1.9 } = {}) {
+  const max = Math.max(...items.map((i) => i.value));
+  const track = w - labelW - valueW - 0.4;
+  items.forEach((it, i) => {
+    const by = y + i * (h + gap);
+    s.addText(it.label, {
+      x, y: by, w: labelW - 0.2, h,
+      fontSize: 14, bold: true, color: C.ink, valign: 'middle', fontFace: 'Segoe UI',
+    });
+    s.addShape('roundRect', { x: x + labelW, y: by, w: track, h, fill: { color: 'F1F2F4' }, line: { color: 'F1F2F4' }, rectRadius: 0.05 });
+    s.addShape('roundRect', {
+      x: x + labelW, y: by, w: Math.max((it.value / max) * track, 0.34), h,
+      fill: { color: it.color ?? C.accent }, line: { color: it.color ?? C.accent }, rectRadius: 0.05,
+    });
+    s.addText(it.display, {
+      x: x + labelW + track + 0.2, y: by, w: valueW, h,
+      fontSize: 17, bold: true, color: it.color ?? C.accent, valign: 'middle', fontFace: 'Segoe UI',
+    });
+  });
+  return y + items.length * (h + gap);
+}
+
 /** Closing slide. */
 function closingSlide(pptx, { title, points, footer }) {
   const s = pptx.addSlide();
@@ -342,4 +368,4 @@ function closingSlide(pptx, { title, points, footer }) {
   return s;
 }
 
-module.exports = { PptxGenJS, C, W, H, M, newDeck, titleSlide, sectionSlide, contentSlide, bullets, code, stats, table, flow, columns, closingSlide, browserFrame, field, badge, chips, legend, callout, cards };
+module.exports = { PptxGenJS, C, W, H, M, newDeck, titleSlide, sectionSlide, contentSlide, bullets, code, stats, table, flow, columns, closingSlide, browserFrame, field, badge, chips, legend, callout, cards, bars };

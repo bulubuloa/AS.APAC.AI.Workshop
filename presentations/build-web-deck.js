@@ -268,31 +268,86 @@ k.sectionSlide(pptx, {
 /* 11 - the headline: what one afternoon produced */
 {
   const { s, top } = k.contentSlide(pptx, {
-    title: 'What one afternoon produced',
-    kicker: 'The RSA portal has been live for years with no automated regression at all. This is where it stood by the end of one session.',
+    title: 'By hand, or with the agent',
+    kicker: 'The same 13 checks, the same site, the same evidence - the only difference is how long it takes to exist',
   });
 
-  k.stats(s, [
-    { value: '0 → 13', label: 'automated checks, from nothing' },
-    { value: '5', label: 'screens covered' },
-    { value: '~2 h', label: 'to build the whole suite' },
-    { value: '~1 min', label: 'to run it, start to finish' },
-  ], { y: top, h: 1.5 });
+  k.bars(s, [
+    { label: 'Written by hand', value: 32, display: '~4 days', color: k.C.bad },
+    { label: 'With the agent', value: 2, display: '~2 hours', color: k.C.good },
+  ], { y: top, h: 0.8, gap: 0.4 });
 
-  k.flow(s, [
-    { text: 'Empty folder' },
-    { text: 'First test passing\non the real site' },
-    { text: 'All 13 checks green', highlight: true },
-    { text: 'Same result on\nthree full runs' },
-  ], { y: top + 2.0, h: 1.05 });
+  k.table(s, {
+    y: top + 2.2,
+    head: ['The same job, step by step', 'By hand', 'With the agent'],
+    colW: [6.3, 2.9, 2.89],
+    rows: [
+      ['Set up the tool, the login and the reporting', 'half a day', '~15 min'],
+      ['Find the right field on every screen', '~1 day', 'minutes - it reads the pages'],
+      ['Write the 13 checks', '~1.5 days', '~40 min'],
+      ['Chase down why they are unreliable', '~1 day', '~30 min'],
+    ],
+  });
 
-  k.callout(s, 'The expensive part is done. Sign-in, the screens, the evidence and the report already exist - so the next check is minutes of work, not days.', {
-    y: top + 3.45, h: 0.8, color: k.C.good,
+  s.addText('"By hand" is an estimate built from those four lines. "With the agent" was measured during the session.', {
+    x: k.M, y: top + 4.35, w: k.W - k.M * 2, h: 0.3,
+    fontSize: 11.5, italic: true, color: k.C.muted, fontFace: 'Segoe UI',
   });
 
   s.addText('Next: the suite running live, against UAT.', {
-    x: k.M, y: top + 4.5, w: k.W - k.M * 2, h: 0.45,
+    x: k.M, y: top + 4.7, w: k.W - k.M * 2, h: 0.45,
     fontSize: 17, bold: true, color: k.C.accent, fontFace: 'Segoe UI',
+  });
+}
+
+/* 12 - why it is faster */
+{
+  const { s, top } = k.contentSlide(pptx, {
+    title: 'Why it is faster - four reasons',
+    kicker: 'None of them is "it types quickly"',
+  });
+
+  k.cards(s, [
+    {
+      title: '1. It reads everything at once',
+      lead: 'A person opens one file at a time.',
+      items: [
+        'To write a test you must know what every box on the screen is called',
+        'A person clicks around and guesses, or digs through the code',
+        'The agent read the pages behind those screens and took the names straight from them',
+      ],
+    },
+    {
+      title: '2. It never loses the thread',
+      lead: 'No meetings, no interruptions, no tomorrow.',
+      color: k.C.good,
+      items: [
+        'Work like this is normally spread across days, and half of each day is spent remembering where you were',
+        'The whole suite was built in one unbroken sitting',
+      ],
+    },
+    {
+      title: '3. Run, fix, run again - in seconds',
+      lead: 'The loop is the slow part, not the typing.',
+      color: k.C.warn,
+      items: [
+        'A test fails, you read why, you fix it, you run it again - dozens of times',
+        'For a person each turn of that loop is minutes; here it is seconds, and it never gets bored of repeating it',
+      ],
+    },
+    {
+      title: '4. It writes it down as it goes',
+      lead: 'Normally the last job, usually skipped.',
+      color: k.C.accent,
+      items: [
+        'Every reason, gotcha and dead end went into the README while it was still fresh',
+        'That is the part that usually never happens, and the reason the next person starts from zero',
+      ],
+    },
+  ], { y: top, h: 4.05 });
+
+  k.callout(s, 'Put simply: a person is fast at deciding what to test and slow at everything around it. The agent is the other way round - which is why the pair is quicker than either alone.', {
+    y: top + 4.3, h: 0.75,
   });
 }
 
