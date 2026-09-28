@@ -324,25 +324,70 @@ k.sectionSlide(pptx, {
     kicker: 'Claude Code, working in the repository and against the live UAT site',
   });
   k.flow(s, [
-    { text: 'Read the\nMVC views' },
-    { text: 'Derive the\nselectors' },
-    { text: 'Write pages\n+ specs' },
-    { text: 'Run against\nUAT', highlight: true },
-    { text: 'Read failures,\nfix, re-run' },
+    { text: 'Read the app’s\nown screens' },
+    { text: 'Write the\ntests' },
+    { text: 'Run them\non UAT', highlight: true },
+    { text: 'Read each failure,\nfix, run again' },
+    { text: 'Write down\nwhat it learned' },
   ], { y: top, h: 0.95 });
 
   k.bullets(s, [
-    { text: 'It read the application, it did not guess', sub: 'Selectors came from JobLst.cshtml, Job.cshtml, DealerList.cshtml - real ids like #tbMain, #btnSearch, select[name="clientProgram"]' },
-    { text: 'It probed the live app to answer its own questions', sub: 'When job creation failed with "Privilege is required", it enumerated every program/tier combination on UAT and found which ones actually have a privilege' },
-    { text: 'Failures became knowledge, not guesswork', sub: 'Each red run was read, diagnosed and fixed; the reasons are written into the README so the next person does not rediscover them' },
+    { text: 'It looked at the real pages instead of guessing', sub: 'The field names in the tests came out of the application’s own screens - so the tests match what is actually there, not what someone remembered' },
+    { text: 'It ran everything it wrote', sub: 'Nothing was left as "probably fine". Every check was executed against the live UAT site before it counted as done' },
+    { text: 'Every failure was investigated, not retried', sub: 'When something went red it went and found out why - and the reason was written into the README so nobody has to rediscover it' },
   ], { y: top + 1.35, size: 14.5 });
 
   k.stats(s, [
-    { value: '~2 h', label: 'from empty folder to 13 green checks' },
-    { value: '13', label: 'checks, all verified on UAT' },
-    { value: '3×', label: 'full-suite runs to prove stability' },
-    { value: '1', label: 'flake found and fixed' },
+    { value: '~2 h', label: 'from empty folder to a working suite' },
+    { value: '13', label: 'checks, every one run on UAT' },
+    { value: '546', label: 'lines of test code written' },
+    { value: '3×', label: 'full runs to prove it was stable' },
   ], { y: top + 3.85 });
+}
+
+/* 13 - a worked example of the agent solving something on its own */
+{
+  const { s, top } = k.contentSlide(pptx, {
+    title: 'One example: the puzzle it solved by itself',
+    kicker: 'The job-creation test failed. Instead of guessing, it went and found the answer.',
+  });
+
+  k.flow(s, [
+    { text: 'Test fails:\n"Privilege is required"' },
+    { text: 'Checks every program\nand tier on UAT', highlight: true },
+    { text: 'Finds only 4 of 15\nprograms can work' },
+    { text: 'Test picks a working\none - and it is\nwritten down' },
+  ], { y: top, h: 1.05 });
+
+  k.columns(s, {
+    y: top + 1.45,
+    h: 3.0,
+    left: {
+      title: 'The usual ways this goes',
+      color: k.C.bad,
+      items: [
+        'Ask around until someone remembers',
+        'Try a few by hand and stop at the first that works',
+        'Hard-code an id that quietly breaks on the next environment',
+        'Or simply give up on automating job creation',
+      ],
+    },
+    right: {
+      title: 'What actually happened',
+      color: k.C.good,
+      items: [
+        'It walked all 15 programs and their tiers in one run',
+        'It reported exactly which ones have a privilege attached:',
+        'HOT UAT Program  ·  Meo Roadside program',
+        'Vit roadside program  ·  Duck program',
+        'The test now selects a program by name, so a different environment does not break it',
+      ],
+    },
+  });
+
+  s.addText('"Which programs can actually create a job on UAT?" had no answer anywhere - not in a document, not in the code. Now it does, and it took one run to get it.', {
+    x: k.M, y: 6.6, w: k.W - k.M * 2, h: 0.4, fontSize: 13, italic: true, color: k.C.muted, fontFace: 'Segoe UI',
+  });
 }
 
 /* 13 - human vs AI */
