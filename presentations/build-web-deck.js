@@ -398,35 +398,89 @@ k.sectionSlide(pptx, {
 k.sectionSlide(pptx, {
   number: '02',
   title: 'How AI changed the effort',
-  blurb: 'The suite was written by an AI agent driving the real application - measured, not estimated.',
+  blurb: 'This suite did not exist before. Not because nobody wanted it - because writing one by hand costs days that nobody had.',
 });
+
+/* 11b - the headline: what one afternoon produced */
+{
+  const { s, top } = k.contentSlide(pptx, {
+    title: 'What one afternoon produced',
+    kicker: 'The RSA portal has been live for years with no automated regression at all. This is where it stood by the end of one session.',
+  });
+
+  k.stats(s, [
+    { value: '0 → 13', label: 'automated checks, from nothing' },
+    { value: '5', label: 'screens covered' },
+    { value: '~2 h', label: 'start to a working suite' },
+    { value: '3×', label: 'clean full runs, to prove it holds' },
+    { value: '1', label: 'data problem nobody knew about' },
+  ], { y: top, h: 1.4 });
+
+  k.flow(s, [
+    { text: 'Empty folder' },
+    { text: 'First test\npassing on UAT' },
+    { text: 'All 13 checks\ngreen', highlight: true },
+    { text: 'Found the\ndata dead end' },
+    { text: 'Stable across\nthree full runs' },
+  ], { y: top + 1.85, h: 0.95 });
+
+  k.callout(s, 'The part that matters for next time: the expensive pieces - sign-in, the page objects, the evidence and the reporting - are now built. The next check costs minutes, not days.', {
+    y: top + 3.1, h: 0.8, color: k.C.good,
+  });
+
+  s.addText('Everything on this slide was measured during the session, not estimated afterwards. The suite runs on demand - you can watch it happen.', {
+    x: k.M, y: top + 4.15, w: k.W - k.M * 2, h: 0.4,
+    fontSize: 13, italic: true, color: k.C.muted, fontFace: 'Segoe UI',
+  });
+}
 
 /* 12 - AI speed */
 {
   const { s, top } = k.contentSlide(pptx, {
-    title: 'Building it with an AI agent',
+    title: 'The parts that were not typing',
     kicker: 'Claude Code, working in the repository and against the live UAT site',
   });
-  k.flow(s, [
-    { text: 'Read the app’s\nown screens' },
-    { text: 'Write the\ntests' },
-    { text: 'Run them\non UAT', highlight: true },
-    { text: 'Read each failure,\nfix, run again' },
-    { text: 'Write down\nwhat it learned' },
-  ], { y: top, h: 0.95 });
+  s.addText('Writing test code is the easy half. These three are the ones that make teams abandon automation - and each was found and solved during the session, not designed in advance.', {
+    x: k.M, y: top, w: k.W - k.M * 2, h: 0.4,
+    fontSize: 13.5, color: k.C.body, fontFace: 'Segoe UI',
+  });
 
-  k.bullets(s, [
-    { text: 'It looked at the real pages instead of guessing', sub: 'The field names in the tests came out of the application’s own screens - so the tests match what is actually there, not what someone remembered' },
-    { text: 'It ran everything it wrote', sub: 'Nothing was left as "probably fine". Every check was executed against the live UAT site before it counted as done' },
-    { text: 'Every failure was investigated, not retried', sub: 'When something went red it went and found out why - and the reason was written into the README so nobody has to rediscover it' },
-  ], { y: top + 1.35, size: 14.5 });
+  k.cards(s, [
+    {
+      title: 'The save that said "OK"',
+      lead: 'The test saved a job. The server answered success - and nothing happened.',
+      color: k.C.bad,
+      items: [
+        'The rejection was hidden in a pop-up the browser closes automatically',
+        'It read the application’s own script, found where the message is raised, and made the test capture it',
+        'Failures now say "Privilege is required" instead of "the page did not change"',
+      ],
+    },
+    {
+      title: 'The dropdowns that were never ready',
+      lead: 'Five dropdowns, each filled by its own background request.',
+      color: k.C.warn,
+      items: [
+        'Waiting for "the page to look finished" was not enough - the page reloads one list while you fill the next',
+        'It identified the four specific requests and waits for the right one each time',
+        'This is the single most common cause of tests that pass locally and fail in CI',
+      ],
+    },
+    {
+      title: 'The dead end in the data',
+      lead: 'The job could not be created with any obvious programme.',
+      color: k.C.accent,
+      items: [
+        'Rather than guess, it checked all 15 programmes and their tiers on UAT',
+        'Found the 4 that work and made the test ask for one by name',
+        'Answered a question that was not written down anywhere (next slide)',
+      ],
+    },
+  ], { y: top + 0.58, h: 3.5 });
 
-  k.stats(s, [
-    { value: '~2 h', label: 'from empty folder to a working suite' },
-    { value: '13', label: 'checks, every one run on UAT' },
-    { value: '546', label: 'lines of test code written' },
-    { value: '3×', label: 'full runs to prove it was stable' },
-  ], { y: top + 3.85 });
+  k.callout(s, 'None of these are typing problems. They are the judgement calls that decide whether a suite is trusted or quietly switched off six months later.', {
+    y: top + 4.28, h: 0.8,
+  });
 }
 
 /* 13 - a worked example of the agent solving something on its own */

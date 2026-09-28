@@ -303,6 +303,28 @@ function columns(s, { y, left, right, h = 3.9 }) {
   });
 }
 
+/** N equal cards across the width, each with a heading, a lead line and bullets. */
+function cards(s, items, { y, h = 3.4, x = M, w = W - M * 2, gap = 0.28 } = {}) {
+  const cw = (w - gap * (items.length - 1)) / items.length;
+  items.forEach((c, i) => {
+    const cx = x + i * (cw + gap);
+    s.addShape('roundRect', { x: cx, y, w: cw, h, fill: { color: 'F6F7F9' }, line: { color: C.line }, rectRadius: 0.08 });
+    s.addShape('rect', { x: cx, y, w: cw, h: 0.06, fill: { color: c.color ?? C.accent }, line: { color: c.color ?? C.accent } });
+    s.addText(c.title, {
+      x: cx + 0.22, y: y + 0.18, w: cw - 0.44, h: 0.52,
+      fontSize: 14.5, bold: true, color: C.ink, fontFace: 'Segoe UI', valign: 'top',
+    });
+    s.addText(c.lead, {
+      x: cx + 0.22, y: y + 0.76, w: cw - 0.44, h: 0.8,
+      fontSize: 12, italic: true, color: C.muted, fontFace: 'Segoe UI', valign: 'top',
+    });
+    s.addText(
+      c.items.map((t) => ({ text: t, options: { bullet: { code: '2022' }, breakLine: true, paraSpaceAfter: 6 } })),
+      { x: cx + 0.22, y: y + 1.6, w: cw - 0.44, h: h - 1.75, fontSize: 12, color: C.body, fontFace: 'Segoe UI', valign: 'top' },
+    );
+  });
+}
+
 /** Closing slide. */
 function closingSlide(pptx, { title, points, footer }) {
   const s = pptx.addSlide();
@@ -320,4 +342,4 @@ function closingSlide(pptx, { title, points, footer }) {
   return s;
 }
 
-module.exports = { PptxGenJS, C, W, H, M, newDeck, titleSlide, sectionSlide, contentSlide, bullets, code, stats, table, flow, columns, closingSlide, browserFrame, field, badge, chips, legend, callout };
+module.exports = { PptxGenJS, C, W, H, M, newDeck, titleSlide, sectionSlide, contentSlide, bullets, code, stats, table, flow, columns, closingSlide, browserFrame, field, badge, chips, legend, callout, cards };
