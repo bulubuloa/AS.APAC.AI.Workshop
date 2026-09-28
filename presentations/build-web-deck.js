@@ -258,150 +258,14 @@ k.sectionSlide(pptx, {
   });
 }
 
-/* 10 - the data problem, explained like a form */
-{
-  const { s, top } = k.contentSlide(pptx, {
-    title: 'The data problem, in plain terms',
-    kicker: 'Creating one job is like a form where each answer unlocks the next question',
-  });
-
-  k.flow(s, [
-    { text: '1. Client\nwho is it for?' },
-    { text: '2. Program\nwhich scheme?' },
-    { text: '3. Customer tier\nwhich level?' },
-    { text: '4. Privilege\nwhat may they claim?', highlight: true },
-    { text: '5. Service type\nwhat do they need?' },
-  ], { y: top + 0.05, h: 1.15, size: 12 });
-
-  s.addText('Pick the client, and only that client’s programs appear. Pick a program, and only its tiers appear. And so on down the line - you cannot skip a step, and you cannot fill them out of order.', {
-    x: k.M, y: top + 1.35, w: k.W - k.M * 2, h: 0.4,
-    fontSize: 13.5, color: k.C.body, fontFace: 'Segoe UI',
-  });
-
-  k.callout(s, 'Step 4 is where it breaks. If the chosen programme has no privilege attached, the job cannot be saved at all - and the screen does not tell you that is the reason.', {
-    y: top + 1.95, h: 0.85,
-  });
-
-  k.columns(s, {
-    y: top + 3.05,
-    h: 1.9,
-    left: {
-      title: 'What a privilege is, in one line',
-      items: [
-        'The record that says what a customer is entitled to claim - the towing, the battery job, the fuel delivery',
-        'No privilege means the customer is not entitled to anything, so there is no job to create',
-      ],
-    },
-    right: {
-      title: 'Why this bit the tests',
-      color: k.C.accent,
-      items: [
-        'The test filled the form exactly as a person would, and still could not save',
-        'The message said "Privilege is required" - true, but it does not say which programme would work',
-      ],
-    },
-  });
-}
-
-/* 11 - the punchline: most of the UAT data cannot be used */
-{
-  const { s, top } = k.contentSlide(pptx, {
-    title: 'Only 4 of the 15 programmes on UAT actually work',
-    kicker: 'Every programme available for this client on UAT, and whether a job can be created with it',
-  });
-
-  const programmes = [
-    { text: 'Honda' },
-    { text: 'Honda EV Car (E:N1)' },
-    { text: 'NonRecurring ALL Products' },
-    { text: 'Annie test honda' },
-    { text: 'Annie test Honda2' },
-    { text: 'Annie28042025' },
-    { text: 'Test' },
-    { text: 'HOT - 8386899868' },
-    { text: '34333434' },
-    { text: 'Aspire Program' },
-    { text: 'Meo Roadside program', ok: true },
-    { text: 'Vit roadside program', ok: true },
-    { text: 'HOT UAT Program', ok: true },
-    { text: 'Duck program', ok: true },
-    { text: 'hot-harry-program-20260706' },
-  ];
-  k.chips(s, programmes, { y: top, cols: 5, h: 0.62 });
-
-  k.legend(s, [
-    { fill: 'E4F2E8', line: '7FB894', text: 'Has a privilege - a job can be created', w: 4.0 },
-    { fill: 'F2F3F5', line: 'DCDEE3', text: 'No privilege - the job cannot be saved', w: 4.2 },
-  ], { y: top + 2.42 });
-
-  k.callout(s, 'Eleven of these look perfectly usable. Pick one and the job simply will not save - the same dead end a tester, a developer or a demo would hit.', {
-    y: top + 2.86, h: 0.72, color: k.C.bad,
-  });
-
-  k.columns(s, {
-    y: top + 3.72,
-    h: 1.78,
-    left: {
-      title: 'What we did about it',
-      items: [
-        'The test asks for a programme by name, not an id that breaks elsewhere',
-        'If none works it says so plainly, not "Privilege is required"',
-      ],
-    },
-    right: {
-      title: 'What should really happen',
-      color: k.C.accent,
-      items: [
-        'UAT data should mirror how production is really set up',
-        'Otherwise every new person loses an afternoon to the same dead end',
-      ],
-    },
-  });
-}
-
-/* 12 - the remaining findings */
-{
-  const { s, top } = k.contentSlide(pptx, {
-    title: 'What else the tests revealed',
-    kicker: 'Small things, all of them found by pointing the tests at the real system',
-  });
-  k.table(s, {
-    y: top,
-    head: ['What we found', 'Why it matters'],
-    colW: [5.6, 6.49],
-    rows: [
-      [
-        'Nobody had written that five-step chain down',
-        'A new developer or tester finds it out by failing. It is now in the test, so the next person inherits it',
-      ],
-      [
-        'A rejected save still answers "OK"',
-        'The real reason only appears in a pop-up. Easy for a person to miss, and it makes a failure look like the wrong thing',
-      ],
-      [
-        'The dealer page cannot be edited at all',
-        'The Save button was removed - that data comes from the CMS. We assumed it was editable; it is not',
-      ],
-      [
-        'One dropdown label changes between page loads',
-        'Sometimes it shows the client number, sometimes not - the kind of inconsistency that makes people distrust a screen',
-      ],
-    ],
-  });
-
-  s.addText('None of this was in a document. It came out of pointing the tests at the real system - which is the argument for testing against UAT rather than a mock-up.', {
-    x: k.M, y: 5.6, w: k.W - k.M * 2, h: 0.4, fontSize: 13, italic: true, color: k.C.muted, fontFace: 'Segoe UI',
-  });
-}
-
-/* 11 - section: AI */
+/* 10 - section: AI */
 k.sectionSlide(pptx, {
   number: '02',
   title: 'How AI changed the effort',
   blurb: 'This suite did not exist before. Not because nobody wanted it - because writing one by hand costs days that nobody had.',
 });
 
-/* 11b - the headline: what one afternoon produced */
+/* 11 - the headline: what one afternoon produced */
 {
   const { s, top } = k.contentSlide(pptx, {
     title: 'What one afternoon produced',
@@ -434,7 +298,7 @@ k.sectionSlide(pptx, {
   });
 }
 
-/* 12 - AI speed */
+/* 12 - the hard problems */
 {
   const { s, top } = k.contentSlide(pptx, {
     title: 'The parts that were not typing',
@@ -483,7 +347,7 @@ k.sectionSlide(pptx, {
   });
 }
 
-/* 13 - a worked example of the agent solving something on its own */
+/* 13 - a worked example */
 {
   const { s, top } = k.contentSlide(pptx, {
     title: 'One example: the puzzle it solved by itself',
@@ -528,7 +392,7 @@ k.sectionSlide(pptx, {
   });
 }
 
-/* 13 - human vs AI */
+/* 14 - human vs AI */
 {
   const { s, top } = k.contentSlide(pptx, {
     title: 'Where the human time still goes',
@@ -565,7 +429,7 @@ k.sectionSlide(pptx, {
   });
 }
 
-/* 14 - CI */
+/* 15 - CI */
 {
   const { s, top } = k.contentSlide(pptx, {
     title: 'Running it in CI',
@@ -590,7 +454,7 @@ k.sectionSlide(pptx, {
   ], { y: top + 2.75, size: 14.5 });
 }
 
-/* 15 - close */
+/* 16 - close */
 k.closingSlide(pptx, {
   title: 'Where this goes next',
   points: [
