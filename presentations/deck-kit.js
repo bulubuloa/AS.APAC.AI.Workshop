@@ -237,6 +237,53 @@ function badge(s, { x, y, n, d = 0.32, color = C.accent }) {
   });
 }
 
+/**
+ * A wrapped grid of labelled chips, each either "works" or "does not".
+ * Used to show at a glance how much of a data set is actually usable.
+ */
+function chips(s, items, { x = M, y, w = W - M * 2, cols = 5, h = 0.62, gap = 0.16, size = 10 } = {}) {
+  const cw = (w - gap * (cols - 1)) / cols;
+  items.forEach((it, i) => {
+    const cx = x + (i % cols) * (cw + gap);
+    const cy = y + Math.floor(i / cols) * (h + 0.14);
+    s.addShape('roundRect', {
+      x: cx, y: cy, w: cw, h,
+      fill: { color: it.ok ? 'E4F2E8' : 'F2F3F5' },
+      line: { color: it.ok ? '7FB894' : 'DCDEE3' },
+      rectRadius: 0.06,
+    });
+    s.addText(it.text, {
+      x: cx + 0.08, y: cy, w: cw - 0.16, h,
+      fontSize: size, bold: !!it.ok, align: 'center', valign: 'middle',
+      color: it.ok ? '14622F' : '8A8F98', fontFace: 'Segoe UI',
+    });
+  });
+  return y + Math.ceil(items.length / cols) * (h + 0.14);
+}
+
+/** Small colour key for a chips grid. */
+function legend(s, entries, { x = M, y, size = 11.5 } = {}) {
+  let cx = x;
+  entries.forEach((e) => {
+    s.addShape('roundRect', { x: cx, y: y + 0.04, w: 0.22, h: 0.18, fill: { color: e.fill }, line: { color: e.line }, rectRadius: 0.03 });
+    s.addText(e.text, {
+      x: cx + 0.3, y, w: e.w ?? 4.0, h: 0.26,
+      fontSize: size, color: C.body, valign: 'middle', fontFace: 'Segoe UI',
+    });
+    cx += 0.3 + (e.w ?? 4.0) + 0.3;
+  });
+}
+
+/** A tinted callout strip for the one thing the audience must remember. */
+function callout(s, text, { x = M, y, w = W - M * 2, h = 0.72, color = C.warn, size = 13.5 } = {}) {
+  s.addShape('roundRect', { x, y, w, h, fill: { color: 'FDF6E7' }, line: { color: 'EBD9AE' }, rectRadius: 0.06 });
+  s.addShape('rect', { x, y, w: 0.07, h, fill: { color }, line: { color } });
+  s.addText(text, {
+    x: x + 0.28, y, w: w - 0.5, h,
+    fontSize: size, color: C.ink, valign: 'middle', fontFace: 'Segoe UI',
+  });
+}
+
 /** Two columns of content, each with a heading. */
 function columns(s, { y, left, right, h = 3.9 }) {
   const cw = (W - M * 2 - 0.5) / 2;
@@ -273,4 +320,4 @@ function closingSlide(pptx, { title, points, footer }) {
   return s;
 }
 
-module.exports = { PptxGenJS, C, W, H, M, newDeck, titleSlide, sectionSlide, contentSlide, bullets, code, stats, table, flow, columns, closingSlide, browserFrame, field, badge };
+module.exports = { PptxGenJS, C, W, H, M, newDeck, titleSlide, sectionSlide, contentSlide, bullets, code, stats, table, flow, columns, closingSlide, browserFrame, field, badge, chips, legend, callout };
