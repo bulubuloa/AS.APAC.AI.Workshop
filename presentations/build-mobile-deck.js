@@ -59,22 +59,72 @@ k.titleSlide(pptx, {
 {
   const { s, top } = k.contentSlide(pptx, {
     title: 'How Appium works',
-    kicker: 'The test speaks WebDriver; Appium translates it into Android automation on the device',
+    kicker: 'Think of it as a tester holding the phone - tapping and typing on the real app, exactly as a driver would',
   });
-  k.flow(s, [
-    { text: 'Spec file\n(TypeScript)' },
-    { text: 'WebdriverIO\nrunner' },
-    { text: 'Appium server\n(HTTP, W3C)', highlight: true },
-    { text: 'UiAutomator2\ndriver' },
-    { text: 'Emulator or\nreal device' },
-  ], { y: top, h: 1.05 });
 
-  k.bullets(s, [
-    { text: 'Appium is a server, not a library', sub: 'The test sends WebDriver commands over HTTP; the uiautomator2 driver executes them through Android’s own instrumentation' },
-    { text: 'The app is installed, not rebuilt', sub: 'Point it at an APK or a package name; the same spec runs on an emulator or a plugged-in handset with one env variable' },
-    { text: 'Everything is a capability', sub: 'autoGrantPermissions handles the location and notification prompts; clearApp resets state between tests' },
-    { text: 'It is the same mental model as the web suite', sub: 'Page objects, locators, expect() with waiting - only the selector syntax changes' },
-  ], { y: top + 1.5, size: 14.5 });
+  // left - the steps we write down, with the real one-liners
+  s.addText('What we write down', {
+    x: k.M, y: top, w: 5.2, h: 0.32,
+    fontSize: 15, bold: true, color: k.C.ink, fontFace: 'Segoe UI',
+  });
+
+  const steps = [
+    { n: 1, text: 'Type the user name', code: "$('login_email_input').setValue(user)" },
+    { n: 2, text: 'Type the password', code: "$('login_password_input').setValue(pass)" },
+    { n: 3, text: 'Tap Sign In', code: "$('login_sign_in_button').click()" },
+    { n: 4, text: 'Check we left the login screen', code: "expect(currentScreen).not.toBe('Login')" },
+  ];
+  steps.forEach((st, i) => {
+    const y = top + 0.5 + i * 1.02;
+    k.badge(s, { x: k.M, y: y + 0.02, n: st.n });
+    s.addText(st.text, {
+      x: k.M + 0.44, y, w: 4.8, h: 0.3,
+      fontSize: 13.5, bold: true, color: k.C.ink, fontFace: 'Segoe UI',
+    });
+    s.addShape('roundRect', { x: k.M + 0.44, y: y + 0.34, w: 4.95, h: 0.42, fill: { color: k.C.codeBg }, line: { color: k.C.codeBg }, rectRadius: 0.05 });
+    s.addText(st.code, {
+      x: k.M + 0.56, y: y + 0.34, w: 4.75, h: 0.42,
+      fontSize: 10, color: k.C.codeInk, fontFace: 'Consolas', valign: 'middle',
+    });
+  });
+
+  // right - the same thing happening on the phone
+  s.addText('What happens on the phone', {
+    x: 6.15, y: top, w: 6.5, h: 0.32,
+    fontSize: 15, bold: true, color: k.C.ink, fontFace: 'Segoe UI',
+  });
+
+  const p1 = k.phoneFrame(s, { x: 6.15, y: top + 0.42, w: 3.9, h: 4.55, appName: 'RS UAT' });
+  const ctrlW = p1.w - 0.52; // leave a lane on the right for the numbered badges
+  k.field(s, { x: p1.x, y: p1.y + 0.42, w: ctrlW, label: 'Email / Username', value: 'banaprovider' });
+  k.badge(s, { x: p1.x + p1.w - 0.3, y: p1.y + 0.49, n: 1, d: 0.3 });
+  k.field(s, { x: p1.x, y: p1.y + 1.2, w: ctrlW, label: 'Password', value: '••••••' });
+  k.badge(s, { x: p1.x + p1.w - 0.3, y: p1.y + 1.27, n: 2, d: 0.3 });
+  s.addShape('roundRect', { x: p1.x, y: p1.y + 1.94, w: ctrlW, h: 0.5, fill: { color: k.C.accent }, line: { color: k.C.accent }, rectRadius: 0.06 });
+  s.addText('Sign In', {
+    x: p1.x, y: p1.y + 1.94, w: ctrlW, h: 0.5,
+    fontSize: 12.5, bold: true, color: k.C.white, align: 'center', valign: 'middle', fontFace: 'Segoe UI',
+  });
+  k.badge(s, { x: p1.x + p1.w - 0.3, y: p1.y + 2.04, n: 3, d: 0.3 });
+
+  s.addText('→', {
+    x: 10.15, y: top + 2.3, w: 0.6, h: 0.4,
+    fontSize: 22, bold: true, color: k.C.muted, align: 'center', fontFace: 'Segoe UI',
+  });
+
+  const p2 = k.phoneFrame(s, { x: 10.8, y: top + 0.42, w: 1.9, h: 4.55, appName: 'Jobs' });
+  [0, 1, 2].forEach((i) => {
+    s.addShape('roundRect', { x: p2.x, y: p2.y + 0.3 + i * 0.6, w: p2.w, h: 0.48, fill: { color: i ? 'EFF1F4' : 'E4F2E8' }, line: { color: i ? 'E4E6EA' : '7FB894' }, rectRadius: 0.05 });
+  });
+  k.badge(s, { x: p2.x + p2.w / 2 - 0.15, y: p2.y + 2.3, n: 4, d: 0.3, color: k.C.good });
+  s.addText('Signed in', {
+    x: p2.x - 0.1, y: p2.y + 2.72, w: p2.w + 0.2, h: 0.3,
+    fontSize: 10.5, bold: true, color: k.C.good, align: 'center', fontFace: 'Segoe UI',
+  });
+
+  s.addText('The app is the one QA installs - we do not rebuild it for testing. The same four steps run on this emulator or on a phone plugged in by USB.', {
+    x: k.M, y: 6.88, w: k.W - k.M * 2, h: 0.35, fontSize: 12.5, italic: true, color: k.C.muted, fontFace: 'Segoe UI',
+  });
 }
 
 /* 5 - section: test ids */
@@ -197,28 +247,6 @@ k.sectionSlide(pptx, {
   ], { y: top + 3.5, size: 14.5 });
 }
 
-/* 10 - environment findings */
-{
-  const { s, top } = k.contentSlide(pptx, {
-    title: 'What the environment cost us',
-    kicker: 'The real work was not writing tests - it was making a corporate laptop run a device at all',
-  });
-  k.bullets(s, [
-    { text: 'The emulator could not resolve DNS', sub: 'Every call failed with UnknownHostException. The network was fine - Wi-Fi up, gateway reachable, raw TCP to 443 working. Only DNS over UDP 53 through QEMU’s forwarder was blocked' },
-    { text: 'ping proved nothing and sent us the wrong way', sub: 'QEMU’s user-mode networking does not forward ICMP at all, so "Network is unreachable" was a red herring; Android also hides the default route in a per-network table' },
-    { text: 'Fix: resolve names on the host instead', sub: 'A 40-line proxy on the laptop plus one setting on the device. No root, no image swap, no physical handset' },
-    { text: 'Android’s captive-portal check hijacked the run', sub: 'It opened Chrome over the proxy, hit a certificate error and covered the app mid-test - now disabled on the emulator' },
-  ], { y: top, size: 14 });
-  k.code(s, {
-    y: top + 3.55, h: 0.95, size: 12,
-    lines: [
-      'npm run proxy                                           # on the laptop',
-      'adb shell settings put global http_proxy 10.0.2.2:8888  # on the device',
-    ],
-    caption: 'Worth knowing before the workshop: budget setup time for any new machine.',
-  });
-}
-
 /* 11 - section: AI */
 k.sectionSlide(pptx, {
   number: '03',
@@ -229,21 +257,83 @@ k.sectionSlide(pptx, {
 /* 12 - AI */
 {
   const { s, top } = k.contentSlide(pptx, {
-    title: 'Building it with an AI agent',
-    kicker: 'Same agent, same day, as the web suite - a different kind of problem',
+    title: 'By hand, or with the agent',
+    kicker: 'The same three checks on the same APK - including the OTP login that was written off as impossible',
   });
-  k.bullets(s, [
-    { text: 'It read the app source to find the truth', sub: 'The OTP screen’s two states and the exact rule isValidPhone - length == 10 - came from OtpViewModel.kt, not from trial and error' },
-    { text: 'It diagnosed the environment instead of guessing', sub: 'Wi-Fi state, routing tables, raw TCP - it proved DNS was the only failure and built the proxy that fixed it' },
-    { text: 'It found the bug the green test was hiding', sub: 'Once login succeeded, the app remembered the session and the second test never saw the login screen - clearApp now runs before each test' },
-    { text: 'It designed the OTP read-back end to end', sub: 'New API in ABMB, config flag, deploy check on UAT, client helper with a stale-code guard - and wrote down why each piece exists' },
-  ], { y: top, size: 14 });
-  k.stats(s, [
-    { value: '~4 h', label: 'zero to a full OTP login, including the environment fight' },
-    { value: '3', label: 'green checks on the real APK' },
-    { value: '1', label: 'backend endpoint designed, built and deployed' },
-    { value: '2 lines', label: 'the app change that made selectors stable' },
-  ], { y: top + 3.7 });
+
+  k.bars(s, [
+    { label: 'Written by hand', value: 40, display: '~5 days', color: k.C.bad },
+    { label: 'With the agent', value: 4, display: '~4 hours', color: k.C.good },
+  ], { y: top, h: 0.8, gap: 0.4 });
+
+  k.table(s, {
+    y: top + 2.2,
+    head: ['The same job, step by step', 'By hand', 'With the agent'],
+    colW: [6.3, 2.9, 2.89],
+    rows: [
+      ['Get the tooling driving the app at all', '~1 day', '~30 min'],
+      ['Work out how to identify each field', '~1 day', 'minutes - it read the app'],
+      ['Make the OTP login automatable', '~2 days', '~1 hour'],
+      ['Get the emulator onto the network', '~1 day', '~45 min'],
+      ['Write the checks', 'half a day', '~30 min'],
+    ],
+  });
+
+  s.addText('"By hand" is an estimate built from those five lines. "With the agent" was measured during the session.', {
+    x: k.M, y: top + 4.7, w: k.W - k.M * 2, h: 0.3,
+    fontSize: 11.5, italic: true, color: k.C.muted, fontFace: 'Segoe UI',
+  });
+}
+
+/* 12b - why it is faster */
+{
+  const { s, top } = k.contentSlide(pptx, {
+    title: 'Why it is faster - four reasons',
+    kicker: 'None of them is "it types quickly"',
+  });
+
+  k.cards(s, [
+    {
+      title: '1. It read the app to find the truth',
+      lead: 'Not trial and error.',
+      items: [
+        'The phone number must be exactly 10 digits - a rule buried in the app’s code',
+        'Get it wrong and the button silently does nothing, which is a long afternoon of confusion',
+        'It found the rule, and made the test say so out loud',
+      ],
+    },
+    {
+      title: '2. It worked across three systems at once',
+      lead: 'App, backend and test suite together.',
+      color: k.C.good,
+      items: [
+        'The OTP fix needed a change in the RoadSide backend, a deploy, and a helper in the test',
+        'Normally three people, three tickets and a week of waiting on each other',
+      ],
+    },
+    {
+      title: '3. It debugged what looked hopeless',
+      lead: '"The emulator has no internet."',
+      color: k.C.warn,
+      items: [
+        'It checked what actually worked and what did not, and proved only name lookup was blocked',
+        'Then it built the small workaround that fixed it - about an hour, instead of giving up and buying handsets',
+      ],
+    },
+    {
+      title: '4. It writes it down as it goes',
+      lead: 'Normally the last job, usually skipped.',
+      color: k.C.accent,
+      items: [
+        'Every dead end went into the README while it was fresh',
+        'The next person does not repeat the same day of trial and error',
+      ],
+    },
+  ], { y: top, h: 4.05 });
+
+  k.callout(s, 'Put simply: a person is fast at deciding what matters and slow at everything around it. The agent is the other way round - which is why the pair is quicker than either alone.', {
+    y: top + 4.3, h: 0.75,
+  });
 }
 
 /* 13 - human vs AI */
@@ -256,25 +346,23 @@ k.sectionSlide(pptx, {
     y: top,
     h: 3.8,
     left: {
-      title: 'Decisions we kept',
-      color: k.C.accent,
+      title: 'The agent does the work',
+      color: k.C.good,
       items: [
-        'Which phone number may receive a real SMS on every run',
-        'That the SMS endpoint is gated by a flag and never enabled on production',
-        'Which account is safe to bind and re-bind on UAT',
-        'Whether a failure is the test, the app or the environment',
-        'Code review before anything merges - it is application code',
+        'Writes the tests and runs them on the device',
+        'Reads what failed and fixes it',
+        'Works out why the environment misbehaves',
+        'Writes down what it learned',
       ],
     },
     right: {
-      title: 'Guard rails that mattered',
-      color: k.C.good,
+      title: 'We still decide',
+      color: k.C.accent,
       items: [
-        'No production writes, ever',
-        'Credentials only in a git-ignored .env',
-        'Phone numbers masked in every log and report',
-        'Test data prefixed [AUTO-TEST] so it is obvious and cleanable',
-        'Findings written into the README, not left in a chat log',
+        'Which phone number may receive a real SMS on every run',
+        'That the SMS endpoint stays switched off outside SIT and UAT',
+        'Whether a failure is the test, the app or the environment',
+        'Nothing merges without a review - it is application code',
       ],
     },
   });

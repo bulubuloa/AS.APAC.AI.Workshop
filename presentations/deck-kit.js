@@ -218,6 +218,28 @@ function browserFrame(s, { x, y, w, h, url }) {
   return { x: x + 0.28, y: y + bar + 0.18, w: w - 0.56 };
 }
 
+/** A mock phone screen - status bar and app title. Returns the inner content box. */
+function phoneFrame(s, { x, y, w, h, appName }) {
+  const bar = 0.3;
+  s.addShape('roundRect', { x, y, w, h, fill: { color: C.white }, line: { color: '9AA0A8', width: 1.5 }, rectRadius: 0.1 });
+  s.addShape('rect', { x: x + 0.04, y: y + 0.04, w: w - 0.08, h: bar, fill: { color: '2B2F36' }, line: { color: '2B2F36' } });
+  s.addText('9:41', {
+    x: x + 0.16, y: y + 0.04, w: 0.7, h: bar,
+    fontSize: 8.5, color: 'FFFFFF', valign: 'middle', fontFace: 'Segoe UI',
+  });
+  s.addText('◼ ◼ ▮', {
+    x: x + w - 1.0, y: y + 0.04, w: 0.84, h: bar,
+    fontSize: 7.5, color: 'FFFFFF', align: 'right', valign: 'middle', fontFace: 'Segoe UI',
+  });
+  if (appName) {
+    s.addText(appName, {
+      x: x + 0.16, y: y + bar + 0.08, w: w - 0.32, h: 0.28,
+      fontSize: 10.5, bold: true, color: C.muted, fontFace: 'Segoe UI',
+    });
+  }
+  return { x: x + 0.3, y: y + bar + (appName ? 0.46 : 0.2), w: w - 0.6 };
+}
+
 /** A form field drawn inside a browser frame. */
 function field(s, { x, y, w, label, value, h = 0.44 }) {
   s.addShape('roundRect', { x, y, w, h, fill: { color: 'FBFBFC' }, line: { color: 'C9CDD4' }, rectRadius: 0.05 });
@@ -368,4 +390,4 @@ function closingSlide(pptx, { title, points, footer }) {
   return s;
 }
 
-module.exports = { PptxGenJS, C, W, H, M, newDeck, titleSlide, sectionSlide, contentSlide, bullets, code, stats, table, flow, columns, closingSlide, browserFrame, field, badge, chips, legend, callout, cards, bars };
+module.exports = { PptxGenJS, C, W, H, M, newDeck, titleSlide, sectionSlide, contentSlide, bullets, code, stats, table, flow, columns, closingSlide, browserFrame, phoneFrame, field, badge, chips, legend, callout, cards, bars };
