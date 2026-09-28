@@ -319,4 +319,4 @@ k.closingSlide(pptx, {
   footer: 'ai-workshop/roadside-android   |   github.com/bulubuloa/AS.APAC.AI.Workshop   |   Hoang Quach - Vietnam 2026',
 });
 
-pptx.writeFile({ fileName: 'Mobile_Test_Automation_Appium.pptx' }).then((f) => console.log('wrote', f));
+pptx.writeFile({ fileName: process.env.OUT ?? 'Mobile_Test_Automation_Appium.pptx' }).then((f) => console.log('wrote', f));

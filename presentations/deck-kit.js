@@ -202,6 +202,41 @@ function flow(s, steps, { y, x = M, w = W - M * 2, h = 0.95, size = 12 } = {}) {
   });
 }
 
+/** A mock browser window - title bar, traffic lights, URL pill. Returns the inner content box. */
+function browserFrame(s, { x, y, w, h, url }) {
+  const bar = 0.36;
+  s.addShape('roundRect', { x, y, w, h, fill: { color: C.white }, line: { color: 'C9CDD4' }, rectRadius: 0.06 });
+  s.addShape('rect', { x, y, w, h: bar, fill: { color: 'EDEEF2' }, line: { color: 'C9CDD4' } });
+  ['E06C61', 'E3B341', '7DC46B'].forEach((c, i) => {
+    s.addShape('ellipse', { x: x + 0.16 + i * 0.2, y: y + 0.12, w: 0.12, h: 0.12, fill: { color: c }, line: { color: c } });
+  });
+  s.addShape('roundRect', { x: x + 0.86, y: y + 0.07, w: w - 1.1, h: 0.22, fill: { color: C.white }, line: { color: 'D6D9DF' }, rectRadius: 0.05 });
+  s.addText(url, {
+    x: x + 0.96, y: y + 0.07, w: w - 1.2, h: 0.22,
+    fontSize: 9, color: C.muted, fontFace: 'Segoe UI', valign: 'middle',
+  });
+  return { x: x + 0.28, y: y + bar + 0.18, w: w - 0.56 };
+}
+
+/** A form field drawn inside a browser frame. */
+function field(s, { x, y, w, label, value, h = 0.44 }) {
+  s.addShape('roundRect', { x, y, w, h, fill: { color: 'FBFBFC' }, line: { color: 'C9CDD4' }, rectRadius: 0.05 });
+  s.addText(label, { x, y: y - 0.24, w, h: 0.22, fontSize: 9.5, color: C.muted, fontFace: 'Segoe UI' });
+  s.addText(value, {
+    x: x + 0.14, y, w: w - 0.28, h,
+    fontSize: 12, color: C.ink, fontFace: 'Segoe UI', valign: 'middle',
+  });
+}
+
+/** Numbered circle used to tie a step to the place it happens in the diagram. */
+function badge(s, { x, y, n, d = 0.32, color = C.accent }) {
+  s.addShape('ellipse', { x, y, w: d, h: d, fill: { color }, line: { color } });
+  s.addText(String(n), {
+    x, y, w: d, h: d,
+    fontSize: 12.5, bold: true, color: C.white, align: 'center', valign: 'middle', fontFace: 'Segoe UI',
+  });
+}
+
 /** Two columns of content, each with a heading. */
 function columns(s, { y, left, right, h = 3.9 }) {
   const cw = (W - M * 2 - 0.5) / 2;
@@ -238,4 +273,4 @@ function closingSlide(pptx, { title, points, footer }) {
   return s;
 }
 
-module.exports = { PptxGenJS, C, W, H, M, newDeck, titleSlide, sectionSlide, contentSlide, bullets, code, stats, table, flow, columns, closingSlide };
+module.exports = { PptxGenJS, C, W, H, M, newDeck, titleSlide, sectionSlide, contentSlide, bullets, code, stats, table, flow, columns, closingSlide, browserFrame, field, badge };

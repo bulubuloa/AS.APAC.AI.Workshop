@@ -62,26 +62,74 @@ k.titleSlide(pptx, {
   ], { y: top, size: 15.5 });
 }
 
-/* 4 - how it works */
+/* 4 - how it works, in plain language */
 {
   const { s, top } = k.contentSlide(pptx, {
     title: 'How Playwright works',
-    kicker: 'One process drives a real browser over a debug protocol - no Selenium grid, no browser driver binaries',
+    kicker: 'Think of it as a tester who never gets tired, never gets bored, and never forgets a step',
   });
-  k.flow(s, [
-    { text: 'Test file\n(TypeScript)' },
-    { text: 'Playwright\ntest runner' },
-    { text: 'Browser over\nCDP / WebSocket', highlight: true },
-    { text: 'Real page\non UAT' },
-    { text: 'Trace, video,\nscreenshots' },
-  ], { y: top + 0.1, h: 1.05 });
+  // left - the four steps we write down, in words and in the real one-liners
+  s.addText('What we write down', {
+    x: k.M, y: top, w: 5.2, h: 0.32,
+    fontSize: 15, bold: true, color: k.C.ink, fontFace: 'Segoe UI',
+  });
 
-  k.bullets(s, [
-    { text: 'Browser context per test = clean cookies and storage, so tests cannot leak into each other' },
-    { text: 'We sign in once in a setup project and reuse the stored session, so 11 of the 13 cases skip the login screen' },
-    { text: 'Locators are lazy: they resolve at the moment of the action, so a re-rendered element is not a stale reference' },
-    { text: 'Everything is observable - the run can record the network, the console and the DOM without extra code' },
-  ], { y: top + 1.5, size: 14.5 });
+  const steps = [
+    { n: 1, text: 'Type the user name into the box', code: "page.getByPlaceholder('User name').fill('admin.ko')" },
+    { n: 2, text: 'Type the password', code: "page.getByPlaceholder('Password').fill('••••••')" },
+    { n: 3, text: 'Press the Sign in button', code: "page.locator('#btnSignIn').click()" },
+    { n: 4, text: 'Check we landed on the job list', code: "expect(page).toHaveURL(/msu\\/joblst/)" },
+  ];
+  steps.forEach((st, i) => {
+    const y = top + 0.5 + i * 1.02;
+    k.badge(s, { x: k.M, y: y + 0.02, n: st.n });
+    s.addText(st.text, {
+      x: k.M + 0.44, y, w: 4.8, h: 0.3,
+      fontSize: 13.5, bold: true, color: k.C.ink, fontFace: 'Segoe UI',
+    });
+    s.addShape('roundRect', { x: k.M + 0.44, y: y + 0.34, w: 4.95, h: 0.42, fill: { color: k.C.codeBg }, line: { color: k.C.codeBg }, rectRadius: 0.05 });
+    s.addText(st.code, {
+      x: k.M + 0.56, y: y + 0.34, w: 4.75, h: 0.42,
+      fontSize: 10, color: k.C.codeInk, fontFace: 'Consolas', valign: 'middle',
+    });
+  });
+
+  // right - what that does on the real screen
+  s.addText('What happens on the real site', {
+    x: 6.15, y: top, w: 6.5, h: 0.32,
+    fontSize: 15, bold: true, color: k.C.ink, fontFace: 'Segoe UI',
+  });
+
+  const f1 = k.browserFrame(s, { x: 6.15, y: top + 0.42, w: 6.55, h: 2.72, url: 'roadside-uat.aspireasia.net/auth/login' });
+  k.field(s, { x: f1.x, y: f1.y + 0.3, w: 4.3, label: 'User name', value: 'admin.ko' });
+  k.badge(s, { x: f1.x + 4.45, y: f1.y + 0.36, n: 1, d: 0.3 });
+  k.field(s, { x: f1.x, y: f1.y + 1.06, w: 4.3, label: 'Password', value: '••••••' });
+  k.badge(s, { x: f1.x + 4.45, y: f1.y + 1.12, n: 2, d: 0.3 });
+  s.addShape('roundRect', { x: f1.x, y: f1.y + 1.72, w: 1.5, h: 0.42, fill: { color: k.C.accent }, line: { color: k.C.accent }, rectRadius: 0.05 });
+  s.addText('Sign in', {
+    x: f1.x, y: f1.y + 1.72, w: 1.5, h: 0.42,
+    fontSize: 12, bold: true, color: k.C.white, align: 'center', valign: 'middle', fontFace: 'Segoe UI',
+  });
+  k.badge(s, { x: f1.x + 1.66, y: f1.y + 1.78, n: 3, d: 0.3 });
+
+  s.addText('↓', {
+    x: 6.15, y: top + 3.2, w: 6.55, h: 0.3,
+    fontSize: 18, bold: true, color: k.C.muted, align: 'center', fontFace: 'Segoe UI',
+  });
+
+  const f2 = k.browserFrame(s, { x: 6.15, y: top + 3.45, w: 6.55, h: 1.45, url: 'roadside-uat.aspireasia.net/msu/joblst' });
+  [0, 1, 2].forEach((i) => {
+    s.addShape('rect', { x: f2.x, y: f2.y + 0.16 + i * 0.24, w: 3.3, h: 0.13, fill: { color: i ? 'E7E9ED' : 'CFD4DB' }, line: { color: i ? 'E7E9ED' : 'CFD4DB' } });
+  });
+  k.badge(s, { x: f2.x + 3.6, y: f2.y + 0.3, n: 4, d: 0.3, color: k.C.good });
+  s.addText('Job list - as expected', {
+    x: f2.x + 4.0, y: f2.y + 0.3, w: 2.0, h: 0.3,
+    fontSize: 11.5, bold: true, color: k.C.good, valign: 'middle', fontFace: 'Segoe UI',
+  });
+
+  s.addText('Four written steps, run against the real site, with a video and screenshots kept as proof. Step 4 is the one that matters - it is where the test decides pass or fail.', {
+    x: k.M, y: 6.88, w: k.W - k.M * 2, h: 0.35, fontSize: 12.5, italic: true, color: k.C.muted, fontFace: 'Segoe UI',
+  });
 }
 
 /* 5 - section: our suite */
@@ -333,4 +381,4 @@ k.closingSlide(pptx, {
   footer: 'ai-workshop/roadside-web   |   github.com/bulubuloa/AS.APAC.AI.Workshop   |   Hoang Quach - Vietnam 2026',
 });
 
-pptx.writeFile({ fileName: 'Web_Test_Automation_Playwright.pptx' }).then((f) => console.log('wrote', f));
+pptx.writeFile({ fileName: process.env.OUT ?? 'Web_Test_Automation_Playwright.pptx' }).then((f) => console.log('wrote', f));
