@@ -264,12 +264,50 @@ k.sectionSlide(pptx, {
     title: 'What writing the tests revealed',
     kicker: 'Automation against a live environment finds things a demo app never would',
   });
-  k.bullets(s, [
-    { text: 'Job creation depends on a data chain nobody had written down', sub: 'client → program → customer tier → privilege → service type, each loaded by a separate ajax call. On UAT only the test programs (HOT UAT, Meo, Vit, Duck) have a privilege at all - Honda’s real programs have none, so a job cannot be created with them' },
-    { text: 'A rejected save answers HTTP 200', sub: '{"success":false,"error":"Privilege is required"} plus a browser alert(). The test captures the dialog so the failure message names the real reason' },
-    { text: 'The dealer detail page has no Save button', sub: 'It is commented out in the view - dealers come from the CMS sync. The test asserts what the page really is, not what we assumed' },
-    { text: 'The client dropdown label is inconsistent', sub: 'Sometimes "Honda Automobile (Thailand) Co., Ltd. (380)", sometimes without the id - the one flake we hit, now normalised in the assertion' },
-  ], { y: top, size: 14 });
+  // the biggest finding is a picture: you cannot create a job without walking this chain in order
+  s.addText('To create one job, five dropdowns must be filled in this exact order:', {
+    x: k.M, y: top, w: k.W - k.M * 2, h: 0.3,
+    fontSize: 13.5, bold: true, color: k.C.ink, fontFace: 'Segoe UI',
+  });
+  k.flow(s, [
+    { text: 'Client' },
+    { text: 'Program' },
+    { text: 'Customer tier' },
+    { text: 'Privilege', highlight: true },
+    { text: 'Service type' },
+  ], { y: top + 0.36, h: 0.72, size: 13 });
+  s.addText('Each one stays empty until the one before it is chosen - and if the privilege is missing, the job simply cannot be saved.', {
+    x: k.M, y: top + 1.14, w: k.W - k.M * 2, h: 0.3,
+    fontSize: 12, italic: true, color: k.C.muted, fontFace: 'Segoe UI',
+  });
+
+  k.table(s, {
+    y: top + 1.62,
+    head: ['What we found', 'Why it matters'],
+    colW: [5.6, 6.49],
+    rows: [
+      [
+        'Nobody had written that chain down',
+        'A new developer or tester finds it out by failing. It is now in the test, so the next person inherits it',
+      ],
+      [
+        'On UAT, only the four test programs can create a job',
+        'Honda’s real programs have no privilege attached - so a test that "fails" there is a data problem, not a code problem',
+      ],
+      [
+        'A rejected save still answers "OK"',
+        'The real reason only appears in a pop-up. Easy for a person to miss, and it makes a failure look like the wrong thing',
+      ],
+      [
+        'The dealer page cannot be edited at all',
+        'The Save button was removed - that data comes from the CMS. We assumed it was editable; it is not',
+      ],
+    ],
+  });
+
+  s.addText('None of this was in a document. It came out of pointing the tests at the real system - which is the argument for doing it against UAT rather than a mock.', {
+    x: k.M, y: 6.55, w: k.W - k.M * 2, h: 0.4, fontSize: 12.5, italic: true, color: k.C.muted, fontFace: 'Segoe UI',
+  });
 }
 
 /* 11 - section: AI */
