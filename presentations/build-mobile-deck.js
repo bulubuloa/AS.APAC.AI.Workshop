@@ -1,5 +1,6 @@
 // Deck 2 - Mobile automation with Appium + WebdriverIO, built on the real suite in ../roadside-android
 const k = require('./deck-kit');
+const shared = require('./shared-slides');
 
 const pptx = k.newDeck({ title: 'Mobile Test Automation with Appium', author: 'Hoang Quach' });
 
@@ -285,57 +286,8 @@ k.sectionSlide(pptx, {
   });
 }
 
-/* 12b - why it is faster */
-{
-  const { s, top } = k.contentSlide(pptx, {
-    title: 'Why it is faster - four reasons',
-    kicker: 'None of them is "it types quickly"',
-  });
-
-  k.cards(s, [
-    {
-      title: '1. It read the app instead of guessing',
-      lead: 'After the first failure, not before.',
-      items: [
-        'Tapping Sign In did nothing - the phone number must be exactly 10 digits, a rule buried in the code',
-        'It found that rule instead of trying numbers until one worked',
-        'The test now fails in a second, with a clear reason',
-      ],
-    },
-    {
-      title: '2. One agent, three languages',
-      lead: 'Android app, backend, tests.',
-      color: k.C.good,
-      items: [
-        'Reading the login meant Kotlin; the endpoint that reads the SMS back meant C#; the test meant TypeScript',
-        'No handover between people, and nobody waiting to be told what the other half does',
-      ],
-    },
-    {
-      title: '3. It kept testing until it was right',
-      lead: 'It got this one wrong first.',
-      color: k.C.warn,
-      items: [
-        'It said the emulator’s network card was dead and suggested using a real phone. That was wrong',
-        'It went back, proved only name lookup was blocked, and fixed it in about an hour',
-        'Fast at trying things - not immune to being wrong',
-      ],
-    },
-    {
-      title: '4. It writes it down as it goes',
-      lead: 'Normally the last job, usually skipped.',
-      color: k.C.accent,
-      items: [
-        'Every dead end went into the README while it was fresh - including the wrong turn above',
-        'The next person does not lose the same afternoon',
-      ],
-    },
-  ], { y: top, h: 4.25 });
-
-  k.callout(s, 'The honest split: the test ids in the app, the code review and every deploy were done by the team. The agent wrote the tests, the backend endpoint and the debugging - and was still the fastest part of the day.', {
-    y: top + 4.45, h: 0.72,
-  });
-}
+/* 12b - why it is faster (shared with the web deck) */
+shared.whyFaster(pptx);
 
 /* 13 - human vs AI */
 {

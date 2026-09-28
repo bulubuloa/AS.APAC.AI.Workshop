@@ -1,5 +1,6 @@
 // Deck 1 - Web automation with Playwright, built on the real RSA/GAN suite in ../roadside-web
 const k = require('./deck-kit');
+const shared = require('./shared-slides');
 
 const pptx = k.newDeck({ title: 'Web Test Automation with Playwright', author: 'Hoang Quach' });
 
@@ -300,56 +301,8 @@ k.sectionSlide(pptx, {
   });
 }
 
-/* 12 - why it is faster */
-{
-  const { s, top } = k.contentSlide(pptx, {
-    title: 'Why it is faster - four reasons',
-    kicker: 'None of them is "it types quickly"',
-  });
-
-  k.cards(s, [
-    {
-      title: '1. It reads everything at once',
-      lead: 'A person opens one file at a time.',
-      items: [
-        'To write a test you must know what every box on the screen is called',
-        'A person clicks around and guesses, or digs through the code',
-        'The agent read the pages behind those screens and took the names straight from them',
-      ],
-    },
-    {
-      title: '2. It never loses the thread',
-      lead: 'No meetings, no interruptions, no tomorrow.',
-      color: k.C.good,
-      items: [
-        'Work like this is normally spread across days, and half of each day is spent remembering where you were',
-        'The whole suite was built in one unbroken sitting',
-      ],
-    },
-    {
-      title: '3. Run, fix, run again - in seconds',
-      lead: 'The loop is the slow part, not the typing.',
-      color: k.C.warn,
-      items: [
-        'A test fails, you read why, you fix it, you run it again - dozens of times',
-        'For a person each turn of that loop is minutes; here it is seconds, and it never gets bored of repeating it',
-      ],
-    },
-    {
-      title: '4. It writes it down as it goes',
-      lead: 'Normally the last job, usually skipped.',
-      color: k.C.accent,
-      items: [
-        'Every reason, gotcha and dead end went into the README while it was still fresh',
-        'That is the part that usually never happens, and the reason the next person starts from zero',
-      ],
-    },
-  ], { y: top, h: 4.05 });
-
-  k.callout(s, 'Put simply: a person is fast at deciding what to test and slow at everything around it. The agent is the other way round - which is why the pair is quicker than either alone.', {
-    y: top + 4.3, h: 0.75,
-  });
-}
+/* 12 - why it is faster (shared with the mobile deck) */
+shared.whyFaster(pptx);
 
 /* 14 - human vs AI */
 {
