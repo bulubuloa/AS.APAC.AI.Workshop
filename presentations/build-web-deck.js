@@ -275,120 +275,24 @@ k.sectionSlide(pptx, {
   k.stats(s, [
     { value: '0 → 13', label: 'automated checks, from nothing' },
     { value: '5', label: 'screens covered' },
-    { value: '~2 h', label: 'start to a working suite' },
-    { value: '3×', label: 'clean full runs, to prove it holds' },
-    { value: '1', label: 'data problem nobody knew about' },
-  ], { y: top, h: 1.4 });
+    { value: '~2 h', label: 'to build the whole suite' },
+    { value: '~1 min', label: 'to run it, start to finish' },
+  ], { y: top, h: 1.5 });
 
   k.flow(s, [
     { text: 'Empty folder' },
-    { text: 'First test\npassing on UAT' },
-    { text: 'All 13 checks\ngreen', highlight: true },
-    { text: 'Found the\ndata dead end' },
-    { text: 'Stable across\nthree full runs' },
-  ], { y: top + 1.85, h: 0.95 });
+    { text: 'First test passing\non the real site' },
+    { text: 'All 13 checks green', highlight: true },
+    { text: 'Same result on\nthree full runs' },
+  ], { y: top + 2.0, h: 1.05 });
 
-  k.callout(s, 'The part that matters for next time: the expensive pieces - sign-in, the page objects, the evidence and the reporting - are now built. The next check costs minutes, not days.', {
-    y: top + 3.1, h: 0.8, color: k.C.good,
+  k.callout(s, 'The expensive part is done. Sign-in, the screens, the evidence and the report already exist - so the next check is minutes of work, not days.', {
+    y: top + 3.45, h: 0.8, color: k.C.good,
   });
 
-  s.addText('Everything on this slide was measured during the session, not estimated afterwards. The suite runs on demand - you can watch it happen.', {
-    x: k.M, y: top + 4.15, w: k.W - k.M * 2, h: 0.4,
-    fontSize: 13, italic: true, color: k.C.muted, fontFace: 'Segoe UI',
-  });
-}
-
-/* 12 - the hard problems */
-{
-  const { s, top } = k.contentSlide(pptx, {
-    title: 'The parts that were not typing',
-    kicker: 'Claude Code, working in the repository and against the live UAT site',
-  });
-  s.addText('Writing test code is the easy half. These three are the ones that make teams abandon automation - and each was found and solved during the session, not designed in advance.', {
-    x: k.M, y: top, w: k.W - k.M * 2, h: 0.4,
-    fontSize: 13.5, color: k.C.body, fontFace: 'Segoe UI',
-  });
-
-  k.cards(s, [
-    {
-      title: 'The save that said "OK"',
-      lead: 'The test saved a job. The server answered success - and nothing happened.',
-      color: k.C.bad,
-      items: [
-        'The rejection was hidden in a pop-up the browser closes automatically',
-        'It read the application’s own script, found where the message is raised, and made the test capture it',
-        'Failures now say "Privilege is required" instead of "the page did not change"',
-      ],
-    },
-    {
-      title: 'The dropdowns that were never ready',
-      lead: 'Five dropdowns, each filled by its own background request.',
-      color: k.C.warn,
-      items: [
-        'Waiting for "the page to look finished" was not enough - the page reloads one list while you fill the next',
-        'It identified the four specific requests and waits for the right one each time',
-        'This is the single most common cause of tests that pass locally and fail in CI',
-      ],
-    },
-    {
-      title: 'The dead end in the data',
-      lead: 'The job could not be created with any obvious programme.',
-      color: k.C.accent,
-      items: [
-        'Rather than guess, it checked all 15 programmes and their tiers on UAT',
-        'Found the 4 that work and made the test ask for one by name',
-        'Answered a question that was not written down anywhere (next slide)',
-      ],
-    },
-  ], { y: top + 0.58, h: 3.5 });
-
-  k.callout(s, 'None of these are typing problems. They are the judgement calls that decide whether a suite is trusted or quietly switched off six months later.', {
-    y: top + 4.28, h: 0.8,
-  });
-}
-
-/* 13 - a worked example */
-{
-  const { s, top } = k.contentSlide(pptx, {
-    title: 'One example: the puzzle it solved by itself',
-    kicker: 'The job-creation test failed. Instead of guessing, it went and found the answer.',
-  });
-
-  k.flow(s, [
-    { text: 'Test fails:\n"Privilege is required"' },
-    { text: 'Checks every program\nand tier on UAT', highlight: true },
-    { text: 'Finds only 4 of 15\nprograms can work' },
-    { text: 'Test picks a working\none - and it is\nwritten down' },
-  ], { y: top, h: 1.05 });
-
-  k.columns(s, {
-    y: top + 1.45,
-    h: 3.0,
-    left: {
-      title: 'The usual ways this goes',
-      color: k.C.bad,
-      items: [
-        'Ask around until someone remembers',
-        'Try a few by hand and stop at the first that works',
-        'Hard-code an id that quietly breaks on the next environment',
-        'Or simply give up on automating job creation',
-      ],
-    },
-    right: {
-      title: 'What actually happened',
-      color: k.C.good,
-      items: [
-        'It walked all 15 programs and their tiers in one run',
-        'It reported exactly which ones have a privilege attached:',
-        'HOT UAT Program  ·  Meo Roadside program',
-        'Vit roadside program  ·  Duck program',
-        'The test now selects a program by name, so a different environment does not break it',
-      ],
-    },
-  });
-
-  s.addText('"Which programs can actually create a job on UAT?" had no answer anywhere - not in a document, not in the code. Now it does, and it took one run to get it.', {
-    x: k.M, y: 6.6, w: k.W - k.M * 2, h: 0.4, fontSize: 13, italic: true, color: k.C.muted, fontFace: 'Segoe UI',
+  s.addText('Next: the suite running live, against UAT.', {
+    x: k.M, y: top + 4.5, w: k.W - k.M * 2, h: 0.45,
+    fontSize: 17, bold: true, color: k.C.accent, fontFace: 'Segoe UI',
   });
 }
 
@@ -402,25 +306,23 @@ k.sectionSlide(pptx, {
     y: top,
     h: 3.8,
     left: {
-      title: 'The agent is good at',
+      title: 'The agent does the work',
       color: k.C.good,
       items: [
-        'Reading the application to find real selectors',
-        'Writing page objects and specs in a consistent shape',
-        'Running, reading the failure, fixing, re-running',
-        'Probing the environment to answer factual questions',
-        'Writing down what it learned so it is not lost',
+        'Writes the tests',
+        'Runs them and reads what failed',
+        'Fixes and runs again until they pass',
+        'Writes down what it learned',
       ],
     },
     right: {
       title: 'We still decide',
       color: k.C.accent,
       items: [
-        'Which journeys matter enough to automate',
-        'What counts as acceptable test data on a shared environment',
-        'Whether a failure is a test bug or a product bug',
+        'Which journeys are worth automating',
+        'Whether a failure is a test problem or a real bug',
         'What may touch production, and what may never',
-        'Review before anything is merged - same PR bar as any code',
+        'Nothing merges without a review - same bar as any code',
       ],
     },
   });
