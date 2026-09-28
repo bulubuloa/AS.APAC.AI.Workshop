@@ -279,8 +279,8 @@ k.sectionSlide(pptx, {
     ],
   });
 
-  s.addText('"By hand" is an estimate built from those five lines. "With the agent" was measured during the session.', {
-    x: k.M, y: top + 4.7, w: k.W - k.M * 2, h: 0.3,
+  s.addText('"By hand" is an estimate built from those five lines. "With the agent" was measured during the session - and excludes the team’s own time: adding the test ids to the app, reviewing the code and deploying it.', {
+    x: k.M, y: top + 4.7, w: k.W - k.M * 2, h: 0.4,
     fontSize: 11.5, italic: true, color: k.C.muted, fontFace: 'Segoe UI',
   });
 }
@@ -294,30 +294,31 @@ k.sectionSlide(pptx, {
 
   k.cards(s, [
     {
-      title: '1. It read the app to find the truth',
-      lead: 'Not trial and error.',
+      title: '1. It read the app instead of guessing',
+      lead: 'After the first failure, not before.',
       items: [
-        'The phone number must be exactly 10 digits - a rule buried in the app’s code',
-        'Get it wrong and the button silently does nothing, which is a long afternoon of confusion',
-        'It found the rule, and made the test say so out loud',
+        'Tapping Sign In did nothing - the phone number must be exactly 10 digits, a rule buried in the code',
+        'It found that rule instead of trying numbers until one worked',
+        'The test now fails in a second, with a clear reason',
       ],
     },
     {
-      title: '2. It worked across three systems at once',
-      lead: 'App, backend and test suite together.',
+      title: '2. One agent, three languages',
+      lead: 'Android app, backend, tests.',
       color: k.C.good,
       items: [
-        'The OTP fix needed a change in the RoadSide backend, a deploy, and a helper in the test',
-        'Normally three people, three tickets and a week of waiting on each other',
+        'Reading the login meant Kotlin; the endpoint that reads the SMS back meant C#; the test meant TypeScript',
+        'No handover between people, and nobody waiting to be told what the other half does',
       ],
     },
     {
-      title: '3. It debugged what looked hopeless',
-      lead: '"The emulator has no internet."',
+      title: '3. It kept testing until it was right',
+      lead: 'It got this one wrong first.',
       color: k.C.warn,
       items: [
-        'It checked what actually worked and what did not, and proved only name lookup was blocked',
-        'Then it built the small workaround that fixed it - about an hour, instead of giving up and buying handsets',
+        'It said the emulator’s network card was dead and suggested using a real phone. That was wrong',
+        'It went back, proved only name lookup was blocked, and fixed it in about an hour',
+        'Fast at trying things - not immune to being wrong',
       ],
     },
     {
@@ -325,14 +326,14 @@ k.sectionSlide(pptx, {
       lead: 'Normally the last job, usually skipped.',
       color: k.C.accent,
       items: [
-        'Every dead end went into the README while it was fresh',
-        'The next person does not repeat the same day of trial and error',
+        'Every dead end went into the README while it was fresh - including the wrong turn above',
+        'The next person does not lose the same afternoon',
       ],
     },
-  ], { y: top, h: 4.05 });
+  ], { y: top, h: 4.25 });
 
-  k.callout(s, 'Put simply: a person is fast at deciding what matters and slow at everything around it. The agent is the other way round - which is why the pair is quicker than either alone.', {
-    y: top + 4.3, h: 0.75,
+  k.callout(s, 'The honest split: the test ids in the app, the code review and every deploy were done by the team. The agent wrote the tests, the backend endpoint and the debugging - and was still the fastest part of the day.', {
+    y: top + 4.45, h: 0.72,
   });
 }
 
