@@ -44,6 +44,34 @@ opens one trace directly.
 
 `auth.setup.ts` signs in once and stores the session in `auth/state.json` for the `msu` project.
 
+## Demo: green run, a data bug, red run
+
+The workshop demo uses the **real, unchanged suite**. Only the data changes.
+
+| Step | Do | Expect |
+|---|---|---|
+| 1 | `npm test` | all 13 pass |
+| 2 | `npm run demo:seed` (runs `demo-data/seed-demo-bugs.sql` on RSA UAT `BKKRsaStaging`; credentials in `demo-data/.db.env`, git-ignored) | dealer 376 `0000 DEMO-DRIFT 0824 01`, client 380 status `702` |
+| 3 | `npm test` | **2 failed** (TC02.2, TC05.3), 11 passed |
+| 4 | `npm run report` | open the two failures: error, screenshot, video, trace |
+| 5 | `npm run demo:revert` | `dealers_still_drifted = 0`, `client_380_status = 701` |
+| 6 | `npm test` | all 13 pass again |
+
+What the seed changes, and why the tests catch it:
+
+| Test | Data change | Why it fails | Real-world cause it represents |
+|---|---|---|---|
+| **TC02.2** dealer detail matches the list | one CMS-linked Honda dealer renamed in `cloud.ClientDealer` to `0000 DEMO-DRIFT <name>` | the list reads the RSA DB name, the detail shows the CMS name: `Expected "0000 DEMO-DRIFT 0824 01" Received "0824 01"` | dealer renamed in the CMS, the Benefit → RSA dealer sync failed |
+| **TC05.3** create a job | `cloud.Client.status` for client 380 set from 701 to 702 | the job form lists client 380 but **disabled**: `client 380 cannot be selected for a new job - inactive in RSA? Expected: enabled, Received: disabled` (the server would also reject the save: `Cannot proceed the job for non-active client`) | client active in Benefit, but RSA never got the status (client sync) |
+
+Notes:
+- Both scripts refuse to run unless the database name contains `Staging` or `Uat`, and both run in a transaction.
+- The seed aborts if client 380 is not active (701) to start with, so the revert only puts back what the seed changed.
+- While seeded, **nobody can create a Honda (380) job on UAT**. Seed right before step 3 and revert straight after step 4.
+- `npm run demo:bugs` runs only the dealer and job specs (faster for step 3).
+- `demo-data/.db.env` holds `RSA_DB_SERVER`, `RSA_DB_NAME`, `RSA_DB_USER`, `RSA_DB_PASS` (sqlcmd from the MS ODBC client tools is used).
+- Rehearsed end to end on 2 Oct 2026: 13 passed → seed → 2 failed / 11 passed → revert → 13 passed.
+
 ## Data written on UAT
 
 Only the two `create` cases write: one Draft announcement and one job per run, both tagged `[AUTO-TEST]` in every

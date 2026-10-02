@@ -85,6 +85,10 @@ export class JobPage {
   async fillRequiredForNewJob(clientId: string, programName?: string) {
     // the page init also loads the program list; let that settle before touching the cascade
     await this.page.waitForLoadState('networkidle');
+    // inactive clients (cloud.Client.status <> 701) are listed but disabled; say so instead of timing out in selectOption
+    const option = this.client.locator(`option[value="${clientId}"]`);
+    await expect(option, `client ${clientId} is not in the job form's client list`).toHaveCount(1, { timeout: 10_000 });
+    await expect(option, `client ${clientId} cannot be selected for a new job - inactive in RSA?`).toBeEnabled({ timeout: 5_000 });
     const programs = this.page.waitForResponse((r) => r.url().includes('GetListProgramByClientId'));
     await this.client.selectOption(clientId);
     await programs;

@@ -259,6 +259,64 @@ k.sectionSlide(pptx, {
   });
 }
 
+/* 9a - demo: a data bug caught by the unchanged suite */
+{
+  const { s, top } = k.contentSlide(pptx, {
+    title: 'Demo: a data bug, caught by the suite',
+    kicker: 'Same tests, same code - only the data in the RSA UAT database changes',
+  });
+  k.flow(s, [
+    { text: '1. npm test\n13 passed' },
+    { text: '2. Seed the bug\nnpm run demo:seed' },
+    { text: '3. npm test\n2 failed', highlight: true },
+    { text: '4. Read the report\nerror, video, trace' },
+    { text: '5. Revert\nnpm run demo:revert' },
+    { text: '6. npm test\n13 passed' },
+  ], { y: top, h: 1.0, size: 11.5 });
+  k.table(s, {
+    y: top + 1.3,
+    head: ['Test', 'Data change', 'What the test sees', 'Real-world cause'],
+    colW: [1.9, 3.1, 3.6, 3.5],
+    rows: [
+      ['TC02.2 dealer detail = list', 'one Honda dealer renamed in cloud.ClientDealer', 'list shows the RSA name, detail shows the CMS name', 'dealer renamed in the CMS, Benefit -> RSA sync failed'],
+      ['TC05.3 create a job', 'client 380 status 701 -> 702 in cloud.Client', 'client 380 is greyed out in the job form - no job can be created', 'client active in Benefit, RSA never got the status'],
+    ],
+  });
+  k.callout(s, 'Nothing is mocked and no test is edited. The two failures are what a real sync bug would look like in production.', {
+    y: top + 3.6, h: 0.75, size: 13,
+  });
+}
+
+/* 9b - reading a failure */
+{
+  const { s, top } = k.contentSlide(pptx, {
+    title: 'Reading a failure',
+    kicker: 'Real output from the rehearsal on UAT, 2 Oct 2026 - 2 failed, 11 passed',
+  });
+  k.code(s, {
+    y: top, h: 2.05, size: 12,
+    lines: [
+      'TC02.2 dealer detail opens from the list with matching code and name',
+      '  expect(locator).toHaveValue(expected) failed',
+      '  Expected: "0000 DEMO-DRIFT 0824 01"     <- list, RSA database',
+      '  Received: "0824 01"                     <- detail, CMS',
+      '',
+      'TC05.3 creating a job assigns a job id and reopens on its detail page',
+      '  Error: client 380 cannot be selected for a new job - inactive in RSA?',
+      '  Expected: enabled    Received: disabled',
+    ],
+  });
+  k.flow(s, [
+    { text: '1. Expected vs Received\nwhat is different' },
+    { text: '2. Screenshot + video\nwhat the user saw' },
+    { text: '3. Trace\nDOM and network at that step' },
+    { text: '4. Decide\nproduct, data or test?', highlight: true },
+  ], { y: top + 2.3, h: 1.0, size: 11.5 });
+  k.callout(s, 'Here the product code is right and the tests are right: the data is wrong. The fix is the sync, not the test.', {
+    y: top + 3.55, h: 0.8, size: 13,
+  });
+}
+
 /* 10 - section: AI */
 k.sectionSlide(pptx, {
   number: '02',

@@ -8,7 +8,10 @@
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",
     "report": "playwright show-report",
-    "codegen": "playwright codegen https://roadside-uat.aspireasia.net/auth/login"
+    "codegen": "playwright codegen https://roadside-uat.aspireasia.net/auth/login",
+    "demo:bugs": "playwright test tests/02-dealer.spec.ts tests/05-job.spec.ts",
+    "demo:seed": "node demo-data/run-sql.js seed-demo-bugs.sql",
+    "demo:revert": "node demo-data/run-sql.js revert-demo-bugs.sql"
   },
   "devDependencies": {
     "@playwright/test": "^1.49.0",
