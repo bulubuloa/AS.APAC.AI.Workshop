@@ -1,0 +1,15 @@
+<table>
+<thead><tr><th>Management question</th><th>Evidence available</th><th>What it means</th></tr></thead>
+<tbody>
+<tr><th>Have we completed 300 of 400?</th><td><strong>Not yet verified against a case list and run report.</strong></td><td>Confirm the specific 400-case pack before presenting 75% completion.</td></tr>
+<tr><th>What RSA work is documented?</th><td>Reported POC: <strong>61 of 449 business cases implemented</strong>, producing 71 automated tests.</td><td>This is the documented baseline; it is a different inventory from the proposed 400-case figure.</td></tr>
+<tr><th>What passed?</th><td>Reported run: <strong>57 tests passed; 14 skipped.</strong></td><td>Implemented cases, executed tests and passed results must be counted separately.</td></tr>
+<tr><th>Why did tests remain blocked?</th><td>14 skips: 9 missing accounts, 2 sign-in identities, 1 signed sign-in fixture, 2 missing job fixtures.</td><td>These need access or test data; they are not inherently impossible to automate.</td></tr>
+<tr><th>What has not started?</th><td>388 cases in the reported catalogue.</td><td>Unfinished work is not evidence that automation cannot cover it.</td></tr>
+<tr><th>Can everything be fully automated?</th><td>Web checks can be automated; external delivery and real service quality may require partial or manual checks.</td><td><a href="https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896681063">Scenario classification and remaining manual portions</a>.</td></tr>
+</tbody>
+</table>
+<p><strong>Notes</strong></p>
+<p><strong>1. Evidence:</strong> Counts come from the <a href="https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6772031506">reported RSA POC</a>, retrieved on 8 October 2026. Its larger suite was not independently rerun here.</p>
+<p><strong>2. The remaining 100:</strong> We cannot explain 100 individual cases until the 400-case pack is identified. Each remaining case needs a reason: not started, missing prerequisites, partial automation or a manual acceptance step.</p>
+<p><strong>3. Management action:</strong> Confirm the case inventory, prioritize the remaining business risks and provide the required accounts/data. Report partial coverage separately from fully completed cases.</p>

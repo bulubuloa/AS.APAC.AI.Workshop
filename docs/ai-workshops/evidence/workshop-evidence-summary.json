@@ -1,0 +1,37 @@
+{
+  "reviewed": "2026-10-08",
+  "repo": "https://github.com/bulubuloa/AS.APAC.AI.Workshop",
+  "commit": "7a87adc6a2182e3084f59964a1264a4218bc3a42",
+  "web": {
+    "inventory": 13,
+    "savedRun": {
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 38.882136,
+      "date": "2026-10-07"
+    }
+  },
+  "mobile": {
+    "freshRun": false,
+    "archivedChecks": [
+      {
+        "case": "TC01.1",
+        "passed": true,
+        "seconds": 34.773
+      },
+      {
+        "case": "TC01.2",
+        "passed": true,
+        "seconds": 38.877
+      },
+      {
+        "case": "TC02.1",
+        "passed": true,
+        "seconds": 52.43
+      }
+    ]
+  },
+  "pipeline": "proposed; not deployed",
+  "rawLogs": "excluded because they contain credentials"
+}

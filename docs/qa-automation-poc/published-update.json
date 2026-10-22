@@ -1,0 +1,45 @@
+{
+  "apiVersion": "v2",
+  "command": "confluence.content.update",
+  "request": {
+    "urlOrId": "6896156677",
+    "site": "internationalsos.atlassian.net",
+    "contentType": null,
+    "snapshotToken": "d1:6",
+    "versionMessage": "Embed verified synthetic POC screenshots and evidence package",
+    "minorEdit": false,
+    "title": null,
+    "hasBody": true,
+    "bodyFormat": "html",
+    "contentWidth": null,
+    "editsCount": 0,
+    "dryRun": false,
+    "draft": false
+  },
+  "data": {
+    "ok": true,
+    "content": {
+      "id": "6896156677",
+      "type": "live_doc",
+      "status": "draft",
+      "title": "QA Automation POC - Tool Selection, Evidence, Coverage and Pipeline Plan",
+      "spaceId": "64782337",
+      "parentId": "6895173696",
+      "webUrl": "/spaces/AD/pages/6896156677/QA+Automation+POC+-+Tool+Selection+Evidence+Coverage+and+Pipeline+Plan",
+      "baseUrl": "https://internationalsos.atlassian.net/wiki",
+      "version": {
+        "number": 1,
+        "createdAt": "2026-10-08T03:54:29.733Z"
+      },
+      "contentWidth": null
+    },
+    "snapshot": {
+      "token": "d1:483"
+    }
+  },
+  "meta": {
+    "resourceClass": "entity",
+    "sourceMode": "native",
+    "resourceType": "confluence.content"
+  }
+}

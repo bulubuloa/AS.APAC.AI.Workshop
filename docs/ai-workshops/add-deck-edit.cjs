@@ -1,0 +1,14 @@
+const fs=require('fs'),path=require('path');
+const n=Number(process.argv[2]);
+const dir=__dirname;
+const read=f=>JSON.parse(fs.readFileSync(path.join(dir,f),'utf8').replace(/^\uFEFF/,''));
+const current=read(`deck-page-${n}-current.json`);
+const attachment=read('qa-deck-attachment.json').data.attachment;
+const match=current.data.body.value.match(/<p\b([^>]*)>([\s\S]*?)<\/p>/);
+const id=match?.[1].match(/data-local-id="([^"]+)"/)?.[1];
+if(!id)throw Error('No first paragraph anchor');
+const ranges={1:'2-12',2:'13-15',3:'16-18',4:'19-21',5:'22-25',6:'26-29'};
+const addition='<br><strong>30-slide presentation:</strong> This topic is on slides '+ranges[n]+'. '+(n===1?`<span data-type="media-inline" data-media-type="file" data-media-id="${attachment.fileId}" data-media-collection="contentId-6895960137" data-alt="${attachment.title}"></span>`:'<a href="https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6895960137">Download the PowerPoint from page 1</a>.');
+const edits=[{name:'replaceNode',localId:id,value:'<p>'+match[2]+addition+'</p>'}];
+fs.writeFileSync(path.join(dir,`deck-page-${n}-edits.json`),JSON.stringify(edits,null,2));
+console.log('Prepared targeted paragraph edit for topic '+n);

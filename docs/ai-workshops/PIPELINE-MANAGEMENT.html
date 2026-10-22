@@ -1,0 +1,17 @@
+<p><strong>Plan: start with an automated web smoke-test pilot after deployment, then expand to scheduled regression and release checks.</strong> The POC is local; the cloud pipeline has not been deployed.</p>
+<table>
+<thead><tr><th>Step</th><th>Business outcome</th><th>POC evidence / next action</th></tr></thead>
+<tbody>
+<tr><th>1. Agree the required test pack</th><td>Everyone knows which checks must run.</td><td>Tests can be listed today; QA must approve the mandatory cases.</td></tr>
+<tr><th>2. Run a cloud pilot</th><td>Repeatable checks after a SIT/UAT deployment.</td><td>Draft AWS CodeBuild instructions exist. A hosted run is still required.</td></tr>
+<tr><th>3. Publish results and evidence</th><td>QA can see failures without repeating the whole test manually.</td><td>Local reports, screenshots and replay evidence exist; restricted cloud storage remains to be configured.</td></tr>
+<tr><th>4. Enforce complete, successful runs</th><td>An incomplete or skipped pack cannot appear fully green.</td><td><strong>Local proof:</strong> 5 policy checks passed; the 6-test RSA report was rejected when 13 were required.</td></tr>
+<tr><th>5. Prove stability</th><td>Teams can trust the checks before relying on them for release decisions.</td><td>Proposed target: 10 unattended runs, with faults and cleanup checked.</td></tr>
+<tr><th>6. Expand the triggers</th><td>Catch regressions after deployment and during nightly/release testing.</td><td>Enable triggers and release rules after the pilot is stable and QA approves.</td></tr>
+</tbody>
+</table>
+<p><strong>Notes</strong></p>
+<p><strong>1. What the POC proves:</strong> The local result gate accepts a complete passing pack and rejects failed, skipped, empty or incomplete runs. It accepted the saved 2-test Benefit pack. It does not prove cloud execution.</p>
+<p><strong>2. What is needed next:</strong> A cloud runner, approved test accounts/data, access to the test environment and restricted evidence storage. Test-data cleanup and a failure owner must be agreed.</p>
+<p><strong>3. Proof before claiming integration:</strong> Retain a hosted run ID, complete results, report links and a controlled failure/recovery demonstration. No cloud QA stage or release gate was created in this POC.</p>
+<p><strong>Evidence:</strong> <a href="https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896156677">POC reports, screenshots and draft pipeline package</a>. <strong>Supported approach:</strong> <a href="https://playwright.dev/docs/ci">Playwright CI</a>; <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/test-reporting.html">AWS test reporting</a>; <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/vpc-support.html">private network access</a>.</p>

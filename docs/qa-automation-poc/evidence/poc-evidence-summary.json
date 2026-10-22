@@ -1,0 +1,52 @@
+{
+    "snapshot":  "2026-10-08",
+    "rsaReported":  {
+                        "source":  "https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6772031506",
+                        "cataloguedCases":  449,
+                        "implementedCases":  61,
+                        "tests":  71,
+                        "passed":  57,
+                        "skipped":  14,
+                        "failed":  0,
+                        "runtimeMinutes":  8.6,
+                        "independentlyRerun":  false
+                    },
+    "rsaWorkshop":  {
+                        "listedTests":  13,
+                        "functionalChecks":  12,
+                        "setupTests":  1,
+                        "latestSavedTests":  6,
+                        "latestSavedFunctionalChecks":  5,
+                        "passed":  6,
+                        "failed":  0,
+                        "skipped":  0,
+                        "seconds":  38.882136
+                    },
+    "benefitUi":  {
+                      "case":  "TC-VENDOR-CREATE-002",
+                      "vendorId":  20415,
+                      "cmsId":  "d4b1c8e8-d8ac-415d-86eb-856391f9a531",
+                      "passedTests":  2,
+                      "functionalCases":  1,
+                      "setupTests":  1,
+                      "renderingChecks":  19,
+                      "failedRenderingChecks":  0,
+                      "suiteSeconds":  286.86101,
+                      "functionalSeconds":  171.956
+                  },
+    "benefitDb":  {
+                      "case":  "TC-VENDOR-CREATE-001",
+                      "vendorId":  20414,
+                      "creation":  "Passed",
+                      "readConnection":  "Passed",
+                      "fullComparison":  "Corrected replay pending AWS authentication"
+                  },
+    "coverage300of400":  "Not verified",
+    "agentWinner":  "No matched benchmark",
+    "pipeline":  {
+                     "cloudExecution":  "Not performed",
+                     "policyChecks":  5,
+                     "incompletePackRejected":  true,
+                     "state":  "Draft buildspec, local gate proof"
+                 }
+}

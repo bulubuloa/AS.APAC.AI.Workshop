@@ -1,0 +1,12 @@
+{
+  "web": {
+    "slides": 17,
+    "sensitiveTextMatches": 0,
+    "sha256": "705ef722a5107bab9776a497a40c8a46b8a1b1f642b4646f6cd65c7d0c872608"
+  },
+  "mobile": {
+    "slides": 15,
+    "sensitiveTextMatches": 0,
+    "sha256": "ef2823a4fe02bb1d823c65d468771fdbcdae31343871a8a1e7a6e45c3a46ffd7"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "apiVersion": "v2",
+  "command": "confluence.content.attachments.upload",
+  "request": {
+    "site": "internationalsos.atlassian.net",
+    "id": "6896156677",
+    "file": "benefit-save-success.png",
+    "comment": "Synthetic UAT POC: creation success message, vendor 20415"
+  },
+  "data": {
+    "attachment": {
+      "mediaTypeDescription": "PNG Image",
+      "webuiLink": "/pages/viewpageattachments.action?pageId=6896156677&preview=%2F6896156677%2F6896156714%2Fbenefit-save-success.png",
+      "downloadLink": "/rest/api/content/6896156677/child/attachment/att6896156714/download",
+      "createdAt": null,
+      "comment": "Synthetic UAT POC: creation success message, vendor 20415",
+      "id": "att6896156714",
+      "version": {
+        "number": 1,
+        "message": "Synthetic UAT POC: creation success message, vendor 20415",
+        "minorEdit": false,
+        "authorId": "712020:72abfc60-0dd3-4165-9a62-9590fbcee8f5",
+        "createdAt": "2026-10-08T03:40:38.058Z"
+      },
+      "pageId": "6896156677",
+      "fileId": "3414642c-c578-4681-a50a-4b8484948924",
+      "mediaType": "image/png",
+      "status": "current",
+      "title": "benefit-save-success.png",
+      "fileSize": 43056,
+      "_links": {
+        "download": "/rest/api/content/6896156677/child/attachment/att6896156714/download",
+        "webui": "/pages/viewpageattachments.action?pageId=6896156677&preview=%2F6896156677%2F6896156714%2Fbenefit-save-success.png",
+        "base": "https://internationalsos.atlassian.net/wiki"
+      }
+    },
+    "contentId": "6896156677",
+    "file": "benefit-save-success.png",
+    "fileSize": 43056,
+    "prepare": {
+      "maxFileSize": 104857600,
+      "expiresAt": "2026-10-08T03:45:37.432230858Z"
+    }
+  },
+  "meta": {
+    "resourceClass": "entity",
+    "sourceMode": "native",
+    "resourceType": "confluence.content.attachments.upload"
+  }
+}

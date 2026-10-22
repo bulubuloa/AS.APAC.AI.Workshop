@@ -1,0 +1,50 @@
+{
+  "apiVersion": "v2",
+  "command": "confluence.content.attachments.upload",
+  "request": {
+    "site": "internationalsos.atlassian.net",
+    "id": "6896156677",
+    "file": "benefit-vendor-detail.png",
+    "comment": "Vendor 20415 detail after CMS comparison: synthetic content and logo/gallery rendered."
+  },
+  "data": {
+    "attachment": {
+      "webuiLink": "/pages/viewpageattachments.action?pageId=6896156677&preview=%2F6896156677%2F6895894531%2Fbenefit-vendor-detail.png",
+      "mediaTypeDescription": "PNG Image",
+      "downloadLink": "/rest/api/content/6896156677/child/attachment/att6895894531/download",
+      "createdAt": null,
+      "id": "att6895894531",
+      "version": {
+        "number": 1,
+        "message": "Vendor 20415 detail after CMS comparison: synthetic content and logo/gallery rendered.",
+        "minorEdit": false,
+        "authorId": "712020:72abfc60-0dd3-4165-9a62-9590fbcee8f5",
+        "createdAt": "2026-10-08T03:41:44.180Z"
+      },
+      "comment": "Vendor 20415 detail after CMS comparison: synthetic content and logo/gallery rendered.",
+      "pageId": "6896156677",
+      "mediaType": "image/png",
+      "fileId": "50522e4a-a1ea-47b4-a5ce-65a1eabd312c",
+      "status": "current",
+      "title": "benefit-vendor-detail.png",
+      "fileSize": 220256,
+      "_links": {
+        "download": "/rest/api/content/6896156677/child/attachment/att6895894531/download",
+        "webui": "/pages/viewpageattachments.action?pageId=6896156677&preview=%2F6896156677%2F6895894531%2Fbenefit-vendor-detail.png",
+        "base": "https://internationalsos.atlassian.net/wiki"
+      }
+    },
+    "contentId": "6896156677",
+    "file": "benefit-vendor-detail.png",
+    "fileSize": 220256,
+    "prepare": {
+      "maxFileSize": 104857600,
+      "expiresAt": "2026-10-08T03:46:42.067153277Z"
+    }
+  },
+  "meta": {
+    "resourceClass": "entity",
+    "sourceMode": "native",
+    "resourceType": "confluence.content.attachments.upload"
+  }
+}

@@ -1,0 +1,18 @@
+const fs=require('node:fs');
+let cfg=fs.readFileSync('playwright.config.ts','utf8');
+if(!cfg.includes("name: 'creation'"))cfg=cfg.replace("{ name: 'setup',",()=>"{ name: 'creation', testMatch: /creation\\.spec\\.ts/, dependencies: ['setup'], use: { storageState: process.env.BENEFIT_STORAGE_STATE ?? 'auth/state.json' } },\n    { name: 'setup',");
+fs.writeFileSync('playwright.config.ts',cfg);
+const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));pkg.scripts.test='playwright test --project=creation';pkg.scripts['test:creation']='playwright test --project=creation';fs.writeFileSync('package.json',JSON.stringify(pkg,null,2));
+let compare=fs.readFileSync('helpers/compare-vendor.ts','utf8');
+compare=compare.replace("import mysql from 'mysql2/promise';","import mysql, { type Connection } from 'mysql2/promise';").replace('connection: mysql.Connection','connection: Connection');
+compare=compare.replace("['FulfillmentInstruction','fulfillment_instruction']", "['FulfillmentInstruction','fulfillment_instruction'],['CategoryText','category_text'],['SubCategoryText','sub_category_text']");
+const start=compare.indexOf("    const actual=(element(codename)");
+const end=compare.indexOf('\n  }',start);
+compare=compare.slice(0,start)+`    const actual=(element(codename)??[]).map((a:any)=>String(a.url).toLowerCase().replace(/-/g,''));
+    const matches=actual.length===expected.length&&expected.every((assetId:string)=>actual.some((url:string)=>url.includes(assetId.replace(/-/g,''))));
+    rows.push({field:property+' asset links',expected,benefitDB:'Not mirrored by v2 creation',cms:element(codename),result:matches?'Passed':'Failed'});`+compare.slice(end);
+compare=compare.replace("check('Availability choice',value(template,'Availability')?.[0]?.codename,value(template,'Availability')?.[0]?.codename,element('availability')?.[0]?.codename);","check('Availability choice',value(template,'Availability')?.[0]?.codename,null,element('availability')?.[0]?.codename,false);");
+compare=compare.replace("check('Client availability text',value(template,'ClientAvailabilityConfig')??'',value(template,'ClientAvailabilityConfig')??'',element('client_availability_config')??'');","check('Client availability text',value(template,'ClientAvailabilityConfig')??'',null,element('client_availability_config')??'',false);");
+fs.writeFileSync('helpers/compare-vendor.ts',compare);
+fs.appendFileSync('.env.example','\n# Read-only Benefit UAT comparison connection:\nBENEFIT_DB_HOST=127.0.0.1\nBENEFIT_DB_PORT=3375\nBENEFIT_DB_DATABASE=AspireProdBackup\nBENEFIT_DB_USER=\nBENEFIT_DB_PASSWORD=\nBENEFIT_CMS_ENVIRONMENT_ID=225b0999-fce9-02b4-c44b-ed6990faeeaa\n');
+fs.appendFileSync('README.md','\n## Creation TC in Playwright\n\nRun npm run test:creation (also npm test). It runs login setup plus TC-VENDOR-CREATE-001. The test fills available inputs, verifies readiness/read access before Save, saves once and compares the returned CMSId across BenefitDB and CMS. Attachments include the specification, field values, screenshots and a comparison table. Traces/videos are recorded. Blocked prerequisites cause a failed test with a BLOCKED annotation; unexecuted comparison stages are explicitly Not run. Provide the read-only DB variables from .env.example locally. Only SELECT statements are used for database checks. The test creates a synthetic vendor/assets through the UAT application when prerequisites allow it; no automatic destructive cleanup.\n');

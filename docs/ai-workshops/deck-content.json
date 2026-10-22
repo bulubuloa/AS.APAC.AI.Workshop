@@ -1,0 +1,730 @@
+{
+  "title": "QA Automation - Six Questions and POC Evidence",
+  "slides": [
+    {
+      "q": 0,
+      "title": "QA automation: tools and POC results",
+      "type": "cover",
+      "subtitle": "Six questions for the APAC Aspire AI workshop",
+      "body": [
+        "RoadSide web • Benefit admin • Aspire Partner Android",
+        "Decision evidence and a staged pipeline plan",
+        "8 October 2026"
+      ],
+      "notes": "\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896156677\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 1,
+      "title": "Requirements behind the tool choice",
+      "type": "table",
+      "head": [
+        "Requirement",
+        "Our example"
+      ],
+      "rows": [
+        [
+          "Browser navigation",
+          "RSA dealer detail opens in a new tab"
+        ],
+        [
+          "Business assertions",
+          "Dealer code/name; vendor values versus CMS"
+        ],
+        [
+          "Evidence",
+          "HTML/JUnit, screenshots, trace and video"
+        ],
+        [
+          "Execution control",
+          "Required pack count and failure/skip gate"
+        ],
+        [
+          "Native Android",
+          "Login, vehicle, fresh OTP and dashboard"
+        ]
+      ],
+      "takeaway": "Playwright for web; Appium + WebdriverIO for native mobile.",
+      "notes": "\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6895960137\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 1,
+      "title": "Playwright: popup detail and field assertions",
+      "type": "example",
+      "left": [
+        "Apache-2.0; $0 core framework fee",
+        "Built-in runner, HTML/JUnit and traces",
+        "Our RSA popup test compares code and name"
+      ],
+      "code": [
+        "const popup = page.waitForEvent('popup');",
+        "await dealerLink.click();",
+        "const detail = await popup;",
+        "await expect(detailName)",
+        "  .toHaveValue(expectedName);"
+      ],
+      "takeaway": "Existing executable example: roadside-web / TC02.2",
+      "notes": "https://playwright.dev/docs/pages\nhttps://playwright.dev/docs/test-reporters\nhttps://github.com/microsoft/playwright/blob/main/LICENSE\nhttps://github.com/bulubuloa/AS.APAC.AI.Workshop/blob/main/roadside-web/tests/02-dealer.spec.ts\nCode sketch reuses fixture locators; it is not a standalone script.\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6895960137\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 1,
+      "title": "Selenium: established language and Grid assets",
+      "type": "example",
+      "left": [
+        "Apache-2.0; $0 core framework fee",
+        "Good fit for an existing Java/C# ecosystem",
+        "Runner and evidence conventions need assembly"
+      ],
+      "code": [
+        "field = WebDriverWait(driver, 10).until(",
+        "  EC.visibility_of_element_located(",
+        "    (By.ID, \"vendorName\")))",
+        "assert field.get_attribute(\"value\") == expected"
+      ],
+      "takeaway": "Can test the same values; no comparative run was performed.",
+      "notes": "https://github.com/SeleniumHQ/selenium/blob/trunk/LICENSE\nhttps://www.selenium.dev/documentation/webdriver/interactions/windows/\nIllustrative Python sketch; imports/fixture/driver omitted.\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6895960137\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 1,
+      "title": "Cypress: interactive single-tab workflow",
+      "type": "example",
+      "left": [
+        "MIT; Cypress App is free",
+        "Cloud recording is an optional service",
+        "RSA new-tab checks use a plugin or adaptation"
+      ],
+      "code": [
+        "cy.visit(detailUrl);",
+        "cy.get('[data-testid=vendor-name]')",
+        "  .should('have.value', expectedName);"
+      ],
+      "takeaway": "Strong frontend alternative; our popup fits Playwright directly.",
+      "notes": "https://docs.cypress.io/app/faq\nhttps://docs.cypress.io/app/references/trade-offs\nCypress documents multi-tab through @cypress/puppeteer. Code is illustrative, not executed here.\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6895960137\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 1,
+      "title": "Robot Framework: keywords over Playwright",
+      "type": "example",
+      "left": [
+        "Apache-2.0 core and Browser library",
+        "Readable keywords for QA authoring",
+        "CMS/DB helpers still need custom integration"
+      ],
+      "code": [
+        "*** Settings ***",
+        "Library    Browser",
+        "*** Test Cases ***",
+        "Vendor Name Matches",
+        "    New Page    %{DETAIL_URL}",
+        "    Get Property    id=vendorName",
+        "    ...    value    ==    QA Vendor"
+      ],
+      "takeaway": "A different authoring layer; Browser uses Playwright underneath.",
+      "notes": "https://robotframework.org/\nhttps://robotframework-browser.org/\nhttps://github.com/MarketSquare/robotframework-browser\nIllustrative keywords; browser/context setup omitted.\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6895960137\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 1,
+      "title": "Katalon: guided authoring and object repository",
+      "type": "example",
+      "left": [
+        "Vendor commercial terms; local Free tier",
+        "Recorded flows and curated test objects",
+        "CI requires a Runtime Engine add-on"
+      ],
+      "code": [
+        "WebUI.navigateToUrl(detailUrl)",
+        "WebUI.verifyElementAttributeValue(",
+        "  findTestObject('Vendor/Name'),",
+        "  'value', 'QA Vendor', 10)"
+      ],
+      "takeaway": "Consider when low-code and vendor support outweigh added licensing.",
+      "notes": "https://katalon.com/pricing\nhttps://www.katalon.com/terms\nhttps://docs.katalon.com/katalon-studio/keywords/keyword-description-in-katalon-studio/web-ui-keywords/webui-verify-element-attribute-value\nIllustrative Groovy sketch; object repository/fixtures/imports required.\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6895960137\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 1,
+      "title": "Appium + WebdriverIO: native Android control",
+      "type": "example",
+      "left": [
+        "Appium Apache-2.0; WebdriverIO MIT",
+        "UiAutomator2 drives native screens",
+        "Existing vehicle/OTP helpers can be reused"
+      ],
+      "code": [
+        "await LoginScreen.open();",
+        "await LoginScreen.signIn(user, password);",
+        "await expect(vehiclePicker)",
+        "  .toBeDisplayed();"
+      ],
+      "takeaway": "Retain for Aspire Partner; a browser viewport is not native evidence.",
+      "notes": "https://github.com/appium/appium/blob/master/LICENSE\nhttps://github.com/webdriverio/webdriverio/blob/main/LICENSE\nhttps://appium.io/docs/en/latest/intro/\nhttps://github.com/bulubuloa/AS.APAC.AI.Workshop/tree/main/roadside-android\nIllustrative Page Object sketch; adapt method names to source.\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6895960137\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 1,
+      "title": "Maestro: concise mobile smoke flows",
+      "type": "example",
+      "left": [
+        "Apache-2.0; local CLI free",
+        "YAML for a readable native journey",
+        "Our fresh-OTP helper needs adaptation"
+      ],
+      "code": [
+        "appId: com.aspire.partner.uat",
+        "---",
+        "- launchApp",
+        "- tapOn: \"Username\"",
+        "- inputText: ${TEST_USERNAME}",
+        "- tapOn: \"Sign in\"",
+        "- assertVisible: \"Select vehicle\""
+      ],
+      "takeaway": "Candidate mobile alternative; not benchmarked against our Appium pack.",
+      "notes": "https://github.com/mobile-dev-inc/maestro/blob/main/LICENSE\nhttps://docs.maestro.dev/get-started/quickstart\nIllustrative abbreviated YAML; password/policy steps omitted.\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6895960137\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 1,
+      "title": "Web licensing and optional cloud costs",
+      "type": "table",
+      "head": [
+        "Product",
+        "Advertised USD price",
+        "Boundary"
+      ],
+      "rows": [
+        [
+          "Playwright / Selenium / Robot",
+          "$0 core fee",
+          "CI, storage and engineering extra"
+        ],
+        [
+          "Cypress App",
+          "$0; MIT",
+          "Cloud optional"
+        ],
+        [
+          "Cypress Cloud Team",
+          "$799/year",
+          "120k results/year in annual plan"
+        ],
+        [
+          "Cypress Cloud Business",
+          "$3,199/year",
+          "120k results/year; extra usage"
+        ],
+        [
+          "Katalon Professional",
+          "$2,199/seat/year displayed",
+          "$1,000 eligible promotion; CI add-on"
+        ]
+      ],
+      "takeaway": "Checked 8 Oct 2026. Free execution does not mean zero operating cost.",
+      "notes": "https://www.cypress.io/pricing\nhttps://katalon.com/pricing\nCypress annual monthly equivalents are rounded $67/$267. Katalon promotion first 3 eligible seats, first online purchase, until 31 Oct 2026; renewal and Runtime Engine/TestCloud add-ons require confirmation. Enterprise plans are quote-based.\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6895960137\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 1,
+      "title": "Mobile and workload cost examples",
+      "type": "table",
+      "head": [
+        "Assumed scenario",
+        "License/subscription impact"
+      ],
+      "rows": [
+        [
+          "Appium/WDIO on own emulator",
+          "$0 core; runner and device operation extra"
+        ],
+        [
+          "Maestro: 2 concurrent cloud devices",
+          "2 × $250 = $500/month"
+        ],
+        [
+          "3 Katalon Professional authors",
+          "3 × $2,199 = $6,597/year standard basis"
+        ],
+        [
+          "100 cases × 10 daily runs × 22 days",
+          "22,000 results/month; 264,000/year"
+        ],
+        [
+          "Cypress Team at assumed volume",
+          "144k/year above included 120k"
+        ]
+      ],
+      "takeaway": "Assumptions for budgeting, not measured spend or savings.",
+      "notes": "https://maestro.dev/pricing\nhttps://katalon.com/pricing\nhttps://www.cypress.io/pricing\nMaestro annual equivalent $6,000 at unchanged rate; web-device rate requires inquiry. Eligible Katalon temporary promotion totals $3,000/year for 3 seats, excluding add-ons. Cypress extra-result fees depend on contracted billing.\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6895960137\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 1,
+      "title": "Why we choose Playwright for web",
+      "type": "bullets",
+      "body": [
+        "The actual RSA popup workflow already has reviewed assertions.",
+        "Benefit creation/detail checks demonstrate CMS value comparison.",
+        "One runner produces inspectable HTML/JUnit and retained evidence.",
+        "Existing TypeScript examples avoid a migration for this POC.",
+        "No mandatory framework or hosted-report subscription."
+      ],
+      "takeaway": "A justified project fit; no universal speed or cost superiority is claimed.",
+      "notes": "https://playwright.dev/docs/trace-viewer\nhttps://playwright.dev/docs/actionability\nhttps://github.com/bulubuloa/AS.APAC.AI.Workshop/tree/main/roadside-web\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6895960137\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 2,
+      "title": "Codex and Claude: evidence from different workloads",
+      "type": "table",
+      "head": [
+        "Dimension",
+        "Claude Code RSA POC",
+        "Codex Benefit POC"
+      ],
+      "rows": [
+        [
+          "Attribution",
+          "Reported in company source",
+          "This working session"
+        ],
+        [
+          "Output",
+          "61 cases → 71 tests reported",
+          "Creation + Save/detail/CMS checks"
+        ],
+        [
+          "Last result",
+          "57 passed / 14 skipped reported",
+          "TC002 + setup passed; 19 comparisons"
+        ],
+        [
+          "Scope",
+          "RSA catalogue subset",
+          "Benefit vendor workflow"
+        ],
+        [
+          "Interpretation",
+          "No matched benchmark",
+          "No agent winner established"
+        ]
+      ],
+      "takeaway": "Test execution time is not AI authoring productivity.",
+      "notes": "\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896910361\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 2,
+      "title": "What worked and what needed correction",
+      "type": "columns",
+      "leftTitle": "Reported Claude evidence",
+      "left": [
+        "Source review corrected NEW badge expectations.",
+        "Search/prefix rules were identified.",
+        "Accounts, identity and fixtures blocked 14 tests."
+      ],
+      "rightTitle": "Measured Codex evidence",
+      "right": [
+        "Save success and CMS rendering checks passed.",
+        "Thailand/global reload prerequisite needed a user correction.",
+        "Asset-ID and comparison assumptions needed fixes."
+      ],
+      "takeaway": "Human review and valid environment access were necessary in both POCs.",
+      "notes": "\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896910361\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 2,
+      "title": "A fair agent benchmark",
+      "type": "bullets",
+      "body": [
+        "Use the same five reviewed cases, repo commit and UAT fixtures.",
+        "Provide equal access, permissions and authoring time.",
+        "Record model version, prompts and human interventions.",
+        "Measure accepted-test time, false defect reports and seeded-fault detection.",
+        "Capture actual billed usage and maintenance after a UI change."
+      ],
+      "takeaway": "Choose an authoring standard after matched evidence; keep one reviewed runtime.",
+      "notes": "Proposed benchmark, not executed. Suggested cases: dependent job creation, popup detail, API fallback, vendor Save/detail/CMS, read-only DB consistency.\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896910361\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 3,
+      "title": "Recommended tools and their boundaries",
+      "type": "table",
+      "head": [
+        "Workstream",
+        "Recommendation",
+        "Reason / boundary"
+      ],
+      "rows": [
+        [
+          "Web regression",
+          "Playwright Test",
+          "Existing popup and vendor POC"
+        ],
+        [
+          "Native Android",
+          "Appium + WebdriverIO",
+          "Resource IDs and native screens"
+        ],
+        [
+          "AI authoring",
+          "Continue controlled dual-tool pilot",
+          "No matched Codex/Claude result"
+        ],
+        [
+          "CMS / database verification",
+          "API + read-only adapters",
+          "Access and correlation required"
+        ],
+        [
+          "Physical service acceptance",
+          "Operational observation",
+          "Digital status is not service proof"
+        ]
+      ],
+      "takeaway": "Choose the runtime per system and review the generated business assertions.",
+      "notes": "\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896287838\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 3,
+      "title": "Save success and resulting vendor detail",
+      "type": "evidence",
+      "images": [
+        "benefit-save-success.png",
+        "benefit-vendor-detail.png"
+      ],
+      "captions": [
+        "Post-save feedback",
+        "Resulting vendor detail"
+      ],
+      "takeaway": "Synthetic vendor 20415; 19 CMS-to-rendering comparisons passed.",
+      "notes": "Saved TC-VENDOR-CREATE-002 evidence, 8 Oct 2026. Full DB consistency is a separate check. Screenshots show the exercised flow, not every optional field.\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896287838\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 3,
+      "title": "A green test can still leave integration gaps",
+      "type": "bullets",
+      "body": [
+        "TC002 compares CMS values with the rendered detail.",
+        "The corrected full BenefitDB replay remains incomplete after AWS expiry.",
+        "Vendor 20414 payload had blank optional mailing/restaurant collections.",
+        "A blank request matching a blank stored value does not prove input retention.",
+        "Add reviewed UI-to-payload and DB/CMS checks before broad coverage claims."
+      ],
+      "takeaway": "Separate app defects, test defects and environment blockers.",
+      "notes": "\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896287838\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 4,
+      "title": "RSA catalogue and implementation coverage",
+      "type": "table",
+      "head": [
+        "Reported measure",
+        "Count",
+        "Meaning"
+      ],
+      "rows": [
+        [
+          "Catalogue",
+          "449 cases / 22 sheets",
+          "Business case inventory"
+        ],
+        [
+          "Implemented",
+          "61 cases → 71 tests",
+          "13.6% case implementation"
+        ],
+        [
+          "Last reported run",
+          "57 pass / 14 skip / 0 fail",
+          "Not complete product coverage"
+        ],
+        [
+          "Not started",
+          "388 cases",
+          "Not evidence of impossibility"
+        ],
+        [
+          "300 of 400",
+          "Unverified",
+          "Need workbook version and case IDs"
+        ]
+      ],
+      "takeaway": "Do not present the unverified 300/400 figure as measured coverage.",
+      "notes": "Source page 6772031506; larger original suite and artifacts were unavailable in current checkout. 61/449 = 13.5857%; rounded 13.6%.\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6895534237\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 4,
+      "title": "Saved workshop and Benefit results",
+      "type": "table",
+      "head": [
+        "Pack",
+        "Inventory / saved result",
+        "Boundary"
+      ],
+      "rows": [
+        [
+          "RSA runnable inventory",
+          "13 tests: 12 functional + setup",
+          "Measured test listing"
+        ],
+        [
+          "Saved RSA run, 7 Oct",
+          "6 pass; 38.882 seconds",
+          "5 functional + setup"
+        ],
+        [
+          "Benefit UI, 8 Oct",
+          "2 pass; 286.861 seconds",
+          "TC002 + setup"
+        ],
+        [
+          "Benefit CMS rendering",
+          "19 comparisons passed",
+          "One exercised synthetic vendor"
+        ],
+        [
+          "Mobile archived reports",
+          "3 passing checks",
+          "No fresh combined run"
+        ]
+      ],
+      "takeaway": "Inventory, executed tests and assertions are different units.",
+      "notes": "\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6895534237\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 4,
+      "title": "How to report completion without inflating it",
+      "type": "bullets",
+      "body": [
+        "Implemented coverage = unique implemented cases / catalogued cases.",
+        "Executed coverage = unique executed cases / catalogued cases.",
+        "Pass rate = passed tests / executed tests, with skips shown separately.",
+        "Track setup tests, assertions and repeated runs outside business-case totals.",
+        "Publish case IDs, pack version, source SHA and latest artifact links."
+      ],
+      "takeaway": "Reconcile the actual 400-case pack before claiming 75% completion.",
+      "notes": "\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6895534237\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 5,
+      "title": "The 14 reported skips have enabling conditions",
+      "type": "table",
+      "head": [
+        "Block",
+        "Tests",
+        "Enabling action"
+      ],
+      "rows": [
+        [
+          "Role/agent/inactive/impersonation accounts",
+          "9",
+          "Dedicated approved UAT accounts"
+        ],
+        [
+          "Okta test identity",
+          "2",
+          "Approved identity/session design"
+        ],
+        [
+          "Signed authentication hash",
+          "1",
+          "Controlled minting fixture"
+        ],
+        [
+          "Reference/assigned-truck jobs",
+          "2",
+          "Reproducible fixture relationships"
+        ]
+      ],
+      "takeaway": "Missing prerequisites are blocked automation, not inherently manual cases.",
+      "notes": "\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896681063\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 5,
+      "title": "Full automation and conditional integration checks",
+      "type": "columns",
+      "leftTitle": "Full with reviewed fixtures",
+      "left": [
+        "CRUD, filtering and negative validation",
+        "Dealer popup and dependent selections",
+        "Save/detail with known expected values"
+      ],
+      "rightTitle": "Full when access is ready",
+      "right": [
+        "CMS and BenefitDB field consistency",
+        "Assigned-provider/truck relationships",
+        "Signed paths and callback correlation"
+      ],
+      "takeaway": "Resolve credentials, test data and network routes; use bounded polling.",
+      "notes": "\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896681063\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 5,
+      "title": "Partial automation: messages, devices and dispatch",
+      "type": "table",
+      "head": [
+        "Scenario",
+        "Automated proof",
+        "Remaining evidence"
+      ],
+      "rows": [
+        [
+          "OTP / notifications",
+          "Request, event and newer test SMS row",
+          "Physical handset delivery"
+        ],
+        [
+          "GPS / camera / background",
+          "Appium harness on controlled device",
+          "Field/network/OS experience"
+        ],
+        [
+          "Roadside dispatch",
+          "Assignment and digital status transitions",
+          "Travel, towing and actual service"
+        ],
+        [
+          "Visual / accessibility",
+          "Rule checks and approved screenshot diffs",
+          "Usability and baseline judgement"
+        ]
+      ],
+      "takeaway": "Mocks prove a contract path; they do not prove the external service happened.",
+      "notes": "\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896681063\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 5,
+      "title": "Manual portions and a clear unblock plan",
+      "type": "bullets",
+      "body": [
+        "Real MFA approval and CAPTCHA remain human actions in that process.",
+        "Physical service quality and subjective usability require acceptance checks.",
+        "Unreviewed cases remain “not assessed,” not “cannot automate.”",
+        "For each case, record owner, blocker, enabling action and acceptance evidence.",
+        "Split manual portions from the automated surrounding application checks."
+      ],
+      "takeaway": "Assess the remaining scope case by case rather than labeling a whole remainder manual.",
+      "notes": "\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896681063\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 6,
+      "title": "Pipeline plan: target execution sequence",
+      "type": "table",
+      "head": [
+        "Stage",
+        "Expected proof"
+      ],
+      "rows": [
+        [
+          "Deploy approved SIT/UAT build",
+          "Target URL and deployed source/version"
+        ],
+        [
+          "Preflight",
+          "Account, fixtures, DNS/TLS and DB route"
+        ],
+        [
+          "Required smoke pack",
+          "Complete count and per-case results"
+        ],
+        [
+          "API / CMS / SELECT checks",
+          "Correlated independent expected values"
+        ],
+        [
+          "Report and quality gate",
+          "Restricted evidence; fail/skip/incomplete rejection"
+        ]
+      ],
+      "takeaway": "Proposed flow; no new cloud QA pipeline was deployed.",
+      "notes": "\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896681090\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 6,
+      "title": "Local pipeline POC and result gate",
+      "type": "columns",
+      "leftTitle": "Evidence already available",
+      "left": [
+        "Draft CodeBuild buildspec and JUnit output",
+        "Five local gate policy checks",
+        "Saved 6-test RSA run rejected when 13 required",
+        "Saved 2-test Benefit pack accepted when 2 required"
+      ],
+      "rightTitle": "Evidence still required",
+      "right": [
+        "Actual CodeBuild project and run ID",
+        "Unattended credentials and private DB route",
+        "Restricted artifact/report links",
+        "Before/fault/after runs and cleanup"
+      ],
+      "takeaway": "Local gate proof does not establish hosted CI integration.",
+      "notes": "\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896681090\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 6,
+      "title": "Draft runner commands and unattended prerequisites",
+      "type": "example",
+      "left": [
+        "Use locked dependencies and compatible browser image",
+        "Use a runner/VPC route, not a desktop tunnel",
+        "Run controlled create packs without automatic retry"
+      ],
+      "code": [
+        "npm ci",
+        "npx playwright install --with-deps chromium",
+        "node ../docs/qa-automation-poc/pipeline/preflight.cjs",
+        "npx playwright test --workers=1 --retries=0",
+        "node ../docs/qa-automation-poc/pipeline/",
+        "  validate-junit.cjs reports/junit.xml 13"
+      ],
+      "takeaway": "Last two lines form one command; see attached source package for executable YAML.",
+      "notes": "https://playwright.dev/docs/ci\nhttps://docs.aws.amazon.com/codebuild/latest/userguide/test-reporting.html\nhttps://docs.aws.amazon.com/codebuild/latest/userguide/vpc-support.html\nDraft at docs/qa-automation-poc/pipeline/buildspec.poc.yml; source repository root contains roadside-web. Requires project secrets/image/network setup.\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896681090\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 6,
+      "title": "Milestones before making it a release gate",
+      "type": "table",
+      "head": [
+        "Milestone",
+        "Required evidence"
+      ],
+      "rows": [
+        [
+          "Freeze reviewed pack",
+          "Case manifest and executable inventory"
+        ],
+        [
+          "Prove one hosted run",
+          "Run ID, SHA, counts and artifacts"
+        ],
+        [
+          "Prove defect detection",
+          "Isolated before/fault/after with cleanup"
+        ],
+        [
+          "Stabilize",
+          "Proposed: 10 unattended runs, no unexplained skips"
+        ],
+        [
+          "Enable triggers",
+          "Post-deploy smoke, nightly regression, release pack"
+        ]
+      ],
+      "takeaway": "QA owns triage; add native mobile and contract coverage separately.",
+      "notes": "\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896681090\nEvidence snapshot: 8 October 2026."
+    },
+    {
+      "q": 0,
+      "title": "Decisions and evidence to collect next",
+      "type": "bullets",
+      "body": [
+        "Adopt Playwright for new RSA/Benefit web checks; retain native Appium coverage.",
+        "Use matched evidence before choosing Codex or Claude as the authoring standard.",
+        "Reconcile the 400-case workbook and its implemented/passed case IDs.",
+        "Complete the pending BenefitDB consistency replay.",
+        "Run one controlled CI pilot and retain fault-detection proof."
+      ],
+      "takeaway": "All six topic pages and workshop repositories are linked in the speaker notes.",
+      "notes": "https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6895960137\nhttps://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896910361\nhttps://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896287838\nhttps://internationalsos.atlassian.net/wiki/spaces/AD/pages/6895534237\nhttps://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896681063\nhttps://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896681090\nhttps://github.com/bulubuloa/AS.APAC.AI.Workshop\nhttps://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896091147\nhttps://internationalsos.atlassian.net/wiki/spaces/AD/pages/6894092390\nSource: https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896156677\nEvidence snapshot: 8 October 2026."
+    }
+  ],
+  "counts": {
+    "1": 11,
+    "2": 3,
+    "3": 3,
+    "4": 3,
+    "5": 4,
+    "6": 4
+  }
+}

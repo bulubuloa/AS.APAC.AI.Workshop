@@ -1,0 +1,104 @@
+﻿output_files:
+  stdout: "C:\\Users\\HOANG~1.QUA\\AppData\\Local\\Temp\\twg\\1791454594\\run.G4luZ2\\stdout.json"
+  stdout_lines: 139
+  stdout_bytes: 3958
+command: "docs.get"
+resource_type: "projection"
+runtime_advisories:
+  updateAvailable:
+    currentVersion: "1.3.1"
+    latestVersion: "1.3.5"
+    installMethod: "direct-public-installer"
+    recommendedCommand: "twg upgrade"
+    installPageUrl: "https://developer.atlassian.com/cloud/twg-cli/getting-started/installation/"
+    checkedAt: "2026-10-08T08:21:41.922Z"
+stdout_inline:
+  apiVersion: "v2"
+  command: "docs.get"
+  request:
+    idOrAri: ["6895960137", "6896910361", "6896287838", "6895534237", "6896681063", "6896681090"]
+    since: "30d"
+    accountId: null
+    first: null
+    after: null
+    batch:
+      concurrency: 5
+  data:
+    items:
+      -
+        input: "6895960137"
+        ok: true
+        data:
+          id: "ari:cloud:confluence:59ee8e8b-5a4a-4fa8-abc9-76b09d43c920:page/6895960137"
+          displayName: "1. QA Automation Tools and Why Playwright"
+          url: "https://internationalsos.atlassian.net/wiki/pages/6895960137"
+          provider: "Confluence"
+          createdAt: null
+          lastUpdated: null
+          relationships: ["created", "contributed", "updated", "viewed"]
+      -
+        input: "6896910361"
+        ok: true
+        data:
+          id: "ari:cloud:confluence:59ee8e8b-5a4a-4fa8-abc9-76b09d43c920:page/6896910361"
+          displayName: "2. Codex versus Claude Code - Automation Results"
+          url: "https://internationalsos.atlassian.net/wiki/pages/6896910361"
+          provider: "Confluence"
+          createdAt: null
+          lastUpdated: null
+          relationships: ["created", "contributed", "updated"]
+      -
+        input: "6896287838"
+        ok: true
+        data:
+          id: "ari:cloud:confluence:59ee8e8b-5a4a-4fa8-abc9-76b09d43c920:page/6896287838"
+          displayName: "3. Recommended Tools - Strengths, Weaknesses and POC Proof"
+          url: "https://internationalsos.atlassian.net/wiki/pages/6896287838"
+          provider: "Confluence"
+          createdAt: null
+          lastUpdated: null
+          relationships: ["created", "contributed", "updated"]
+      -
+        input: "6895534237"
+        ok: true
+        data:
+          id: "ari:cloud:confluence:59ee8e8b-5a4a-4fa8-abc9-76b09d43c920:page/6895534237"
+          displayName: "4. Completed Automation - Coverage and Remaining Scope"
+          url: "https://internationalsos.atlassian.net/wiki/pages/6895534237"
+          provider: "Confluence"
+          createdAt: null
+          lastUpdated: null
+          relationships: ["created", "contributed", "updated"]
+      -
+        input: "6896681063"
+        ok: true
+        data:
+          id: "ari:cloud:confluence:59ee8e8b-5a4a-4fa8-abc9-76b09d43c920:page/6896681063"
+          displayName: "5. Partial Automation, Blockers and Manual Scenarios"
+          url: "https://internationalsos.atlassian.net/wiki/pages/6896681063"
+          provider: "Confluence"
+          createdAt: null
+          lastUpdated: null
+          relationships: ["created", "updated"]
+      -
+        input: "6896681090"
+        ok: true
+        data:
+          id: "ari:cloud:confluence:59ee8e8b-5a4a-4fa8-abc9-76b09d43c920:page/6896681090"
+          displayName: "6. Pipeline Integration Plan and POC Evidence"
+          url: "https://internationalsos.atlassian.net/wiki/pages/6896681090"
+          provider: "Confluence"
+          createdAt: null
+          lastUpdated: null
+          relationships: ["created", "contributed", "updated"]
+    summary:
+      requested: 6
+      succeeded: 6
+      failed: 0
+  meta:
+    resourceClass: "projection"
+    sourceMode: "mixed"
+    resourceType: "docs"
+    backend: "graphstore"
+    resultCount: 6
+---END---

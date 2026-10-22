@@ -1,0 +1,866 @@
+[
+  {
+    "id": "VC-001",
+    "area": "Readiness",
+    "title": "Create form and empty Save",
+    "automation": "Automated now",
+    "priority": "P0",
+    "preconditions": "UAT account; English; Thailand.",
+    "steps": [
+      "Open /vendors-ver2/add.",
+      "Wait for Vendor Information and Save.",
+      "Inspect empty Save."
+    ],
+    "expected": "Create form visible; Save disabled for missing required data.",
+    "points": "UI, authentication",
+    "status": "Passed"
+  },
+  {
+    "id": "VC-002",
+    "area": "Readiness",
+    "title": "Authorized field readiness",
+    "automation": "Automated now",
+    "priority": "P0",
+    "preconditions": "JWT includes Vendors.View and Vendors.Create; English.",
+    "steps": [
+      "Open creation page.",
+      "Resolve Vendor Name by label.",
+      "Wait 30 seconds for enabled input."
+    ],
+    "expected": "Input editable after initialization. Actual: remained disabled over 62 observations.",
+    "points": "UI, permissions, localization",
+    "status": "Failed"
+  },
+  {
+    "id": "VC-003",
+    "area": "Readiness",
+    "title": "Application lookup success",
+    "automation": "Automated now",
+    "priority": "P0",
+    "preconditions": "Authenticated browser.",
+    "steps": [
+      "Capture initialization responses.",
+      "Inspect get-by-cmsid/0, languages, CMS items/field-values.",
+      "Check HTTP and result envelope."
+    ],
+    "expected": "All captured responses HTTP 200 and Succeeded=true; not just HTTP success.",
+    "points": "API, CMS, Benefit read path",
+    "status": "Passed"
+  },
+  {
+    "id": "VC-004",
+    "area": "Readiness",
+    "title": "CMS published-content connectivity",
+    "automation": "Automated now",
+    "priority": "P0",
+    "preconditions": "Shared SIT/UAT CMS Delivery endpoint.",
+    "steps": [
+      "GET one depth=0 item for vendor_group_list, country_list and template_generic.",
+      "Use freshness header.",
+      "Verify status and requested item type."
+    ],
+    "expected": "Nonempty correctly typed published sample for each; not proof of creation or total integrity.",
+    "points": "CMS Delivery",
+    "status": "Passed"
+  },
+  {
+    "id": "VC-005",
+    "area": "Readiness",
+    "title": "Anonymous creation-route protection",
+    "automation": "Automated now",
+    "priority": "P0",
+    "preconditions": "New context without local storage or cookies.",
+    "steps": [
+      "Open creation route.",
+      "Wait for Sign In.",
+      "Confirm Vendor Information absent."
+    ],
+    "expected": "Anonymous visitor cannot see create form.",
+    "points": "UI, authentication",
+    "status": "Passed"
+  },
+  {
+    "id": "VC-006",
+    "area": "General",
+    "title": "Minimum valid vendor creation",
+    "automation": "Automatable with access/data",
+    "priority": "P0",
+    "preconditions": "Editable form; published normal category/subcategory; unique synthetic fixture.",
+    "steps": [
+      "Choose normal category, Active, Global, market.",
+      "Enter QA_VENDOR_<runId> and qa-vendor@example.invalid.",
+      "Save once; capture POST /api/vendors/v2 envelope and IDs.",
+      "Compare CMS and SQL by returned CMSId."
+    ],
+    "expected": "Succeeded=true; exactly one vendor and published template_generic; correct category module/market/links; no RSA record for normal vendor.",
+    "points": "UI, API, CMS, MySQL, RSA exclusion",
+    "status": "Blocked: required Vendor Information disabled"
+  },
+  {
+    "id": "VC-007",
+    "area": "Validation",
+    "title": "Mandatory fields",
+    "automation": "Automatable with access/data",
+    "priority": "P1",
+    "preconditions": "Otherwise valid fixture; test each required field separately.",
+    "steps": [
+      "Clear name, email, status, category, subcategory or availability.",
+      "Blur and inspect validation.",
+      "Attempt Save only if enabled; observe POST traffic."
+    ],
+    "expected": "Save disabled or field-specific error; no create POST, DB row or CMS item.",
+    "points": "UI validation, API exclusion, DB/CMS exclusion",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-008",
+    "area": "Validation",
+    "title": "Email syntax and whitespace name",
+    "automation": "Automatable with access/data",
+    "priority": "P1",
+    "preconditions": "Editable valid fixture.",
+    "steps": [
+      "Try malformed email and whitespace-only name.",
+      "Blur.",
+      "Inspect validation and Save."
+    ],
+    "expected": "Invalid email and blank name rejected; no side effects.",
+    "points": "UI validation, API",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-009",
+    "area": "Validation",
+    "title": "Duplicate vendor name",
+    "automation": "Automatable with access/data",
+    "priority": "P0",
+    "preconditions": "Existing synthetic vendor in same market.",
+    "steps": [
+      "Try exact duplicate, case variant and trimmed variant.",
+      "Submit UI.",
+      "Repeat direct API in isolated fixture.",
+      "Compare counts."
+    ],
+    "expected": "Duplicate policy enforced consistently; no extra DB/CMS records. UI checks name, server prevalidation does not currently check name: BA policy required.",
+    "points": "UI duplicate lookup, API, MySQL, CMS",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-010",
+    "area": "Validation",
+    "title": "Duplicate dealer code",
+    "automation": "Automatable with access/data",
+    "priority": "P0",
+    "preconditions": "Existing synthetic dealer code.",
+    "steps": [
+      "Submit UI and API with same dealer code.",
+      "Capture result.",
+      "Compare CMS/DB/RSA counts."
+    ],
+    "expected": "Failure before CMS creation; existing dealer untouched; no duplicate record.",
+    "points": "Server prevalidation, MySQL, CMS, RSA",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-011",
+    "area": "Validation",
+    "title": "Duplicate RSA username",
+    "automation": "Automatable with access/data",
+    "priority": "P0",
+    "preconditions": "Existing synthetic provider username.",
+    "steps": [
+      "Submit provider with same username through UI/API.",
+      "Capture result.",
+      "Compare CMS/DB/RSA counts."
+    ],
+    "expected": "Rejected before creating CMS content; no duplicate provider or orphan item.",
+    "points": "Server prevalidation, MySQL, CMS, RSA",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-012",
+    "area": "Validation",
+    "title": "Name and serialized contact boundaries",
+    "automation": "Automatable with access/data",
+    "priority": "P1",
+    "preconditions": "Live constraints measured; synthetic fixture.",
+    "steps": [
+      "Exercise names around 200 characters, also considering module suffix.",
+      "Exercise KeyContact/KeyContactEN serialized JSON around 4000 characters.",
+      "Inspect rejection and cleanup."
+    ],
+    "expected": "Clear limit errors; no truncation/orphans. FullNameEN model max=200; service contact limit=4000; CMS module item names need separate boundary check.",
+    "points": "UI, API, CMS item limits, MySQL",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-013",
+    "area": "General",
+    "title": "Unicode and rich-text round trip",
+    "automation": "Automatable with access/data",
+    "priority": "P1",
+    "preconditions": "Normal test category.",
+    "steps": [
+      "Use Thai/Vietnamese/accented name and supported rich text.",
+      "Save and reload.",
+      "Compare CMS fields and rendered content."
+    ],
+    "expected": "Unicode and supported formatting preserved; HTML follows agreed sanitization rules.",
+    "points": "UI, serialization, CMS variants",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-014",
+    "area": "Categories",
+    "title": "Every category/module mapping",
+    "automation": "Automatable with access/data",
+    "priority": "P1",
+    "preconditions": "Live category_module_mappings catalog resolved by MasterCode.",
+    "steps": [
+      "Enumerate category/subcategory pairs.",
+      "Select each and inspect dynamic fields.",
+      "Create minimal fixture for each supported module."
+    ],
+    "expected": "Correct field set/content type; matching DB CmsModuleCodename and linked module; unsupported pair handled clearly.",
+    "points": "Master data, mapping API, MySQL, UI/CMS switch",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-015",
+    "area": "Categories",
+    "title": "Multiple categories and removal",
+    "automation": "Automatable with access/data",
+    "priority": "P1",
+    "preconditions": "Two valid categories.",
+    "steps": [
+      "Add/fill two category modules.",
+      "Remove one before Save.",
+      "Inspect payload, CMS and category rows."
+    ],
+    "expected": "Only retained modules/rows persist; no stale link or unused module created.",
+    "points": "UI wrappers, Modules payload, CMS, MySQL",
+    "status": "Blocked: primary category/subcategory disabled"
+  },
+  {
+    "id": "VC-016",
+    "area": "Categories",
+    "title": "Missing mapping",
+    "automation": "Isolated environment only",
+    "priority": "P1",
+    "preconditions": "Dedicated fixture; never change shared master data to induce failure.",
+    "steps": [
+      "Load category without mapping.",
+      "Inspect form/Save/error.",
+      "Submit unsupported module type in backend integration test."
+    ],
+    "expected": "Explicit failure; no fake generic success or orphan CMS/DB record.",
+    "points": "Master data, API mapping, CMS types",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-017",
+    "area": "Availability",
+    "title": "Global visibility",
+    "automation": "Automatable with access/data",
+    "priority": "P1",
+    "preconditions": "Editable normal-vendor fixture.",
+    "steps": [
+      "Choose Global.",
+      "Save.",
+      "Compare CMS availability/config and targeted client/program rows."
+    ],
+    "expected": "Global persists; CMS client config empty; no unintended restriction/placeholder mappings.",
+    "points": "UI, CMS, vendor_client_program_mappings",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-018",
+    "area": "Availability",
+    "title": "Client-wide visibility",
+    "automation": "Automatable with access/data",
+    "priority": "P1",
+    "preconditions": "Resolved valid synthetic client; no programs selected.",
+    "steps": [
+      "Choose Client and one client.",
+      "Save.",
+      "Inspect CMS config and DB mapping."
+    ],
+    "expected": "Exactly one client row with ProgramId=NULL; client text consistent; no duplicate mapping.",
+    "points": "Client API, CMS, MySQL",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-019",
+    "area": "Availability",
+    "title": "Selected client/program pairs",
+    "automation": "Automatable with access/data",
+    "priority": "P1",
+    "preconditions": "Resolve ClientCode/ProgramNumber and valid associations.",
+    "steps": [
+      "Select two programs of one client.",
+      "Save and reload.",
+      "Compare DB pairs and CMS description."
+    ],
+    "expected": "Only selected valid pairs persisted once; UI/CMS/DB agree.",
+    "points": "Client/program APIs, CMS, MySQL",
+    "status": "Partially executed: two client/program choices; no Save/SQL"
+  },
+  {
+    "id": "VC-020",
+    "area": "Availability",
+    "title": "Wrong-client program association",
+    "automation": "Isolated environment only",
+    "priority": "P1",
+    "preconditions": "Dedicated fixture; environment-specific IDs resolved.",
+    "steps": [
+      "Submit program belonging to a different client.",
+      "Inspect application failure.",
+      "Inspect DB rollback and created CMS items."
+    ],
+    "expected": "Invalid association rejected; no vendor/mapping row or orphan CMS content.",
+    "points": "MySQL validation/FK, CMS compensation",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-021",
+    "area": "Market",
+    "title": "Country, market and scope consistency",
+    "automation": "Automatable with access/data",
+    "priority": "P1",
+    "preconditions": "Two authorized markets and a restricted-market account.",
+    "steps": [
+      "Create within permitted market.",
+      "Try mismatched payload country and cross-market identifiers.",
+      "Compare current market, DB CountryId and CMS country."
+    ],
+    "expected": "Server enforces scope; no unintended cross-market record; duplicate scope agreed; never reuse numeric IDs across environments.",
+    "points": "JWT, country API, EF filters, MySQL, CMS",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-022",
+    "area": "Language",
+    "title": "English and additional variants",
+    "automation": "Automatable with access/data",
+    "priority": "P1",
+    "preconditions": "English creation; edit permissions for localized variant.",
+    "steps": [
+      "Create in English.",
+      "Verify explicit published variant through Management.",
+      "Add local-language variant through edit.",
+      "Read exact language with fallback awareness."
+    ],
+    "expected": "Creation is English; localization preserves nonlocalizable links; Delivery fallback not mistaken for an explicit variant.",
+    "points": "Language UI, CMS Management/Delivery",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-023",
+    "area": "Contacts",
+    "title": "Mailing and multiple contacts",
+    "automation": "Automatable with access/data",
+    "priority": "P1",
+    "preconditions": "Synthetic address/email/phone only.",
+    "steps": [
+      "Fill mailing address and ZIP.",
+      "Add multiple emails/phones and second contact.",
+      "Save/reload; inspect serialized KeyContactEN and mailing rows."
+    ],
+    "expected": "Correct contact JSON/order and mailing count; no accidental empty placeholder data.",
+    "points": "UI repeaters, API, MySQL, CMS",
+    "status": "Partially executed: mailing/repeat contacts retained; no Save/SQL"
+  },
+  {
+    "id": "VC-024",
+    "area": "Assets",
+    "title": "Logo/gallery upload end to end",
+    "automation": "Automatable with access/data",
+    "priority": "P1",
+    "preconditions": "Small synthetic PNG/JPG; storage/CMS upload access.",
+    "steps": [
+      "Upload logo and gallery.",
+      "Observe presigned API, S3 PUT and finalize.",
+      "Save.",
+      "Verify asset IDs and rendered files after reload."
+    ],
+    "expected": "Upload/finalize succeed; submitted links are finalized CMS asset IDs; visible after reload. Do not share signed URLs.",
+    "points": "UI, S3, CMS assets/CDN, vendor asset API",
+    "status": "Partially executed: S3/CMS asset finalize passed; no vendor Save/link verification"
+  },
+  {
+    "id": "VC-025",
+    "area": "Assets",
+    "title": "File extension/size boundary",
+    "automation": "Automatable with access/data",
+    "priority": "P1",
+    "preconditions": "Synthetic files; UAT displays 25 MB maximum.",
+    "steps": [
+      "Try unsupported extension and just-over-limit image.",
+      "Try exact-limit image.",
+      "Check error and requests."
+    ],
+    "expected": "Invalid files rejected before upload; exact byte convention measured; boundary valid file accepted.",
+    "points": "UI validation, upload API, CMS assets",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-026",
+    "area": "Assets",
+    "title": "Upload failure and abandoned assets",
+    "automation": "Isolated environment only",
+    "priority": "P0",
+    "preconditions": "Controllable S3/finalize errors; synthetic assets.",
+    "steps": [
+      "Fail upload then finalize independently.",
+      "Cancel after upload succeeds.",
+      "Inspect temporary objects and CMS assets."
+    ],
+    "expected": "No fake upload success; retry works; retention/cleanup defined. Content-item compensation does not track uploaded assets.",
+    "points": "S3, CMS assets, cancel, cleanup",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-027",
+    "area": "Locations",
+    "title": "Separate location creation and mirror",
+    "automation": "Automatable with access/data",
+    "priority": "P0",
+    "preconditions": "Existing synthetic vendor; location operation after initial create.",
+    "steps": [
+      "Create location/address/coordinates through UI.",
+      "Read CMS location and parent link.",
+      "Query vendorproductcitys by CmsItemCodename.",
+      "Read picker."
+    ],
+    "expected": "Published location linked once; DB mirror row agrees; picker returns it. This is not part of initial create transaction.",
+    "points": "Location API, CMS, MySQL, picker",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-028",
+    "area": "Locations",
+    "title": "Location mirror failure",
+    "automation": "Isolated environment only",
+    "priority": "P0",
+    "preconditions": "Isolated DB fault.",
+    "steps": [
+      "Create/publish location with DB mirror failure.",
+      "Inspect result and logs.",
+      "Compare missing mirror row and recovery path."
+    ],
+    "expected": "CMS success not confused with DB consistency; best-effort mirror failure observable and recoverable.",
+    "points": "CMS, vendorproductcitys, logs",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-029",
+    "area": "RSA provider",
+    "title": "Thai provider identity sync",
+    "automation": "Automatable with access/data",
+    "priority": "P0",
+    "preconditions": "Thailand/provider category; unique test username; RSA UAT online.",
+    "steps": [
+      "Create provider with RSA/contact fields.",
+      "Capture callback evidence.",
+      "Compare CMS, vendors and cloud.UserAccount."
+    ],
+    "expected": "One account with matching vendorCmsId/BenefitVendorId/name/username/mobile/active; CloudAccIdExternal equals accountId.",
+    "points": "ProviderSyncDataVer2, CMS, MySQL, RSA MSSQL",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-030",
+    "area": "RSA provider",
+    "title": "Mobile flag, group and note",
+    "automation": "Automatable with access/data",
+    "priority": "P1",
+    "preconditions": "Two Thai test providers, mobile yes/no; valid group.",
+    "steps": [
+      "Create both flags.",
+      "Compare CMS module and UserAccount.",
+      "Check group/note and provider picker eligibility."
+    ],
+    "expected": "CMS and RSA mobile/active flags agree; no drift hiding Auto-mode providers; empty-value policy defined.",
+    "points": "CMS module, RSA flag resolver, dispatch read path",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-031",
+    "area": "RSA provider",
+    "title": "Vehicles and services",
+    "automation": "Automatable with access/data",
+    "priority": "P1",
+    "preconditions": "Two unique synthetic vehicle licenses and services.",
+    "steps": [
+      "Add two vehicles to RSA module.",
+      "Save.",
+      "Compare published vehicle links, cloud.Vehicle ownership and service associations."
+    ],
+    "expected": "Correct vehicle CMS IDs/owner/services; no duplicates or missing links.",
+    "points": "CMS vehicles, ProviderCarCreateOrUpdateVer2, RSA Vehicle/VehService",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-032",
+    "area": "RSA dealer",
+    "title": "Dealer sync for mapped brands",
+    "automation": "Automatable with access/data",
+    "priority": "P0",
+    "preconditions": "Thai dealership category; published brand group; RSA clients present.",
+    "steps": [
+      "Create Honda, Mercedes and Porsche fixtures.",
+      "Resolve HOT/MBZ/PTH by client code.",
+      "Compare IDs, CMS links, client and active flag."
+    ],
+    "expected": "One dealer per fixture; VendorIdExternal=dealerId; matching vendorCmsId/clientId; no clientId=0. Local Porsche mapping is PTH.",
+    "points": "CMS groups, MySQL, DealerSyncInfoVer2, RSA Client/ClientDealer",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-033",
+    "area": "RSA dealer",
+    "title": "Mandatory dealership group",
+    "automation": "Automatable with access/data",
+    "priority": "P1",
+    "preconditions": "Valid Thai dealership fixture.",
+    "steps": [
+      "Clear group.",
+      "Attempt Save.",
+      "Inspect error and absence of create side effects."
+    ],
+    "expected": "Group required for dealership; optional for normal vendor.",
+    "points": "UI identity/group validation, CMS/DB exclusion",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-034",
+    "area": "RSA dealer",
+    "title": "Unmapped group or missing client",
+    "automation": "Isolated environment only",
+    "priority": "P1",
+    "preconditions": "Dedicated brand/client fixtures; no shared client removal.",
+    "steps": [
+      "Use unmapped group, then mapped group with missing RSA client.",
+      "Capture outcome.",
+      "Inspect DB/CMS/RSA rollback."
+    ],
+    "expected": "Current unmapped source path returns success/no-sync: BA acceptance required. Missing mapped client must fail without clientId=0.",
+    "points": "Brand resolver, RSA Client, result envelope, cleanup",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-035",
+    "area": "RSA routing",
+    "title": "Non-Thai RSA category",
+    "automation": "Automatable with access/data",
+    "priority": "P1",
+    "preconditions": "Authorized non-Thai market.",
+    "steps": [
+      "Create provider/dealer-category fixture.",
+      "Inspect callbacks/external IDs.",
+      "Query RSA by CMSId."
+    ],
+    "expected": "No RSA callback/record under current Thailand-only gate; intended Benefit/CMS data persists.",
+    "points": "Country gate, MySQL, CMS, RSA exclusion",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-036",
+    "area": "Consistency",
+    "title": "Non-Active creation status",
+    "automation": "Automatable with access/data",
+    "priority": "P0",
+    "preconditions": "Permitted non-Active creation option; policy agreed.",
+    "steps": [
+      "Create allowed non-Active fixture.",
+      "Compare CMS status, DB Status and RSA active when applicable.",
+      "Reload UI."
+    ],
+    "expected": "Status agrees everywhere. Local DB creation hard-codes Active: source risk, not proven UAT defect.",
+    "points": "UI status, CMS, MySQL, RSA",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-037",
+    "area": "Consistency",
+    "title": "IDs, collections and linked content",
+    "automation": "Automatable with access/data",
+    "priority": "P1",
+    "preconditions": "Successful synthetic fixture.",
+    "steps": [
+      "Capture CMSId/codename and DB ID.",
+      "Read collection, module/vehicle links and DB CMSId.",
+      "Check counts by exact fixture."
+    ],
+    "expected": "One vendor; vendors/modular_block collections correct; links resolve; CMSId not confused with database ID.",
+    "points": "API, CMS Management/Delivery, MySQL",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-038",
+    "area": "Consumers",
+    "title": "Vendor search/detail and dependent pickers",
+    "automation": "Automatable with access/data",
+    "priority": "P1",
+    "preconditions": "Created fixture plus location if needed.",
+    "steps": [
+      "Search exact fixture name.",
+      "Open detail by CMSId.",
+      "Read product/promotion/location and RSA pickers under allowed scope."
+    ],
+    "expected": "Fixture appears after bounded propagation; correct name/category/availability/IDs; no real privilege, job or redemption required.",
+    "points": "Vendor read APIs, CMS Delivery, dependent pickers",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-039",
+    "area": "Failures",
+    "title": "CMS initial create failure",
+    "automation": "Isolated environment only",
+    "priority": "P0",
+    "preconditions": "Injected Management API error.",
+    "steps": [
+      "Fail first create with 401/403/5xx.",
+      "Submit valid payload.",
+      "Inspect API, DB and callback absence."
+    ],
+    "expected": "Failure with no vendor, CMS graph or RSA side effects; no success toast.",
+    "points": "CMS, orchestrator, MySQL, RSA exclusion",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-040",
+    "area": "Failures",
+    "title": "Vehicle/module/vendor publish failure",
+    "automation": "Isolated environment only",
+    "priority": "P0",
+    "preconditions": "Fault control for each CMS step.",
+    "steps": [
+      "Fail vehicle create/publish, module create/publish and vendor publish in separate runs.",
+      "Track created IDs.",
+      "Inspect compensation and DB/RSA absence."
+    ],
+    "expected": "Only newly created content removed; reused vehicles survive; no orphan content or DB/RSA record.",
+    "points": "CMS Management, rollback, database exclusion",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-041",
+    "area": "Failures",
+    "title": "CMS throttling and delivery propagation",
+    "automation": "Isolated environment only",
+    "priority": "P1",
+    "preconditions": "Injected 429 or bounded propagation fixture; no shared CMS load test.",
+    "steps": [
+      "Return 429 with retry hints.",
+      "Inspect retry/failure and cleanup.",
+      "After success poll exact item with freshness header and deadline."
+    ],
+    "expected": "No fake success, duplicate create or endless retry; propagation measured separately from create response.",
+    "points": "CMS rate limits, Delivery CDN, retry policy",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-042",
+    "area": "Failures",
+    "title": "DB failure after CMS publish",
+    "automation": "Isolated environment only",
+    "priority": "P0",
+    "preconditions": "Injected insert/mapping/commit errors.",
+    "steps": [
+      "Publish CMS graph.",
+      "Fail each DB stage independently.",
+      "Inspect rollback and every created CMS ID."
+    ],
+    "expected": "No DB remnants and content compensated; asset cleanup handled separately.",
+    "points": "MySQL transaction, CMS, orchestrator",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-043",
+    "area": "Failures",
+    "title": "RSA callback failure",
+    "automation": "Isolated environment only",
+    "priority": "P0",
+    "preconditions": "Synthetic Thai fixture; controlled timeout/500/application error.",
+    "steps": [
+      "Fail provider/dealer callback by each mode.",
+      "Read API Succeeded.",
+      "Query exact DB/CMS/RSA IDs."
+    ],
+    "expected": "No success; Benefit rollback and CMS compensation; external side effects explicitly checked.",
+    "points": "RSA callback, MySQL transaction, CMS cleanup",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-044",
+    "area": "Failures",
+    "title": "RSA success then MySQL commit failure",
+    "automation": "Isolated environment only",
+    "priority": "P0",
+    "preconditions": "Commit failure injected after successful RSA callback.",
+    "steps": [
+      "Allow RSA creation.",
+      "Fail final MySQL commit.",
+      "Inspect all stores and reconciliation."
+    ],
+    "expected": "No orphan RSA account/dealer or explicit approved recovery. CMS cleanup does not undo independent RSA commit.",
+    "points": "Distributed transaction boundary, RSA, MySQL, CMS",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-045",
+    "area": "Failures",
+    "title": "CMS compensation returns failure",
+    "automation": "Isolated environment only",
+    "priority": "P0",
+    "preconditions": "Late create failure; delete failure as exception and Result.Fail.",
+    "steps": [
+      "Trigger compensation.",
+      "Fail deletion of one created item.",
+      "Inspect logging, remaining IDs and recovery."
+    ],
+    "expected": "Cleanup failure and unresolved IDs visible. Source cleanup does not inspect returned Result.Succeeded.",
+    "points": "CMS delete, compensation, logs",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-046",
+    "area": "Concurrency",
+    "title": "Double-submit and lost response retry",
+    "automation": "Isolated environment only",
+    "priority": "P1",
+    "preconditions": "Isolated fixture and network control.",
+    "steps": [
+      "Double-click Save during request.",
+      "Drop response after persistence.",
+      "Retry same fixture.",
+      "Compare all-store counts."
+    ],
+    "expected": "Single logical vendor or deterministic duplicate outcome; no orphan/duplicate graph. UI guard is not an end-to-end idempotency proof.",
+    "points": "UI, API retries, CMS, MySQL, RSA",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-047",
+    "area": "Concurrency",
+    "title": "Concurrent duplicate identifiers",
+    "automation": "Isolated environment only",
+    "priority": "P0",
+    "preconditions": "Isolated parallel requests; live indexes measured.",
+    "steps": [
+      "Submit same dealer code/username concurrently.",
+      "Collect both results.",
+      "Inspect indexes and record counts."
+    ],
+    "expected": "At most one success; no duplicate/orphan; pre-check alone cannot ensure race safety.",
+    "points": "API uniqueness, SQL indexes, CMS cleanup",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-048",
+    "area": "Security",
+    "title": "View-only and denied-create accounts",
+    "automation": "Automatable with access/data",
+    "priority": "P0",
+    "preconditions": "Separate view-only/create-enabled/unauthorized test accounts.",
+    "steps": [
+      "Compare route, enabled fields and Save.",
+      "Call API as denied account with isolated fixture.",
+      "Check no side effects."
+    ],
+    "expected": "UI/server enforce Create; direct API cannot bypass it; role name alone is insufficient.",
+    "points": "JWT, UI authorization, API policies",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-049",
+    "area": "Security",
+    "title": "Tampered scope and module payload",
+    "automation": "Isolated environment only",
+    "priority": "P1",
+    "preconditions": "Synthetic restricted account and invalid references.",
+    "steps": [
+      "Submit unauthorized market/client/program IDs.",
+      "Submit unknown module and missing TemplateGeneric.",
+      "Inspect result and remnants."
+    ],
+    "expected": "Server validates references/scope; clear failure; no CMS/DB/RSA remnants.",
+    "points": "API, EF scope, CMS models, SQL FKs",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-050",
+    "area": "Observability",
+    "title": "Correlation and reconciliation",
+    "automation": "Automatable with access/data",
+    "priority": "P0",
+    "preconditions": "Read access to UAT logs/DB/CMS.",
+    "steps": [
+      "Capture runId, request correlation and returned IDs.",
+      "Locate CMS/DB/RSA outcomes.",
+      "Compare reconciliation summary to actual stores."
+    ],
+    "expected": "All points linked to same fixture; cleanup failures observable; no credential/customer payload in shared logs.",
+    "points": "API, CloudWatch/Lambda, CMS, MySQL, RSA",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-051",
+    "area": "Acceptance",
+    "title": "Business and legal content correctness",
+    "automation": "Human-led",
+    "priority": "P1",
+    "preconditions": "Approved documents and content owner.",
+    "steps": [
+      "Review terms, cancellation/fulfilment, category and availability against approved source."
+    ],
+    "expected": "Business owner approves suitability; automation can compare text/presence but cannot give legal/commercial sign-off.",
+    "points": "Business content, CMS",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-052",
+    "area": "Acceptance",
+    "title": "Usability and accessibility acceptance",
+    "automation": "Human-led",
+    "priority": "P1",
+    "preconditions": "Browser/keyboard/assistive tech coverage and policy.",
+    "steps": [
+      "Review layout, focus, label association, contrast, readability and responsive behavior.",
+      "Use automated accessibility/image checks as support."
+    ],
+    "expected": "Human acceptance of full usability; rule checks and screenshot diffs are supporting evidence.",
+    "points": "UI, accessibility/design",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-053",
+    "area": "Acceptance",
+    "title": "Real provider and device operation",
+    "automation": "Hybrid/manual device",
+    "priority": "P1",
+    "preconditions": "Approved provider/device setup and test job.",
+    "steps": [
+      "Check actual provider login, GPS/background, push and accepting a test job in separate downstream suite."
+    ],
+    "expected": "Deterministic device/API parts automatable; real field quality and operational acceptance need people.",
+    "points": "RSA login, ABMR, GPS/push, dispatch",
+    "status": "Not run"
+  },
+  {
+    "id": "VC-054",
+    "area": "Acceptance",
+    "title": "Release/environment sign-off",
+    "automation": "Human-led",
+    "priority": "P0",
+    "preconditions": "Release and environment owners; approved process.",
+    "steps": [
+      "Review environment IDs, deployment/schema drift and UAT evidence.",
+      "Approve cleanup/promotion."
+    ],
+    "expected": "Explicit owner approval; no autonomous production mutation or shared CMS fault injection.",
+    "points": "Release governance, environment isolation",
+    "status": "Not run"
+  }
+]

@@ -1,0 +1,9 @@
+node_modules/
+.env
+auth/
+test-results/
+playwright-report/
+reports/
+
+docs/vendor-creation/evidence/
+docs/vendor-creation/roadside-cms-source.md

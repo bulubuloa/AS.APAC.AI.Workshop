@@ -1,0 +1,20 @@
+import { test as setup, expect } from '@playwright/test';
+import { mkdirSync } from 'node:fs';
+import { dirname } from 'node:path';
+import { LoginPage } from '../pages/login.page';
+setup('sign in to Benefit UAT', async ({ page }) => {
+  const username = process.env.BENEFIT_USERNAME;
+  const password = process.env.BENEFIT_PASSWORD;
+  if (!username || !password) throw new Error('Set BENEFIT_USERNAME and BENEFIT_PASSWORD in the ignored .env file.');
+  await page.goto('/login');
+  const login = new LoginPage(page);
+  await login.expectVisible();
+  await login.username.fill(username);
+  await login.password.fill(password);
+  await login.signIn.click();
+  await expect(page).toHaveURL(/\/(dashboard|account)\/?$/);
+  await expect(login.signIn).not.toBeVisible();
+  const statePath = process.env.BENEFIT_STORAGE_STATE ?? 'auth/state.json';
+  mkdirSync(dirname(statePath), { recursive: true });
+  await page.context().storageState({ path: statePath });
+});

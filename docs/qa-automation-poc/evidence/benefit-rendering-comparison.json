@@ -1,0 +1,131 @@
+{
+    "case":  "TC-VENDOR-CREATE-002",
+    "created":  {
+                    "Id":  20415,
+                    "CMSId":  "d4b1c8e8-d8ac-415d-86eb-856391f9a531"
+                },
+    "comparisons":  [
+                        {
+                            "field":  "Vendor Name",
+                            "cms":  "QA_VENDOR_FIELD_FILL_1791425675669",
+                            "rendered":  "QA_VENDOR_FIELD_FILL_1791425675669",
+                            "result":  "Passed"
+                        },
+                        {
+                            "field":  "CMS ID",
+                            "cms":  "d4b1c8e8-d8ac-415d-86eb-856391f9a531",
+                            "rendered":  "d4b1c8e8-d8ac-415d-86eb-856391f9a531",
+                            "result":  "Passed"
+                        },
+                        {
+                            "field":  "Email",
+                            "cms":  "qa.contact4@example.invalid",
+                            "rendered":  "qa.contact4@example.invalid",
+                            "result":  "Passed"
+                        },
+                        {
+                            "field":  "Office Address",
+                            "cms":  "123 QA Test Street, Bangkok",
+                            "rendered":  "123 QA Test Street, Bangkok",
+                            "result":  "Passed"
+                        },
+                        {
+                            "field":  "Website",
+                            "cms":  "https://example.com",
+                            "rendered":  "https://example.com",
+                            "result":  "Passed"
+                        },
+                        {
+                            "field":  "Category",
+                            "cms":  "Food And Wine",
+                            "rendered":  "Food And Wine",
+                            "result":  "Passed"
+                        },
+                        {
+                            "field":  "Sub-Category",
+                            "cms":  "Restaurant",
+                            "rendered":  "Restaurant",
+                            "result":  "Passed"
+                        },
+                        {
+                            "field":  "Phone",
+                            "cms":  "(+66) 812345678",
+                            "rendered":  "(+66) 812345678",
+                            "result":  "Passed"
+                        },
+                        {
+                            "field":  "Vendor Status",
+                            "cms":  "Active",
+                            "rendered":  "Active",
+                            "result":  "Passed"
+                        },
+                        {
+                            "field":  "Vendor Group",
+                            "cms":  "Honda RSA",
+                            "rendered":  "Honda RSA",
+                            "result":  "Passed"
+                        },
+                        {
+                            "field":  "Country",
+                            "cms":  "Thailand",
+                            "rendered":  "Thailand",
+                            "result":  "Passed"
+                        },
+                        {
+                            "field":  "Description",
+                            "cms":  "Synthetic vendor profile used only for UAT field testing.",
+                            "rendered":  "Synthetic vendor profile used only for UAT field testing.",
+                            "result":  "Passed"
+                        },
+                        {
+                            "field":  "Short Description",
+                            "cms":  "Synthetic vendor profile used only for UAT field testing.",
+                            "rendered":  "Synthetic vendor profile used only for UAT field testing.",
+                            "result":  "Passed"
+                        },
+                        {
+                            "field":  "Insider Tips",
+                            "cms":  "Synthetic QA insider tips.",
+                            "rendered":  "Synthetic QA insider tips.",
+                            "result":  "Passed"
+                        },
+                        {
+                            "field":  "Terms and Conditions",
+                            "cms":  "Synthetic UAT test terms. No real contract.",
+                            "rendered":  "Synthetic UAT test terms. No real contract.",
+                            "result":  "Passed"
+                        },
+                        {
+                            "field":  "Cancellation Policy",
+                            "cms":  "Synthetic UAT test cancellation policy.",
+                            "rendered":  "Synthetic UAT test cancellation policy.",
+                            "result":  "Passed"
+                        },
+                        {
+                            "field":  "Fulfilment Instructions",
+                            "cms":  "Synthetic UAT test instructions: confirm with QA.",
+                            "rendered":  "Synthetic UAT test instructions: confirm with QA.",
+                            "result":  "Passed"
+                        },
+                        {
+                            "field":  "Logo",
+                            "cms":  [
+                                        "https://assets-au-01.kc-usercontent.com/225b0999-fce9-02b4-c44b-ed6990faeeaa/2ef7c9c7-ae5b-4d4e-8867-40747f362710/9992c2c1a98f4d3bb5e4aaa5e619ba11.png"
+                                    ],
+                            "rendered":  [
+                                             "https://assets-au-01.kc-usercontent.com/225b0999-fce9-02b4-c44b-ed6990faeeaa/2ef7c9c7-ae5b-4d4e-8867-40747f362710/9992c2c1a98f4d3bb5e4aaa5e619ba11.png"
+                                         ],
+                            "result":  "Passed"
+                        },
+                        {
+                            "field":  "Gallery",
+                            "cms":  [
+                                        "https://assets-au-01.kc-usercontent.com/225b0999-fce9-02b4-c44b-ed6990faeeaa/215a817f-b491-49a7-9765-6561f5329f49/81c593e30f37469d88bc221368da514c.png"
+                                    ],
+                            "rendered":  [
+                                             "https://assets-au-01.kc-usercontent.com/225b0999-fce9-02b4-c44b-ed6990faeeaa/215a817f-b491-49a7-9765-6561f5329f49/81c593e30f37469d88bc221368da514c.png"
+                                         ],
+                            "result":  "Passed"
+                        }
+                    ]
+}

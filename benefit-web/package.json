@@ -1,0 +1,25 @@
+{
+  "name": "benefit-web-e2e",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "test": "playwright test --project=creation",
+    "test:headed": "playwright test --project=smoke --headed",
+    "test:ui": "playwright test --ui",
+    "test:authenticated": "playwright test --project=authenticated",
+    "typecheck": "tsc --noEmit",
+    "report": "playwright show-report",
+    "auth:save": "node scripts/save-auth.cjs",
+    "test:smoke": "playwright test --project=smoke",
+    "test:vendor": "playwright test --project=vendor",
+    "test:vendor:fill": "node scripts/vendor-fill-all.cjs",
+    "test:creation": "playwright test --project=creation"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/node": "^22.0.0",
+    "dotenv": "^16.4.5",
+    "mysql2": "^3.24.5",
+    "typescript": "^5.6.0"
+  }
+}

@@ -1,0 +1,35 @@
+version: 0.2
+env:
+  variables:
+    CI: "true"
+    RSA_BASE_URL: "https://roadside-uat.aspireasia.net"
+phases:
+  install:
+    runtime-versions:
+      nodejs: 22
+    commands:
+      - cd "$CODEBUILD_SRC_DIR/roadside-web"
+      - npm ci
+      - npx playwright install --with-deps chromium
+  pre_build:
+    commands:
+      - node ../docs/qa-automation-poc/pipeline/preflight.cjs
+  build:
+    commands:
+      - npx playwright test --workers=1 --retries=0 --global-timeout=900000
+    finally:
+      - node ../docs/qa-automation-poc/pipeline/validate-junit.cjs reports/junit.xml 13
+reports:
+  rsa-uat-playwright:
+    files:
+      - junit.xml
+    base-directory: roadside-web/reports
+    file-format: JUNITXML
+artifacts:
+  files:
+    - roadside-web/playwright-report/**/*
+    - roadside-web/reports/*
+    - roadside-web/test-results/**/*
+  discard-paths: no
+
+

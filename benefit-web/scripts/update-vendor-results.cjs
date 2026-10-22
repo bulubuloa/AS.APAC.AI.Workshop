@@ -1,0 +1,15 @@
+const fs=require('node:fs');
+const report='docs/vendor-creation/REPORT.md';
+let text=fs.readFileSync(report,'utf8').replace('in 1.9 minutes','in 2.1 minutes on the final rerun');
+text=text.replace('Login setup passed:','The same disabled-field failure reproduced on two runs. Login setup passed:');
+fs.writeFileSync(report,text);
+let renderer=fs.readFileSync('scripts/render-vendor-report.cjs','utf8');
+renderer=renderer.replace(/const ignore=[\s\S]*?console\.log/,'console.log');
+fs.writeFileSync('scripts/render-vendor-report.cjs',renderer);
+const file='docs/vendor-creation/test-cases.json';
+const cases=JSON.parse(fs.readFileSync(file,'utf8'));
+for(const c of cases)if(['VC-001','VC-002','VC-003','VC-004','VC-005','VC-006','VC-048','VC-050','VC-054'].includes(c.id))c.priority='P0';
+fs.writeFileSync(file,JSON.stringify(cases,null,2));
+let md=fs.readFileSync('docs/vendor-creation/TEST-CASES.md','utf8');
+for(const c of cases)md=md.replace(new RegExp('(## '+c.id+' [\\s\\S]*?- Area / priority: [^\\n]* / )P[01]'),'$1'+c.priority);
+fs.writeFileSync('docs/vendor-creation/TEST-CASES.md',md);

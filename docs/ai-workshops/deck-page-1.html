@@ -1,0 +1,542 @@
+﻿<h2>Presentation for the six questions</h2><p>The 30-slide PowerPoint covers this topic on slides 2-12. Sources and evidence boundaries are included in the speaker notes.</p><div data-type="media-group"><div data-type="media" data-media-type="file" data-id="e8013fd1-f43e-48b8-b057-96777a03e05f" data-collection="contentId-6895960137" data-alt="QA-Automation-Six-Questions-POC-v2.pptx"></div></div><p data-local-id="11ece8a9c5bf"><strong>Decision: use Playwright Test for RoadSide and Benefit web end-to-end testing; retain Appium with WebdriverIO for the native Aspire Partner Android app.</strong> Playwright fits our popup workflows, report requirements and existing TypeScript examples, with no framework license fee. The POC demonstrates useful checks and evidence capture; it does not establish that Playwright is universally faster or cheaper than every alternative.</p>
+<p data-local-id="dce82f0780a4">Page 1 of the QA automation decision series. Pricing and license sources checked on 8 October 2026. Prices below are advertised USD list prices, before tax, contract discounts and usage changes. “Free” means no core framework license fee; engineering, CI compute, storage, devices and AI subscriptions still cost money.</p>
+<h2 data-local-id="44d3fd43dafe">1. What we need the tool to prove</h2>
+<table data-local-id="3afbbcdbdfdd">
+  <thead>
+    <tr data-local-id="ba075e6f16bc">
+      <th data-local-id="4c0f8e2bb6d9">
+        <p data-local-id="feffa72dbb6f"><strong>Requirement</strong></p>
+      </th>
+      <th data-local-id="68c6be831ef5">
+        <p data-local-id="3cec96bcde9f"><strong>Our example</strong></p>
+      </th>
+      <th data-local-id="496518a11f1c">
+        <p data-local-id="507bc2134893"><strong>Selection implication</strong></p>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr data-local-id="9d649ecd74ad">
+      <td data-local-id="a5397982271d">
+        <p data-local-id="76ccb995367e">Correct business values</p>
+      </td>
+      <td data-local-id="f677d9768099">
+        <p data-local-id="8a721b9b312d">RSA dealer list opens detail in a new tab; dealer code and name must match</p>
+      </td>
+      <td data-local-id="d52fa1e00069">
+        <p data-local-id="4fb663ea2820">Need real popup control and assertions on values.</p>
+      </td>
+    </tr>
+    <tr data-local-id="701912a1bad8">
+      <td data-local-id="cdfa236fcf0b">
+        <p data-local-id="d0155e966cb8">Application plus integrations</p>
+      </td>
+      <td data-local-id="536a079bcff6">
+        <p data-local-id="dd78e474fb33">Benefit vendor saves, opens its detail and renders the expected CMS values; BenefitDB must be checked independently</p>
+      </td>
+      <td data-local-id="11473fd3328d">
+        <p data-local-id="c142cb9096a0">Need UI assertions, API helpers and read-only database adapters; a toast is insufficient.</p>
+      </td>
+    </tr>
+    <tr data-local-id="60c4ed07d640">
+      <td data-local-id="bfc98f2c5cd6">
+        <p data-local-id="e38b67fa4dae">Evidence a reviewer can inspect</p>
+      </td>
+      <td data-local-id="4909c0483901">
+        <p data-local-id="ef3ec738b875">HTML/JUnit report, screenshots, trace and video</p>
+      </td>
+      <td data-local-id="ab8bbfbdcd3d">
+        <p data-local-id="9b1a62e666a1">Prefer integrated evidence without requiring a hosted service.</p>
+      </td>
+    </tr>
+    <tr data-local-id="b3015be51237">
+      <td data-local-id="3706a717afa6">
+        <p data-local-id="e55cb8578d2e">Repeatable pipeline execution</p>
+      </td>
+      <td data-local-id="e420c03a8b13">
+        <p data-local-id="48f6dbf2615c">Required pack count; reject failed, skipped, empty or incomplete runs</p>
+      </td>
+      <td data-local-id="7a22fc8d0ed6">
+        <p data-local-id="2d0059a05621">Need a CLI, versioned tests and explicit result gate.</p>
+      </td>
+    </tr>
+    <tr data-local-id="3f29a0d5e6be">
+      <td data-local-id="0935fa4bcc21">
+        <p data-local-id="a822527b1b88">Native Android coverage</p>
+      </td>
+      <td data-local-id="de62721d086a">
+        <p data-local-id="4b3789df627e">Provider login, vehicle, fresh OTP, dashboard</p>
+      </td>
+      <td data-local-id="8959c83711c8">
+        <p data-local-id="c4193372d388">Use a native driver; a mobile browser viewport cannot prove native app behavior.</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h2 data-local-id="2ecf6cb6bc4b">2. Tool comparison: license, cost and example use</h2>
+<table data-local-id="173ddcd9c8fb">
+  <thead>
+    <tr data-local-id="e39f1922fc5d">
+      <th data-local-id="55b5da20575a">
+        <p data-local-id="a9b234572a07"><strong>Tool</strong></p>
+      </th>
+      <th data-local-id="a6371fb50674">
+        <p data-local-id="19bfda9b48a4"><strong>License and core price</strong></p>
+      </th>
+      <th data-local-id="d4396c0ac406">
+        <p data-local-id="9e50066712fb"><strong>Optional paid services</strong></p>
+      </th>
+      <th data-local-id="70048a900e63">
+        <p data-local-id="e2f2e6bd070e"><strong>Example and fit</strong></p>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr data-local-id="7707d27f23e9">
+      <td data-local-id="b208209ad433">
+        <p data-local-id="1627c8165b6c">Playwright Test</p>
+      </td>
+      <td data-local-id="0fd3a375d15a">
+        <p data-local-id="f841d9ae61d4"><a href="https://github.com/microsoft/playwright/blob/main/LICENSE">Apache-2.0</a>; $0 framework fee</p>
+      </td>
+      <td data-local-id="0ba7c6c0468e">
+        <p data-local-id="a24f7eef2d2d">Self-hosted runs and built-in reports require no Playwright SaaS subscription. CI/storage or third-party browser clouds are additional.</p>
+      </td>
+      <td data-local-id="de09db0ff67c">
+        <p data-local-id="14febe14565d">RSA popup dealer comparison; Benefit creation and CMS rendering. Recommended web baseline.</p>
+      </td>
+    </tr>
+    <tr data-local-id="d4ffedaa0a10">
+      <td data-local-id="d615f83e5af8">
+        <p data-local-id="6e67f36c8de7">Selenium WebDriver</p>
+      </td>
+      <td data-local-id="565c4a730e01">
+        <p data-local-id="f1c1788e81dd"><a href="https://github.com/SeleniumHQ/selenium/blob/trunk/LICENSE">Apache-2.0</a>; $0 framework fee</p>
+      </td>
+      <td data-local-id="66e751633ae3">
+        <p data-local-id="b00447ed1196">Self-hosted Grid costs infrastructure and operation; optional hosted grids are separately priced.</p>
+      </td>
+      <td data-local-id="7f4ae543e64f">
+        <p data-local-id="2239308a1909">Same dealer comparison using window handles; strong fit where Java/C# and an established Grid already exist.</p>
+      </td>
+    </tr>
+    <tr data-local-id="ad1013b29ed7">
+      <td data-local-id="e1e4132c16f8">
+        <p data-local-id="0f72c866db1b">Cypress App</p>
+      </td>
+      <td data-local-id="b5cbdfa63401">
+        <p data-local-id="4935ece5ad31"><a href="https://docs.cypress.io/app/faq">MIT; free App</a>; $0 local framework fee</p>
+      </td>
+      <td data-local-id="7b51f46ca51d">
+        <p data-local-id="2a6c5db16b9f"><a href="https://www.cypress.io/pricing">Cloud: Starter free; Team $799/year; Business $3,199/year; Enterprise quote</a>. Annual plans advertised at about $67/$267 per month; paid tiers shown with 120k results/year.</p>
+      </td>
+      <td data-local-id="6d865b46b134">
+        <p data-local-id="a6daa3fefade">Single-tab Benefit form validation; good interactive developer workflow. Native multi-tab needs plugin/workaround.</p>
+      </td>
+    </tr>
+    <tr data-local-id="9f81f4fbbc46">
+      <td data-local-id="3cd58cd5e649">
+        <p data-local-id="ddec235874ae">Robot Framework + Browser</p>
+      </td>
+      <td data-local-id="befad1e3b5ec">
+        <p data-local-id="586321ac7929"><a href="https://robotframework.org/">Apache-2.0 framework</a> and <a href="https://github.com/MarketSquare/robotframework-browser">Apache-2.0 Browser library</a>; $0 core fee</p>
+      </td>
+      <td data-local-id="221f759bd034">
+        <p data-local-id="eaa44db395f7">No required hosted subscription; Python/library setup, CI and support remain costs.</p>
+      </td>
+      <td data-local-id="35d8b79c9e0a">
+        <p data-local-id="ce1cae673639">Keyword-driven vendor detail checks. Browser library uses Playwright; alternative authoring layer rather than a different browser engine.</p>
+      </td>
+    </tr>
+    <tr data-local-id="d32bc05c5e37">
+      <td data-local-id="0c638a051242">
+        <p data-local-id="77b91dab183c">Katalon Studio</p>
+      </td>
+      <td data-local-id="1f9c13a764cd">
+        <p data-local-id="84eccb7db66c"><a href="https://www.katalon.com/terms">Vendor commercial terms</a>; Free tier for local authoring/execution</p>
+      </td>
+      <td data-local-id="7c4631af364d">
+        <p data-local-id="2f666f242afa"><a href="https://katalon.com/pricing">Professional advertised $2,199/seat/year, promotional $1,000/seat/year for first 3 eligible seats until 31 Oct 2026</a>. Enterprise quote; CI requires Runtime Engine add-on, cloud execution requires TestCloud add-on.</p>
+      </td>
+      <td data-local-id="c207ebf1f7eb">
+        <p data-local-id="dfc4a152ccec">Record a vendor form, maintain an object repository and assert detail values. Candidate for teams prioritizing low-code and paid support.</p>
+      </td>
+    </tr>
+    <tr data-local-id="76b952c12c9f">
+      <td data-local-id="80846f229508">
+        <p data-local-id="55c8ba563568">Appium + WebdriverIO</p>
+      </td>
+      <td data-local-id="35efcea8a709">
+        <p data-local-id="49b9445acbcc"><a href="https://github.com/appium/appium/blob/master/LICENSE">Appium Apache-2.0</a>; <a href="https://github.com/webdriverio/webdriverio/blob/main/LICENSE">WebdriverIO MIT</a>; $0 core fee</p>
+      </td>
+      <td data-local-id="fa2f542d7da8">
+        <p data-local-id="36fc59fa77df">Emulator/device operation and optional device clouds cost separately.</p>
+      </td>
+      <td data-local-id="a5cd442ac39a">
+        <p data-local-id="e9c451453db5">Native Aspire Partner login/vehicle/OTP. Existing mobile example; retained for native coverage.</p>
+      </td>
+    </tr>
+    <tr data-local-id="07af5dfcc9ba">
+      <td data-local-id="41a89f300ec5">
+        <p data-local-id="a21cc2828434">Maestro</p>
+      </td>
+      <td data-local-id="f7cbfa1af84c">
+        <p data-local-id="75b5ca69dedd"><a href="https://github.com/mobile-dev-inc/maestro/blob/main/LICENSE">Apache-2.0</a>; local CLI free</p>
+      </td>
+      <td data-local-id="2b7836e5cd02">
+        <p data-local-id="361d910338a5"><a href="https://maestro.dev/pricing">Cloud $250 per concurrent device/month; Enterprise quote</a>. Web/Chromium device pricing requires inquiry.</p>
+      </td>
+      <td data-local-id="071368097b1c">
+        <p data-local-id="63b061be0242">Concise YAML login smoke flow. Candidate mobile alternative; our custom OTP integration would need adaptation and validation.</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p data-local-id="37141872f6db">Paid cloud terms differ from open-source licenses. License labels apply to the named core projects, not every plugin, driver, browser binary or hosted service. Follow each dependency’s notices and the vendor’s service terms. Procurement should confirm current quotes and corporate entitlements before purchase.</p>
+<h2 data-local-id="94bc6edf9996">3. Examples: the same intent, different authoring approaches</h2>
+<p data-local-id="ef4751f352be">The web examples below express “open a test vendor detail and assert its expected name.” Selectors and URLs are illustrative and must be adapted to the application. These alternatives have not been executed in our environment. The Playwright repository example is separately linked as measured POC evidence. No credentials are embedded.</p>
+<h3 data-local-id="a50c66ac9e14">Playwright: direct browser assertions and popup handling</h3>
+<pre data-local-id="d7deba81db9e"><code>import { test, expect } from &#39;@playwright/test&#39;;
+test(&#39;vendor detail matches fixture&#39;, async ({ page }) =&gt; {
+  await page.goto(process.env.TEST_VENDOR_DETAIL_URL!);
+  await expect(page.getByLabel(&#39;Vendor Name&#39;)).toHaveValue(&#39;QA Vendor&#39;);
+});
+// RSA: capture the popup before the click.
+const popup = page.waitForEvent(&#39;popup&#39;);
+await page.getByRole(&#39;link&#39;, { name: dealerName }).click();
+const detail = await popup;
+await expect(detail.locator(&#39;#dealerName&#39;)).toHaveValue(dealerName);</code></pre>
+<p data-local-id="7380c1a5e7eb">Useful here: assertions retry while the page settles, and a new tab remains a first-class page. Our actual RSA test compares code and name through Page Objects: <a href="https://github.com/bulubuloa/AS.APAC.AI.Workshop/blob/main/roadside-web/tests/02-dealer.spec.ts">TC02.2 source</a>. <a href="https://playwright.dev/docs/pages">Official popup/page model</a>; <a href="https://playwright.dev/docs/actionability">actionability and waiting</a>.</p>
+<h3 data-local-id="77a0cc1fd8a0">Selenium: explicit waits and window handles</h3>
+<pre data-local-id="9af65d5d98d9"><code>from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+driver.get(test_vendor_detail_url)
+field = WebDriverWait(driver, 10).until(
+    EC.visibility_of_element_located((By.ID, &#39;vendorName&#39;)))
+assert field.get_attribute(&#39;value&#39;) == &#39;QA Vendor&#39;</code></pre>
+<p data-local-id="beb991ccde7d">Useful here: reuse an established language/test-runner/Grid ecosystem. For RSA, collect window handles, wait for the new window and switch before asserting. We prefer Playwright’s integrated runner and evidence for this new web project; Selenium can achieve the same business checks with suitable libraries. <a href="https://www.selenium.dev/documentation/webdriver/interactions/windows/">Official window handling example</a>.</p>
+<h3 data-local-id="fe5c4ec2b9e9">Cypress: concise single-tab form/detail check</h3>
+<pre data-local-id="3b799c50da1c"><code>it(&#39;vendor detail matches fixture&#39;, () =&gt; {
+  cy.visit(Cypress.env(&#39;TEST_VENDOR_DETAIL_URL&#39;));
+  cy.get(&#39;[data-testid=vendor-name]&#39;)
+    .should(&#39;have.value&#39;, &#39;QA Vendor&#39;);
+});</code></pre>
+<p data-local-id="c5e4dea55e86">Useful here: interactive browser debugging and retrying command assertions. For a new-tab dealer journey, use the documented Puppeteer plugin or a single-tab adaptation; removing a link’s target changes what is tested. Playwright handles our existing popup without that adaptation. <a href="https://docs.cypress.io/app/references/trade-offs">Official Cypress trade-offs</a>. Cypress remains a credible choice for single-tab/component-heavy teams.</p>
+<h3 data-local-id="f7a5ee60cdea">Robot Framework Browser: readable keywords over Playwright</h3>
+<pre data-local-id="0115e601feab"><code>*** Settings ***
+Library    Browser
+
+*** Test Cases ***
+Vendor Detail Matches Fixture
+    New Browser    chromium    headless=True
+    New Context
+    New Page    %{TEST_VENDOR_DETAIL_URL}
+    Get Property    id=vendorName    value    ==    QA Vendor
+    Close Browser</code></pre>
+<p data-local-id="0959996c7a78">Useful here: QA teams can express workflows as reusable keywords. Custom CMS/database comparison logic still needs library code. Direct TypeScript avoids an extra authoring/runtime layer for our existing project; this is a team-fit decision, not a browser capability deficiency. <a href="https://robotframework-browser.org/">Browser library examples</a>.</p>
+<h3 data-local-id="56e18dfdaab9">Katalon: object repository and recorded workflow</h3>
+<pre data-local-id="dc2414aed953"><code>WebUI.openBrowser(&#39;&#39;)
+WebUI.navigateToUrl(testVendorDetailUrl)
+WebUI.verifyElementAttributeValue(
+    findTestObject(&#39;Vendor/Name&#39;), &#39;value&#39;, &#39;QA Vendor&#39;, 10)
+WebUI.closeBrowser()</code></pre>
+<p data-local-id="5ba190cd8ec2">Useful here: record steps, curate objects and expose a guided authoring interface. The object repository and fixture variables must exist for this sketch. We prefer repository-owned TypeScript and the $0 web framework fee for this POC. Katalon’s local Free tier is not a complete free CI deployment; confirm Runtime Engine and cloud add-ons. <a href="https://katalon.com/pricing">Official feature and pricing matrix</a>.</p>
+<h3 data-local-id="a759220b4214">Appium with WebdriverIO: native Android control</h3>
+<pre data-local-id="479539444263"><code>const name = $(&#39;android=new UiSelector().resourceId(&quot;com.aspire.partner.uat:id/userName&quot;)&#39;);
+await name.waitForDisplayed();
+await name.setValue(process.env.TEST_USERNAME);
+// Reuse the actual LoginScreen and approved fixture for password/sign-in.
+await expect(dashboard).toBeDisplayed();</code></pre>
+<p data-local-id="5b17d8d1c56e">Useful here: Android resource IDs and native screens are accessible through UiAutomator2. The IDs in this sketch must be replaced with the current Page Object IDs. The actual <a href="https://github.com/bulubuloa/AS.APAC.AI.Workshop/tree/main/roadside-android">mobile example project</a> has login and fresh-OTP helpers. Appium solves the native mobile requirement; Playwright browser emulation cannot replace this evidence. <a href="https://appium.io/docs/en/latest/intro/">Official Appium scope</a>.</p>
+<h3 data-local-id="424a6b406814">Maestro: YAML mobile smoke flow</h3>
+<pre data-local-id="49de81e29a27"><code>appId: com.aspire.partner.uat
+---
+- launchApp
+- tapOn: &quot;Username&quot;
+- inputText: ${TEST_USERNAME}
+- tapOn: &quot;Password&quot;
+- inputText: ${TEST_PASSWORD}
+- tapOn: &quot;Sign in&quot;
+- assertVisible: &quot;Select vehicle&quot;</code></pre>
+<p data-local-id="c4b41de50f1d">Useful here: short readable mobile journeys with external test variables. Actual text/IDs and policy setup need adaptation. Our OTP scenario reads a newer authenticated backend SMS record; assess how that helper would integrate before migration. Maestro has not been benchmarked against our Appium pack. <a href="https://docs.maestro.dev/get-started/quickstart">Official flow tutorial</a>.</p>
+<h2 data-local-id="83db8ebd5ca2">4. Why we finally choose Playwright for web</h2>
+<table data-local-id="7539d2e6f64b">
+  <thead>
+    <tr data-local-id="3978a14952f1">
+      <th data-local-id="95b127c432fa">
+        <p data-local-id="d16184e9c3b3"><strong>Reason</strong></p>
+      </th>
+      <th data-local-id="6f152067112e">
+        <p data-local-id="906463ffcc32"><strong>Concrete evidence or scenario</strong></p>
+      </th>
+      <th data-local-id="6e078762c4a9">
+        <p data-local-id="8055289eba9e"><strong>Trade-off</strong></p>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr data-local-id="268febb6f2bb">
+      <td data-local-id="305df4179182">
+        <p data-local-id="9c0e1303747b">Matches the actual RSA navigation</p>
+      </td>
+      <td data-local-id="a5aeaaa73ce7">
+        <p data-local-id="a65fc59ce9d9">TC02.2 opens dealer detail from the list and checks code/name. Popup handling is native.</p>
+      </td>
+      <td data-local-id="5a0f7283a862">
+        <p data-local-id="897705443b65">Selenium can also do this; Cypress needs its documented extra approach.</p>
+      </td>
+    </tr>
+    <tr data-local-id="54effa5ce1e5">
+      <td data-local-id="f7adf26a1cd4">
+        <p data-local-id="d83b45e188f2">Evidence is part of the runner</p>
+      </td>
+      <td data-local-id="c3b2e40332fe">
+        <p data-local-id="090e51125c41">Existing configurations emit HTML/JUnit and capture trace, screenshot and video. <a href="https://playwright.dev/docs/test-reporters">Built-in reporters</a>; <a href="https://playwright.dev/docs/trace-viewer">Trace Viewer</a>.</p>
+      </td>
+      <td data-local-id="43ff7cbb62e7">
+        <p data-local-id="456310d042dd">Artifact storage/redaction and test design remain our responsibility.</p>
+      </td>
+    </tr>
+    <tr data-local-id="51bf9c129fe2">
+      <td data-local-id="4cc043b2e1b4">
+        <p data-local-id="01763c6fddcc">Existing integration example works</p>
+      </td>
+      <td data-local-id="7c725278092f">
+        <p data-local-id="0de5135d716c">Benefit save/detail check passed with 19 CMS-versus-rendered comparisons.</p>
+      </td>
+      <td data-local-id="a82dbe71b45b">
+        <p data-local-id="4bbad75a82d3">The corrected full BenefitDB comparison is still incomplete; do not report it as passed.</p>
+      </td>
+    </tr>
+    <tr data-local-id="f4e216b7d25d">
+      <td data-local-id="400906ec6731">
+        <p data-local-id="87f6f8c0270f">No mandatory framework or report subscription</p>
+      </td>
+      <td data-local-id="ede9533616f9">
+        <p data-local-id="e91f1a30ee6f">Apache-2.0 core and locally generated report; CLI fits the planned gate.</p>
+      </td>
+      <td data-local-id="847f9ebeace5">
+        <p data-local-id="e28b1f3d510b">CI compute, maintenance and optional hosted services are paid separately.</p>
+      </td>
+    </tr>
+    <tr data-local-id="3e1ee7c68e45">
+      <td data-local-id="51f845a3161e">
+        <p data-local-id="2185e1c447cc">Fits repository and AI-assisted review</p>
+      </td>
+      <td data-local-id="777332bd4d14">
+        <p data-local-id="73375861e994">Versioned TypeScript, Page Objects and assertions can be reviewed in normal diffs.</p>
+      </td>
+      <td data-local-id="d5278e8738cf">
+        <p data-local-id="18f90d5ad5a5">Other tools also support AI-assisted authoring; this is not unique to Playwright.</p>
+      </td>
+    </tr>
+    <tr data-local-id="136b7e86b977">
+      <td data-local-id="182bf6259a89">
+        <p data-local-id="9527d9c3ca18">Avoids migration cost for the POC</p>
+      </td>
+      <td data-local-id="8750f851ccbd">
+        <p data-local-id="537c44d932d8">Working roadside-web example is already available.</p>
+      </td>
+      <td data-local-id="b70f5ed2615e">
+        <p data-local-id="bcb0bcb39f5e">Reconsider if team language, enterprise support, browser/device requirements or measured outcomes change.</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h2 data-local-id="078858efe59e">5. POC proof: what we have actually demonstrated</h2>
+<table data-local-id="8e8021e54769">
+  <thead>
+    <tr data-local-id="76b9445885db">
+      <th data-local-id="1fc2b199d25f">
+        <p data-local-id="180d54d4a6ed"><strong>Evidence</strong></p>
+      </th>
+      <th data-local-id="8e4d2bf95cfe">
+        <p data-local-id="e7e80515ce82"><strong>Observed result</strong></p>
+      </th>
+      <th data-local-id="7a762f435cc7">
+        <p data-local-id="507346a35d22"><strong>Claim boundary</strong></p>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr data-local-id="552f85d025e2">
+      <td data-local-id="7fddb526c372">
+        <p data-local-id="c3d983479d82">RSA workshop inventory</p>
+      </td>
+      <td data-local-id="ba149ff9d680">
+        <p data-local-id="1c3b63d75b04">13 executable tests: 12 functional plus authentication setup</p>
+      </td>
+      <td data-local-id="1e056f18d506">
+        <p data-local-id="c9ff0cc661ce">Inventory, not a full latest run.</p>
+      </td>
+    </tr>
+    <tr data-local-id="fc6e43af836f">
+      <td data-local-id="76c5cb536dcd">
+        <p data-local-id="ce02fe8b5f0b">Saved RSA run, 7 Oct 2026</p>
+      </td>
+      <td data-local-id="e6355f00d205">
+        <p data-local-id="dfc4fba6a04c">6 passed, 0 failed/skipped; 38.882 seconds</p>
+      </td>
+      <td data-local-id="85d20a493995">
+        <p data-local-id="cc93ab7b6a30">5 functional plus setup; not proof all 13 ran.</p>
+      </td>
+    </tr>
+    <tr data-local-id="6968f275b0ae">
+      <td data-local-id="9b3b4b8b5350">
+        <p data-local-id="9f21da46c56d">Benefit creation/detail, 8 Oct 2026</p>
+      </td>
+      <td data-local-id="09d26af4bb1d">
+        <p data-local-id="e2e0ea74349c">TC-VENDOR-CREATE-002 plus setup passed; 19 CMS rendering comparisons</p>
+      </td>
+      <td data-local-id="bb77e07126cb">
+        <p data-local-id="ec67b54adafe">Proves the exercised vendor and values, not every optional field/integration.</p>
+      </td>
+    </tr>
+    <tr data-local-id="062344bd4a2f">
+      <td data-local-id="c74a20ffe30f">
+        <p data-local-id="49744e61c7aa">Native mobile archived pack</p>
+      </td>
+      <td data-local-id="b8226462b45e">
+        <p data-local-id="048c94c02229">3 passing checks: valid login, invalid login and vehicle/OTP/dashboard</p>
+      </td>
+      <td data-local-id="20a13465e405">
+        <p data-local-id="1693bad1ed0b">Saved evidence; no fresh combined run for this page.</p>
+      </td>
+    </tr>
+    <tr data-local-id="ea5685fe8c27">
+      <td data-local-id="08339e6f63c0">
+        <p data-local-id="665b1de9d368">Pipeline POC</p>
+      </td>
+      <td data-local-id="937219cc8ee9">
+        <p data-local-id="840da8077b44">Local gate rejects failed/skipped/empty/incomplete packs</p>
+      </td>
+      <td data-local-id="9cf9d69f99d2">
+        <p data-local-id="e54da7a55d65">Cloud pipeline is proposed, not deployed.</p>
+      </td>
+    </tr>
+    <tr data-local-id="c87aee71c750">
+      <td data-local-id="b2e22bb6993e">
+        <p data-local-id="1e39523ca89a">Cross-tool benchmark</p>
+      </td>
+      <td data-local-id="1304ca4a9bef">
+        <p data-local-id="f158fc1a2de1">Not performed</p>
+      </td>
+      <td data-local-id="4d3de85dc191">
+        <p data-local-id="d8c3ecb74900">Do not claim a measured speed, flakiness or productivity ranking.</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p data-local-id="2a80fdcef361">Review the <a href="https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896156677">detailed evidence report</a>, <a href="https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896091147">Web workshop with PPT</a> and <a href="https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6894092390">Mobile workshop with PPT</a>. The larger Claude-attributed catalogue is a different reported suite. “300 of 400 completed” is unverified; this selection does not depend on that number.</p>
+<h2 data-local-id="538f000325e1">6. Cost example and budget model</h2>
+<p data-local-id="b16cf69b2383">Illustrative planning workload: 100 web tests x 10 runs per day x 22 working days = 22,000 individual results per month (264,000 per year), before extra browser projects and repeated scheduled packs. This is an assumed budget scenario, not measured current usage.</p>
+<table data-local-id="31428d3dffed">
+  <thead>
+    <tr data-local-id="3e04475a47fb">
+      <th data-local-id="7b6aeb006824">
+        <p data-local-id="35c12650ab41"><strong>Option</strong></p>
+      </th>
+      <th data-local-id="88838e0bc3a8">
+        <p data-local-id="6ced613e931a"><strong>Illustrative license/subscription impact</strong></p>
+      </th>
+      <th data-local-id="4e2abc43f10c">
+        <p data-local-id="834b24ffb7fe"><strong>What remains to budget</strong></p>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr data-local-id="4ed8f92a12c9">
+      <td data-local-id="ea0151a1f83c">
+        <p data-local-id="198de5da3265">Playwright / Selenium / Robot</p>
+      </td>
+      <td data-local-id="17533acc84b8">
+        <p data-local-id="fefc168fc1e9">Core framework fee $0 for this volume; self-hosted execution</p>
+      </td>
+      <td data-local-id="e6b5217edfc0">
+        <p data-local-id="a9466c44f719">Runner minutes, artifact GB-month, engineer hours, fixtures and support.</p>
+      </td>
+    </tr>
+    <tr data-local-id="a78bd569eec6">
+      <td data-local-id="5ac0234a81be">
+        <p data-local-id="80a77f151df8">Cypress App without Cloud</p>
+      </td>
+      <td data-local-id="d17750319432">
+        <p data-local-id="72f83bf864bb">Core local execution fee $0; Cloud recording is optional</p>
+      </td>
+      <td data-local-id="9c4c1e30d28d">
+        <p data-local-id="a4265ab587cd">Runner and local-report maintenance. No Cloud result entitlement needed when not recording.</p>
+      </td>
+    </tr>
+    <tr data-local-id="45983a01c5fc">
+      <td data-local-id="e1aebfb98928">
+        <p data-local-id="05931e0e839d">Cypress Cloud Team annual</p>
+      </td>
+      <td data-local-id="c05dfc41da26">
+        <p data-local-id="26e91f5ba15d">Advertised $799/year includes 120k results/year; assumed 264k exceeds allowance by 144k. Do not quote only the base subscription.</p>
+      </td>
+      <td data-local-id="d5a089f51e35">
+        <p data-local-id="040a916821e9">Confirm bundled/on-demand result rates and billing eligibility with vendor; add CI compute.</p>
+      </td>
+    </tr>
+    <tr data-local-id="65ecd8ac3b00">
+      <td data-local-id="4c1f15bbc99c">
+        <p data-local-id="efbb271ff822">Katalon Professional, 3 authors</p>
+      </td>
+      <td data-local-id="5b36e745a72e">
+        <p data-local-id="8c5f380c48f9">Standard displayed seat basis: 3 x $2,199 = $6,597/year. Eligible temporary promotion: 3 x $1,000 = $3,000 for that year.</p>
+      </td>
+      <td data-local-id="bb975e0c4dfa">
+        <p data-local-id="4b53b8b21245">CI Runtime Engine and TestCloud add-ons are extra; confirm renewal and promotional eligibility.</p>
+      </td>
+    </tr>
+    <tr data-local-id="11be42759169">
+      <td data-local-id="0450e8e67e97">
+        <p data-local-id="7f48ab672d5f">Appium / WDIO on own emulator</p>
+      </td>
+      <td data-local-id="9ade775102d4">
+        <p data-local-id="4308d022e261">Core fee $0</p>
+      </td>
+      <td data-local-id="f3dec46af58d">
+        <p data-local-id="141bdeafb0a1">Emulator runner, APK build/distribution and device/OTP operations.</p>
+      </td>
+    </tr>
+    <tr data-local-id="bcef28d41739">
+      <td data-local-id="a2a7a305b424">
+        <p data-local-id="8b18d220e57f">Maestro Cloud, 2 concurrent devices</p>
+      </td>
+      <td data-local-id="6bb4a66e3533">
+        <p data-local-id="aa2f29835883">2 x $250 = $500/month ($6,000/year at unchanged rate)</p>
+      </td>
+      <td data-local-id="f141edd112d4">
+        <p data-local-id="cc3665498bd2">Engineering and non-cloud integrations; web device rate requires quote.</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p data-local-id="cd71ca8b00cd">Total annual cost = framework/seats + optional cloud/add-ons + CI minutes x contracted runner rate + storage x retention rate + maintenance hours x internal rate + device/test-service costs + AI usage. We have not measured maintenance hours or obtained an infrastructure/vendor quote, so no total-cost savings percentage is claimed. Compare equal browser/device coverage, evidence retention and required test counts before approving a budget.</p>
+<h2 data-local-id="ee4647cc340a">7. Decision and next validation</h2>
+<p data-local-id="029c17cac9e5">Adopt Playwright for new RSA/Benefit web checks and retain Appium/WDIO for native mobile. Keep tests and evidence in the repository, start with the required POC pack and publish sanitized artifacts through the proposed pipeline. Do not buy a cloud dashboard solely to execute the initial web suite.</p>
+<p data-local-id="d10357d12c01">If procurement needs a competitive benchmark, run the same fixture-controlled workflows in Playwright, Selenium and Cypress: dealer popup, dependent vendor form, file upload, save/detail/CMS and negative validation. Measure implementation/review time, clean-run duration, failures across repeated runs, diagnosis time and infrastructure cost. Include legitimate business failures rather than hiding them through retries. This benchmark is future work, not evidence already collected.</p>
+<h2 data-local-id="babbaf7607f9">Six-question report</h2>
+<ol data-local-id="d0d404019f13">
+  <li data-local-id="597d21213d69">
+    <p data-local-id="3542e8462e2d"><a href="https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6895960137">QA Automation Tools and Why Playwright</a></p>
+  </li>
+  <li data-local-id="eb44dd0cd0d7">
+    <p data-local-id="5e829d6fb20a"><a href="https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896910361">Codex versus Claude Code - Automation Results</a></p>
+  </li>
+  <li data-local-id="b0a1e0488877">
+    <p data-local-id="e7b245a35fe0"><a href="https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896287838">Recommended Tools - Strengths, Weaknesses and POC Proof</a></p>
+  </li>
+  <li data-local-id="5b8815dbfd87">
+    <p data-local-id="76c9998858c3"><a href="https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6895534237">Completed Automation - Coverage and Remaining Scope</a></p>
+  </li>
+  <li data-local-id="16169f1bd837">
+    <p data-local-id="dfb6589b2662"><a href="https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896681063">Partial Automation, Blockers and Manual Scenarios</a></p>
+  </li>
+  <li data-local-id="2300b1c1eb2a">
+    <p data-local-id="ebf559e2bafa"><a href="https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896681090">Pipeline Integration Plan and POC Evidence</a></p>
+  </li>
+</ol>

@@ -1,0 +1,50 @@
+{
+  "apiVersion": "v2",
+  "command": "confluence.content.attachments.upload",
+  "request": {
+    "site": "internationalsos.atlassian.net",
+    "id": "6896156677",
+    "file": "benefit-rendering-comparison.json",
+    "comment": "19 expected/actual CMS-to-rendering comparisons, all passed."
+  },
+  "data": {
+    "attachment": {
+      "webuiLink": "/pages/viewpageattachments.action?pageId=6896156677&preview=%2F6896156677%2F6895992836%2Fbenefit-rendering-comparison.json",
+      "mediaTypeDescription": null,
+      "downloadLink": "/rest/api/content/6896156677/child/attachment/att6895992836/download",
+      "createdAt": null,
+      "comment": "19 expected/actual CMS-to-rendering comparisons, all passed.",
+      "id": "att6895992836",
+      "version": {
+        "number": 1,
+        "message": "19 expected/actual CMS-to-rendering comparisons, all passed.",
+        "minorEdit": false,
+        "authorId": "712020:72abfc60-0dd3-4165-9a62-9590fbcee8f5",
+        "createdAt": "2026-10-08T03:41:55.931Z"
+      },
+      "pageId": "6896156677",
+      "fileId": "a9359de8-81ce-4822-8a65-c671eeabf664",
+      "mediaType": "application/json",
+      "status": "current",
+      "title": "benefit-rendering-comparison.json",
+      "fileSize": 6790,
+      "_links": {
+        "download": "/rest/api/content/6896156677/child/attachment/att6895992836/download",
+        "webui": "/pages/viewpageattachments.action?pageId=6896156677&preview=%2F6896156677%2F6895992836%2Fbenefit-rendering-comparison.json",
+        "base": "https://internationalsos.atlassian.net/wiki"
+      }
+    },
+    "contentId": "6896156677",
+    "file": "benefit-rendering-comparison.json",
+    "fileSize": 6790,
+    "prepare": {
+      "maxFileSize": 104857600,
+      "expiresAt": "2026-10-08T03:46:55.220850617Z"
+    }
+  },
+  "meta": {
+    "resourceClass": "entity",
+    "sourceMode": "native",
+    "resourceType": "confluence.content.attachments.upload"
+  }
+}

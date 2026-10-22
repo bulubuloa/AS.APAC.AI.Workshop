@@ -1,0 +1,10 @@
+private/
+*-page.json
+*-attachments.json
+*-current.json
+*-update.json
+*-verified.json
+qa-deck-attachment.json
+deck-page-*.json
+output/QA-Automation-Six-Questions-POC.pptx
+output/QA-Automation-Six-Questions-POC-Reviewed.pptx

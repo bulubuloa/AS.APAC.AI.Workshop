@@ -1,0 +1,18 @@
+{
+  "titles": {
+    "1": "QA Automation Tools and Why Playwright",
+    "2": "Codex versus Claude Code - Automation Results",
+    "3": "Recommended Tools - Strengths, Weaknesses and POC Proof",
+    "4": "Completed Automation - Coverage and Remaining Scope",
+    "5": "Partial Automation, Blockers and Manual Scenarios",
+    "6": "Pipeline Integration Plan and POC Evidence"
+  },
+  "ids": {
+    "1": "6895960137",
+    "2": "6896910361",
+    "3": "6896287838",
+    "4": "6895534237",
+    "5": "6896681063",
+    "6": "6896681090"
+  }
+}

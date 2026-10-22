@@ -1,0 +1,50 @@
+{
+  "apiVersion": "v2",
+  "command": "confluence.content.attachments.upload",
+  "request": {
+    "site": "internationalsos.atlassian.net",
+    "id": "6896156677",
+    "file": "pipeline-poc.zip",
+    "comment": "Complete verified pipeline POC package: buildspec, preflight and five-case result gate"
+  },
+  "data": {
+    "attachment": {
+      "mediaTypeDescription": "Zip Archive",
+      "webuiLink": "/pages/viewpageattachments.action?pageId=6896156677&preview=%2F6896156677%2F6894092355%2Fpipeline-poc.zip",
+      "downloadLink": "/rest/api/content/6896156677/child/attachment/att6894092355/download",
+      "createdAt": null,
+      "comment": "Complete verified pipeline POC package: buildspec, preflight and five-case result gate",
+      "id": "att6894092355",
+      "version": {
+        "number": 2,
+        "message": "Complete verified pipeline POC package: buildspec, preflight and five-case result gate",
+        "minorEdit": false,
+        "authorId": "712020:72abfc60-0dd3-4165-9a62-9590fbcee8f5",
+        "createdAt": "2026-10-08T03:42:35.833Z"
+      },
+      "pageId": "6896156677",
+      "fileId": "7aae200e-be93-41a6-bdeb-8bd215fe0a47",
+      "mediaType": "application/zip",
+      "status": "current",
+      "title": "pipeline-poc.zip",
+      "fileSize": 3317,
+      "_links": {
+        "download": "/rest/api/content/6896156677/child/attachment/att6894092355/download",
+        "webui": "/pages/viewpageattachments.action?pageId=6896156677&preview=%2F6896156677%2F6894092355%2Fpipeline-poc.zip",
+        "base": "https://internationalsos.atlassian.net/wiki"
+      }
+    },
+    "contentId": "6896156677",
+    "file": "pipeline-poc.zip",
+    "fileSize": 3317,
+    "prepare": {
+      "maxFileSize": 104857600,
+      "expiresAt": "2026-10-08T03:47:34.462083127Z"
+    }
+  },
+  "meta": {
+    "resourceClass": "entity",
+    "sourceMode": "native",
+    "resourceType": "confluence.content.attachments.upload"
+  }
+}

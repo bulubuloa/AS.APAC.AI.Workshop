@@ -1,0 +1,37 @@
+[
+    {
+        "name":  "benefit-save-success.png",
+        "image":  true,
+        "caption":  "Captured success message immediately after Save; the detail page was still loading.",
+        "mediaId":  "3414642c-c578-4681-a50a-4b8484948924",
+        "collection":  "contentId-6896156677"
+    },
+    {
+        "name":  "benefit-vendor-detail.png",
+        "image":  true,
+        "caption":  "Vendor 20415 detail after CMS comparison: synthetic content and logo/gallery rendered.",
+        "mediaId":  "50522e4a-a1ea-47b4-a5ce-65a1eabd312c",
+        "collection":  "contentId-6896156677"
+    },
+    {
+        "name":  "poc-evidence-summary.json",
+        "image":  false,
+        "caption":  "Measured versus reported POC evidence and limitations.",
+        "mediaId":  "40bb2f9f-5b2f-4bb3-a61f-97986171da79",
+        "collection":  "contentId-6896156677"
+    },
+    {
+        "name":  "benefit-rendering-comparison.json",
+        "image":  false,
+        "caption":  "19 expected/actual CMS-to-rendering comparisons, all passed.",
+        "mediaId":  "a9359de8-81ce-4822-8a65-c671eeabf664",
+        "collection":  "contentId-6896156677"
+    },
+    {
+        "name":  "pipeline-poc.zip",
+        "image":  false,
+        "caption":  "Draft CodeBuild buildspec, target preflight and locally verified result gate.",
+        "mediaId":  "7aae200e-be93-41a6-bdeb-8bd215fe0a47",
+        "collection":  "contentId-6896156677"
+    }
+]

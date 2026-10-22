@@ -1,0 +1,13 @@
+<p><strong>Recommendation: Playwright to run the web tests; Claude Code as the primary assistant to build the broader test pack.</strong> Codex is a capable option for focused vendor and data checks.</p>
+<table>
+<thead><tr><th>Tool and role</th><th>Strength shown</th><th>Weakness or POC limit</th><th>Proof from our POC</th></tr></thead>
+<tbody>
+<tr><th>Playwright<br>Run web tests</th><td><strong>Checks complete workflows and produces clear failure evidence.</strong></td><td>Tests still need correct business expectations and reliable test data.</td><td>Saved RoadSide run: 6 passes. Benefit Save/detail test: passed, with 19 CMS value checks. <a href="https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896156677">Results and screenshots</a>.</td></tr>
+<tr><th>Claude Code<br>Primary authoring assistant</th><td><strong>Demonstrated delivery across a larger set of business cases.</strong></td><td>14 tests were skipped for missing access or data. Generated rules still need QA review.</td><td>Reported RoadSide POC: 61 cases implemented; 57 tests passed and 14 skipped. <a href="https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6772031506">Original POC</a>.</td></tr>
+<tr><th>Codex<br>Focused authoring option</th><td><strong>Demonstrated detailed checks of vendor creation and displayed data.</strong></td><td>Setup assumptions needed correction; the full database comparison remains incomplete.</td><td>Saved Benefit run: vendor test and login passed; all 19 CMS-to-screen checks passed. <a href="https://internationalsos.atlassian.net/wiki/spaces/AD/pages/6896156677">Saved evidence</a>.</td></tr>
+</tbody>
+</table>
+<p><strong>Notes</strong></p>
+<p><strong>1. Why this combination:</strong> Playwright executes the tests and collects evidence. The AI assistants help write them. Claude's broader POC delivery supports its selection for building the regression pack.</p>
+<p><strong>2. What the weaknesses mean:</strong> Missing accounts or data are delivery blockers, not proof of a tool limitation. Incorrect assumptions show why QA must review generated tests.</p>
+<p><strong>3. Strength of the recommendation:</strong> This is based on the available POC evidence, dated 8 October 2026. Different workloads were tested, so it does not prove Claude is faster, cheaper or more accurate than Codex on equal tasks.</p>
