@@ -1,5 +1,8 @@
 import { Page, Locator, expect } from '@playwright/test';
 
+/** Optional job form text fields by input name; cmProvince is the option value (Thai, e.g. กทม.). */
+export type JobDetails = Partial<Record<'locNote' | 'svcCon' | 'symptom' | 'cmLicense' | 'cmAddr' | 'cmDistrict' | 'cmProvince', string>>;
+
 /** /msu/job - the agent's job form, map toolbar and dispatch controls (selectors as in roadside-web). */
 export class JobPage {
   readonly form: Locator;
@@ -35,7 +38,7 @@ export class JobPage {
   }
 
   /** client -> program (by name) -> first tier -> first privilege -> service type (by label). */
-  async createJob(clientId: string, programName: string, service: string, lastName: string): Promise<string> {
+  async createJob(clientId: string, programName: string, service: string, lastName: string, details: JobDetails = {}): Promise<string> {
     await this.goto();
     await this.choose('clientId', clientId, 'GetListProgramByClientId');
     const program = await this.page.locator('#frmMain select[name="clientProgram"] option', { hasText: programName }).first().getAttribute('value');
@@ -47,6 +50,13 @@ export class JobPage {
     await this.page.fill('#frmMain input[name="cmFName"]', '[AUTO-TEST]');
     await this.page.fill('#frmMain input[name="cmLName"]', lastName);
     await this.page.fill('#frmMain input[name="cmTel"]', '0800000000');
+    for (const [name, value] of Object.entries(details)) {
+      if (name === 'cmProvince') {
+        await this.page.locator('#frmMain select[name="cmProvince"]').selectOption(value as string);
+      } else {
+        await this.page.fill(`#frmMain input[name="${name}"]`, value as string);
+      }
+    }
     await this.save.click();
     await expect(this.page).toHaveURL(/\/msu\/job\/\d{2}JB\d{6}/i, { timeout: 30_000 });
     await this.page.waitForLoadState('networkidle');

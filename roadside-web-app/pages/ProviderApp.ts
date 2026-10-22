@@ -1,6 +1,7 @@
 import { remote } from 'webdriverio';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
+import os from 'node:os';
 
 // SMS helper from the Android suite: reads the binding OTP back from api/pmws/smslatest
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -8,7 +9,10 @@ const { latestSmsId, waitForOtp } = require('../../roadside-android/tools/pmws-s
 
 const PACKAGE = process.env.APP_PACKAGE ?? 'com.aspire.partner.uat';
 const DEVICE = process.env.ANDROID_DEVICE ?? 'emulator-5554';
-const ADB = path.join(process.env.LOCALAPPDATA ?? '', 'Android/Sdk/platform-tools/adb.exe');
+// Windows keeps the SDK under %LOCALAPPDATA%, macOS under ~/Library/Android/sdk; ANDROID_HOME wins on both
+const SDK = process.env.ANDROID_HOME ?? process.env.ANDROID_SDK_ROOT ??
+  (process.platform === 'win32' ? path.join(process.env.LOCALAPPDATA ?? '', 'Android/Sdk') : path.join(os.homedir(), 'Library/Android/sdk'));
+const ADB = path.join(SDK, 'platform-tools', process.platform === 'win32' ? 'adb.exe' : 'adb');
 
 type Driver = Awaited<ReturnType<typeof remote>>;
 
@@ -19,7 +23,7 @@ export class ProviderApp {
   static async connect(): Promise<ProviderApp> {
     const d = await remote({
       hostname: '127.0.0.1',
-      port: 4723,
+      port: Number(process.env.APPIUM_PORT ?? 4723),
       logLevel: 'error',
       capabilities: {
         platformName: 'Android',
@@ -57,6 +61,19 @@ export class ProviderApp {
   /** Emulator GPS - the app reports it on every poll, and the web map plots the truck there. */
   static setGps(lat: number, lng: number) {
     execFileSync(ADB, ['-s', DEVICE, 'emu', 'geo', 'fix', String(lng), String(lat)]);
+  }
+
+  /** Drives the truck along the waypoints, one GPS fix about every stepM metres, like a phone in a moving truck. */
+  async drive(route: [number, number][], stepM = 150, everyMs = 1_000) {
+    for (let i = 1; i < route.length; i++) {
+      const [a, b] = [route[i - 1], route[i]];
+      const m = Math.hypot((b[0] - a[0]) * 111_000, (b[1] - a[1]) * 108_000);
+      const n = Math.max(1, Math.round(m / stepM));
+      for (let k = 1; k <= n; k++) {
+        ProviderApp.setGps(a[0] + ((b[0] - a[0]) * k) / n, a[1] + ((b[1] - a[1]) * k) / n);
+        await this.d.pause(everyMs);
+      }
+    }
   }
 
   /** Signs in, binds the truck by OTP when needed, and leaves the driver on the dashboard with Ready on. */
