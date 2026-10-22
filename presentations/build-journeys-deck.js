@@ -263,12 +263,20 @@ pres.addSection({ title: 'The two journeys' });
 // ---------- 11. demo ----------
 pres.addSection({ title: 'Demo and next' });
 {
-  const s = content('Demo: watch the journeys', 'Demo and next');
-  shot(s, 'j11.png', { x: M, y: 1.5, w: 7.4, ratio: VID });
-  card(s, { x: M + 7.8, y: 1.5, w: W - 2 * M - 7.8, h: 2.3, head: 'E2E-01 Job  (2 min 25 s)', body: 'TC-23-001-web-and-app.mp4 (22 Oct)\nPortal left, phone right; a caption bar names each of the 11 steps.', color: C.accent3, headSize: 14, bodySize: 12 });
-  card(s, { x: M + 7.8, y: 4.0, w: W - 2 * M - 7.8, h: 2.4, head: 'E2E-02 Announcement  (55 s)', body: 'TC-23-003-web-and-app.mp4 (22 Oct)\nSame layout, 8 captioned steps.', color: C.accent2, headSize: 14, bodySize: 12 });
-  box(s, { x: M, y: 1.5 + 7.4 / VID + 0.15, w: 7.4, h: 0.6, text: 'What to watch: the job number appearing on the phone after Dispatch, and the timestamps arriving on the portal after each tap.', fontSize: 12, color: C.accent4 });
-  s.addNotes('Play the video here. Point out: dispatch on the left, job appears on the right; each driver tap, then the timestamp row on the portal.');
+  const s = content('Demo: watch the journeys (click a video to play)', 'Demo and next');
+  // captioned side-by-side recordings of the 22 Oct runs; 1686 x 970 incl. the caption bar
+  const fs = require('fs');
+  const vids = [
+    ['video-job.mp4', 'j11.png', 'E2E-01 Job  ·  2 min 25 s  ·  PASSED 22 Oct', C.accent3],
+    ['video-announcement.mp4', 'a5.png', 'E2E-02 Announcement  ·  55 s  ·  PASSED 22 Oct', C.accent3],
+  ];
+  vids.forEach(([v, poster, label, col], i) => {
+    const x = M + i * 6.17, w = 5.95, h = w * 970 / 1686; // bar on top, 70 px
+    box(s, { x, y: 1.45, w, h: 0.4, text: label, fontSize: 14, bold: true, color: col });
+    s.addMedia({ type: 'video', path: IMG(v), x, y: 1.9, w, h, cover: 'data:image/png;base64,' + fs.readFileSync(IMG(poster)).toString('base64'), objectName: v });
+  });
+  box(s, { x: M, y: 5.6, w: W - 2 * M, h: 0.8, text: 'Portal on the left, phone on the right, recorded in the same run. The bar under each video names the current step - the same step names as sheet 23 of the test suite. Files: Downloads/E2E-runs-22Oct-final.', fontSize: 12, color: C.accent4 });
+  s.addNotes('Play E2E-01 first: dispatch on the left, the job appears on the right; each driver tap, then the timestamp row on the portal. Then E2E-02: publish, News card and banner on the phone, switch off, gone.');
 }
 
 // ---------- 12. findings + next ----------

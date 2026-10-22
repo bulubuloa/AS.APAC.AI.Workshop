@@ -17,9 +17,10 @@ export function sideBySide(web: string, phone: string, out: string, phoneDelaySe
   if (captions.length) {
     // ffmpeg filter options treat ":" as a separator, so font and texts sit next to the output and are passed by bare name
     copyFileSync(process.env.CAPTION_FONT ?? (process.platform === 'win32' ? 'C:/Windows/Fonts/segoeuib.ttf' : '/System/Library/Fonts/Supplemental/Arial Bold.ttf'), path.join(dir, 'caption.ttf'));
-    caps = ',pad=iw:ih+70:0:0:0x1E2761' + captions.map((c, i) => {
+    // bar above the video, so the step name is read before the screens
+    caps = ',pad=iw:ih+70:0:70:0x1E2761' + captions.map((c, i) => {
       writeFileSync(path.join(dir, `cap${i}.txt`), c.text);
-      return `,drawtext=fontfile=caption.ttf:textfile=cap${i}.txt:fontcolor=white:fontsize=30:x=24:y=h-52:` +
+      return `,drawtext=fontfile=caption.ttf:textfile=cap${i}.txt:fontcolor=white:fontsize=30:x=24:y=18:` +
         `enable='between(t\\,${c.start.toFixed(2)}\\,${c.end.toFixed(2)})'`;
     }).join('');
   }
