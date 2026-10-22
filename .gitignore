@@ -12,3 +12,6 @@ presentations/preview/
 # run recordings show UAT screens - share internally, not in this (public) repo
 presentations/e2e-img/video-*.mp4
 presentations/*_with_video.pptx
+e2e-delivery/reports/
+e2e-delivery/videos/
+e2e-delivery/slides/*_with_video.pptx
