@@ -1,0 +1,136 @@
+{
+  "TC-23-001": {
+    "title": "E2E-01 Job: agent creates and dispatches a job; the driver takes, drives to, reaches, photographs and finishes it in the app; the portal shows it CLOSED",
+    "priority": "P1",
+    "pre": "Android emulator with the UAT provider app (com.aspire.partner.uat), truck v3036 bound to the test provider; agent login on the RSA portal (UAT); truck GPS at its base, Victory Monument (13.7649, 100.5383), ~5 km from the customer",
+    "data": "Client Honda (380), program HOT UAT Program, service Basic Repair; customer [AUTO-TEST] Jaidee; incident 13.7334, 100.5408 (Ratchadamri Rd by Lumphini Park); odometer 48215",
+    "spec": "ai-workshop/roadside-web-app/tests/TC-23-001-job-happy-path.spec.ts",
+    "status": "Automated - PASSED 22 Oct 2026 (job 26JB049155, 3.7 min); also 20 Oct (job 26JB049153)",
+    "steps": [
+      [
+        "App",
+        "Sign in as the driver, choose truck v3036, switch Ready on",
+        "Dashboard shows VIN v3036 and Ready = On",
+        "Driver signs in, truck v3036, Ready on"
+      ],
+      [
+        "Web",
+        "Sign in as the agent and create a Basic Repair job: client Honda, program HOT UAT Program, customer [AUTO-TEST] Jaidee, Thai incident address (ถ.ราชดำริ หน้าสวนลุมพินี, ปทุมวัน, กทม.), licence 1กข 2345, location note and service condition; Save",
+        "Job number is issued; the values are kept after reload",
+        "Agent creates the job (Thai address)"
+      ],
+      [
+        "Web",
+        "Set the incident pin on the map at 13.7334, 100.5408",
+        "Incident location is saved",
+        "Agent sets the incident pin"
+      ],
+      [
+        "Web",
+        "Assign truck v3036 and click Dispatch",
+        "Truck and dispatch time are saved; status stays OPEN",
+        "Agent assigns truck v3036 and dispatches"
+      ],
+      [
+        "App",
+        "Wait on the dashboard without refreshing",
+        "A job card with the same job number appears, more than 2 km away (9.70 km on 20 Oct)",
+        "Job card appears on the phone"
+      ],
+      [
+        "App",
+        "Open the job and tap Take Job",
+        "Job is accepted; the portal shows the accept time and status ONPROCESS",
+        "Driver taps Take Job"
+      ],
+      [
+        "App",
+        "Drive ~5 km by road to the customer (GPS point every ~150 m: Victory Monument - Phaya Thai - Rama I - Ratchadamri)",
+        "App follows the route; the portal road distance is more than 2 km",
+        "Truck drives ~5 km by road"
+      ],
+      [
+        "App",
+        "Tap Arrived, enter odometer 48215, Confirm",
+        "Portal shows the reach time and mileage 48215",
+        "Arrived, odometer 48215"
+      ],
+      [
+        "App",
+        "Take a photo with the camera and tap Done",
+        "Photo is listed in the app; portal photo count is 1",
+        "Photo taken and uploaded"
+      ],
+      [
+        "App",
+        "Tap Finish job and confirm",
+        "Completed screen is shown",
+        "Driver finishes the job"
+      ],
+      [
+        "Web",
+        "Reload the job",
+        "Status CLOSED; request < accept < reach < complete; ACCEPT, REACH and COMPLETE rows stamped by truck v3036 with GPS; KPI Pass",
+        "Portal shows CLOSED with the driver's timestamps"
+      ]
+    ]
+  },
+  "TC-23-003": {
+    "title": "E2E-02 Announcement: admin publishes an announcement on the web; drivers see it in the app; deactivating it removes it from the app",
+    "priority": "P1",
+    "pre": "Android emulator with the UAT provider app, driver signed in; administrator (R0001) login on the RSA portal - administrator submits are approved at once. Announcements cannot be targeted: every UAT provider app sees it, so it is always deactivated at the end",
+    "data": "Title \"[AUTO-TEST] Road closure Rama IV <timestamp>\", priority High, content \"Rama IV Rd closed between Sam Yan and Lumphini 22:00-05:00. Use Rama I or Sukhumvit.\", effective today, expiry tomorrow",
+    "spec": "ai-workshop/roadside-web-app/tests/TC-23-003-announcement.spec.ts",
+    "status": "Automated - PASSED 22 Oct 2026 (1.6 min, announcement switched off at the end)",
+    "steps": [
+      [
+        "App",
+        "Driver is signed in, on the dashboard",
+        "Dashboard is shown",
+        "Driver on the dashboard"
+      ],
+      [
+        "Web",
+        "Sign in as administrator; Announcements > Create New: title, priority High, content, effective today, expiry tomorrow, Active; click Submit & Publish",
+        "Announcement is saved and approved at once",
+        "Admin creates a High announcement and publishes"
+      ],
+      [
+        "Web",
+        "Open the announcement list",
+        "Row shows priority High, Active, status Approved",
+        "List shows Approved, Active, High"
+      ],
+      [
+        "Server",
+        "Read the feed the app uses: GET api/pmws/announcements",
+        "Feed contains the new announcement",
+        "Mobile feed contains it"
+      ],
+      [
+        "App",
+        "Open the News tab and tap the card",
+        "Card shows the title; the content expands",
+        "News tab shows the card"
+      ],
+      [
+        "App",
+        "Open Home",
+        "High-priority banner shows the title",
+        "Home shows the high-priority banner"
+      ],
+      [
+        "Web",
+        "Edit the announcement, untick Active, Update",
+        "Feed no longer contains it",
+        "Admin unticks Active"
+      ],
+      [
+        "App",
+        "Re-open the News tab",
+        "The announcement is gone",
+        "Gone from the News tab"
+      ]
+    ]
+  }
+}

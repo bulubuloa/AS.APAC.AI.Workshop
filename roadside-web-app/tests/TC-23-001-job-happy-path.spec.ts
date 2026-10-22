@@ -3,6 +3,10 @@ import { writeFileSync } from 'node:fs';
 import { JobPage } from '../pages/JobPage';
 import { ProviderApp } from '../pages/ProviderApp';
 import { sideBySide, captioned, Caption } from '../tools/sideBySide';
+import { stepTitles } from '../tools/steps';
+
+// the 11 steps of TC-23-001 as written in the suite (sheet 23-E2E Journeys)
+const S = stepTitles('TC-23-001');
 
 // A real-looking call: the car breaks down on Ratchadamri Rd by Lumphini Park, the tow truck waits ~5 km away at
 // Victory Monument and drives there by road (Phaya Thai -> Rama I -> Ratchadamri) after taking the job.
@@ -35,9 +39,9 @@ test('TC-23-001 web creates and dispatches a job; the driver takes, reaches, pho
 
   let jobId = '';
   try {
-    const vinId = await step('App: driver signed in, truck chosen, Ready switch on', () => app.readyOnDashboard());
+    const vinId = await step(S[0], () => app.readyOnDashboard());
 
-    await step('Web: agent creates a job at the incident location', async () => {
+    await step(S[1], async () => {
       await web.login(process.env.RSA_USER!, process.env.RSA_PASSWORD!);
       jobId = await web.createJob(process.env.RSA_TEST_CLIENT_ID ?? '380', process.env.RSA_TEST_PROGRAM ?? 'HOT UAT Program',
         'Basic Repair', `Jaidee (web+app ${new Date().toISOString().slice(0, 16)})`, {
@@ -48,28 +52,32 @@ test('TC-23-001 web creates and dispatches a job; the driver takes, reaches, pho
           locNote: 'Left lane outbound, hazard lights on, next to the park fence',
           svcCon: 'Engine stalled and will not restart, battery warning light on',
         });
-      await web.setCustomerPosition(...CUSTOMER);
       testInfo.annotations.push({ type: 'job', description: jobId });
     });
 
-    await step(`Web: assign truck ${vinId} and dispatch`, async () => {
+    await step(S[2], () => web.setCustomerPosition(...CUSTOMER));
+
+    await step(S[3], async () => {
       await web.assignTruck(vinId);
       await web.dispatch();
     });
 
     let cardKm = 0;
-    await step('App: the job arrives without a refresh, ~5 km away; driver takes it', async () => {
+    await step(S[4], async () => {
       await (await app.el(`recent_job_item_${jobId}`)).waitForDisplayed({ timeout: 90_000 });
       const dist = await app.text('job_card_distance_text').catch(() => '');
       cardKm = parseFloat(dist.replace(/[^\d.]/g, '')) || 0;
       testInfo.annotations.push({ type: 'distance on the job card', description: dist });
+    });
+
+    await step(S[5], async () => {
       await app.tap(`recent_job_item_${jobId}`);
       await app.tap('job_info_take_job_button');
     });
 
-    await step('App: the truck drives to the customer (emulator GPS along the road)', () => app.drive(ROUTE));
+    await step(S[6], () => app.drive(ROUTE));
 
-    await step('App: arrive at the destination and enter the customer mileage', async () => {
+    await step(S[7], async () => {
       await app.tap('job_arriving_target_arrived_button');
       await (await app.el('input_distance_value_input')).waitForDisplayed();
       // no hideKeyboard here: its back-press closes the dialog
@@ -77,7 +85,7 @@ test('TC-23-001 web creates and dispatches a job; the driver takes, reaches, pho
       await app.tap('input_distance_confirm_button');
     });
 
-    await step('App: take a photo with the camera', async () => {
+    await step(S[8], async () => {
       await app.tap('job_processing_take_photo_button');
       await app.tap('job_photo_fab_button');
       await app.tap('job_photo_take_photo_button');
@@ -87,13 +95,13 @@ test('TC-23-001 web creates and dispatches a job; the driver takes, reaches, pho
       await app.tap('job_photo_back_button');
     });
 
-    await step('App: finish the job', async () => {
+    await step(S[9], async () => {
       await app.tap('job_processing_finish_job_button');
       await app.tap('confirm_finish_job_confirm_button');
       await (await app.el('job_completed_view')).waitForDisplayed({ timeout: 30_000 });
     });
 
-    await step('Web: job is closed with the driver\'s timestamps', async () => {
+    await step(S[10], async () => {
       await web.goto(jobId);
       const m = await web.model();
       expect(m.jobStatus).toBe('CLOSED');

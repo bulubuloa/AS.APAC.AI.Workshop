@@ -122,7 +122,7 @@ function lane(s, steps, { y = 1.5, colW = 1.18, gap = 0.05 } = {}) {
     box(s, { x: x + 0.06, y: rows[side] + 0.5, w: colW - 0.12, h: 0.8, text, fontSize: 9.5 });
   });
 }
-const E2E = require('./e2e-steps.json');
+const E2E = require('../roadside-web-app/e2e-steps.json');
 function trace(s, tid, { y = 1.45, fs = 10.5 } = {}) {
   const head = ['Step', 'Side', 'Action', 'Expected result'];
   const data = [head, ...E2E[tid].steps.map(([side, a, e], i) => [String(i + 1), side, a, e])];
@@ -186,8 +186,8 @@ pres.addSection({ title: 'The two journeys' });
 {
   const s = content('Two journeys that cross web, server and phone', 'The two journeys');
   const j = [
-    ['E2E-01  Job', 'TC-23-001', 'Agent creates a job and dispatches it → driver receives it, takes it, drives there, arrives, enters mileage, takes a photo, finishes → portal shows CLOSED with the driver\'s timestamps', 'PASSED 20 Oct 2026  ·  ~4.5 min  ·  11 steps', C.accent3],
-    ['E2E-02  Announcement', 'TC-23-003', 'Admin creates and publishes an announcement → drivers see it in the app (News + high-priority banner) → admin switches it off → it disappears from the app', 'Built 22 Oct 2026  ·  first run next  ·  8 steps', C.accent2],
+    ['E2E-01  Job', 'TC-23-001', 'Agent creates a job and dispatches it → driver receives it, takes it, drives there, arrives, enters mileage, takes a photo, finishes → portal shows CLOSED with the driver\'s timestamps', 'PASSED 22 Oct 2026  ·  3.7 min  ·  11 steps  ·  job 26JB049155', C.accent3],
+    ['E2E-02  Announcement', 'TC-23-003', 'Admin creates and publishes an announcement → drivers see it in the app (News + high-priority banner) → admin switches it off → it disappears from the app', 'PASSED 22 Oct 2026  ·  1.6 min  ·  8 steps  ·  switched off at the end', C.accent3],
   ];
   j.forEach(([name, tc, flow, status, col], i) => {
     const y = 1.55 + i * 2.45;
@@ -204,19 +204,7 @@ pres.addSection({ title: 'The two journeys' });
 // ---------- 6. E2E-01 swimlane ----------
 {
   const s = content('E2E-01 Job: eleven steps, alternating between portal and phone', 'The two journeys');
-  lane(s, [
-    ['App', 'Driver signed in, Ready on'],
-    ['Web', 'Agent creates job (Thai address)'],
-    ['Web', 'Sets incident pin'],
-    ['Web', 'Assigns truck, Dispatch'],
-    ['App', 'Job appears, 9.7 km'],
-    ['App', 'Take Job'],
-    ['App', 'Drives ~5 km by road'],
-    ['App', 'Arrive + mileage 48215'],
-    ['App', 'Photo, upload'],
-    ['App', 'Finish job'],
-    ['Web', 'CLOSED, timestamps by truck'],
-  ], { colW: 0.97 });
+  lane(s, E2E['TC-23-001'].steps.map(([side, , , short]) => [side, short]), { colW: 0.97 });
   box(s, { x: M, y: 6.25, w: W - 2 * M, h: 0.35, text: 'The server sits in the middle: the phone asks it for jobs every few seconds while Ready; every driver action is written back and read by the portal.', fontSize: 12, color: C.accent4 });
   s.addNotes('Read it left to right. Blue is the portal, orange is the phone. Every arrow between rows is a hand-off that the test checks.');
 }
@@ -232,29 +220,20 @@ pres.addSection({ title: 'The two journeys' });
 // ---------- 8. E2E-01 what the video shows ----------
 {
   const s = content('E2E-01 in the video: portal left, phone right, same run', 'The two journeys');
-  const shots = [['t30.png', 'Step 5: dispatched on the portal, the job is on the phone 9.70 km away'], ['t105.png', 'Step 8: driver arrives and enters odometer 48215'], ['t165.png', 'Step 11: portal shows ACCEPT / REACH / COMPLETE by truck v3036, KPI Pass']];
+  const shots = [['j5.png', 'Step 5: dispatched on the portal; the job card is on the phone, 9.60 km away'], ['j8.png', 'Step 8: driver arrives and enters odometer 48215'], ['j11.png', 'Step 11: portal shows ACCEPT / REACH / COMPLETE by truck v3036, KPI Pass; phone shows the route']];
   shots.forEach(([f, cap], i) => {
     const x = M + i * 4.1;
     shot(s, f, { x, y: 1.55, w: 3.95, ratio: VID });
     box(s, { x, y: 1.55 + 3.95 / VID + 0.12, w: 3.95, h: 0.8, text: cap, fontSize: 12 });
   });
-  card(s, { x: M, y: 4.85, w: W - 2 * M, h: 1.55, head: 'Result 20 Oct 2026: PASSED, job 26JB049153', body: 'Job card 9.70 km, portal road distance 7 km, mileage 48215, 1 photo, status CLOSED, KPI Pass on accept / reach / complete. Evidence: side-by-side video, Playwright report and trace.', color: C.accent3, headSize: 14, bodySize: 12.5 });
-  s.addNotes('Three frames from the recorded run. The full three-minute video plays in the demo.');
+  card(s, { x: M, y: 4.85, w: W - 2 * M, h: 1.55, head: 'Result 22 Oct 2026: PASSED in 3.7 min, job 26JB049155', body: 'All 11 steps passed. Job card 9.60 km, portal road distance 9.6 km, mileage 48215, 1 photo, status CLOSED, KPI Pass on accept / reach / complete. Evidence: captioned side-by-side video, Playwright report and trace. Also passed on 20 Oct (job 26JB049153).', color: C.accent3, headSize: 14, bodySize: 12.5 });
+  s.addNotes('Three frames from the 22 Oct run. The caption bar in the video names the step from the suite.');
 }
 
 // ---------- 9. E2E-02 swimlane ----------
 {
   const s = content('E2E-02 Announcement: publish on the web, see it on every phone', 'The two journeys');
-  lane(s, [
-    ['App', 'Driver on the dashboard'],
-    ['Web', 'Admin creates High announcement'],
-    ['Web', 'List: Approved, Active'],
-    ['Server', 'Mobile feed contains it'],
-    ['App', 'News tab shows the card'],
-    ['App', 'Home: high-priority banner'],
-    ['Web', 'Admin unticks Active'],
-    ['App', 'Gone from News'],
-  ], { colW: 1.35 });
+  lane(s, E2E['TC-23-003'].steps.map(([side, , , short]) => [side, short]), { colW: 1.35 });
   box(s, { x: M, y: 6.25, w: W - 2 * M, h: 0.35, text: 'Administrators publish at once ("Submit & Publish"). Announcements cannot be targeted - every UAT phone sees it - so the test always switches it off at the end.', fontSize: 12, color: C.accent4 });
   s.addNotes('The announcement journey has a server step: the test reads the same feed the phone reads, so we know whether a failure is on the server or on the phone.');
 }
@@ -267,13 +246,27 @@ pres.addSection({ title: 'The two journeys' });
   s.addNotes('Same format as TC-23-001: the test case as written in the suite, step by step.');
 }
 
+// ---------- E2E-02 in the video ----------
+{
+  const s = content('E2E-02 in the video: publish on the portal, see it on the phone', 'The two journeys');
+  const shots = [['ann-create.png', 'Step 2: the create form an administrator fills (UAT screenshot)', 1920 / 1200], ['a5.png', 'Step 5: News tab shows the High card (and the push notification)', VID], ['a6.png', 'Step 6: Home shows the high-priority banner', VID], ['a8.png', 'Step 8: after "untick Active" the card is gone from News', VID]];
+  shots.forEach(([f, cap, ratio], i) => {
+    const x = M + (i % 2) * 6.1, y = 1.45 + Math.floor(i / 2) * 2.55;
+    const w = 3.6;
+    shot(s, f, { x, y, w, ratio });
+    box(s, { x: x + w + 0.15, y: y + 0.1, w: 2.2, h: 1.6, text: cap, fontSize: 12 });
+  });
+  box(s, { x: M, y: 6.55, w: W - 2 * M, h: 0.3, text: 'Result 22 Oct 2026: PASSED in 1.6 min, all 8 steps. The announcement was switched off at the end and is no longer in the mobile feed.', fontSize: 12, bold: true, color: C.accent3 });
+  s.addNotes('Four moments from the 22 Oct run. Step 4 (not shown) checks the server feed the phone reads, so a failure points at server or phone.');
+}
+
 // ---------- 11. demo ----------
 pres.addSection({ title: 'Demo and next' });
 {
   const s = content('Demo: watch the journeys', 'Demo and next');
-  shot(s, 't165.png', { x: M, y: 1.5, w: 7.4, ratio: VID });
-  card(s, { x: M + 7.8, y: 1.5, w: W - 2 * M - 7.8, h: 2.3, head: 'E2E-01 Job  (3 min)', body: 'TC-23-001-web-and-app_20Oct-real-location.mp4\nPortal left, phone right. Step names appear as captions from the next run.', color: C.accent3, headSize: 14, bodySize: 12 });
-  card(s, { x: M + 7.8, y: 4.0, w: W - 2 * M - 7.8, h: 2.4, head: 'E2E-02 Announcement', body: 'Video from the first run (on the faster machine). Until then: the steps and the mapping on the previous two slides.', color: C.accent2, headSize: 14, bodySize: 12 });
+  shot(s, 'j11.png', { x: M, y: 1.5, w: 7.4, ratio: VID });
+  card(s, { x: M + 7.8, y: 1.5, w: W - 2 * M - 7.8, h: 2.3, head: 'E2E-01 Job  (2 min 25 s)', body: 'TC-23-001-web-and-app.mp4 (22 Oct)\nPortal left, phone right; a caption bar names each of the 11 steps.', color: C.accent3, headSize: 14, bodySize: 12 });
+  card(s, { x: M + 7.8, y: 4.0, w: W - 2 * M - 7.8, h: 2.4, head: 'E2E-02 Announcement  (55 s)', body: 'TC-23-003-web-and-app.mp4 (22 Oct)\nSame layout, 8 captioned steps.', color: C.accent2, headSize: 14, bodySize: 12 });
   box(s, { x: M, y: 1.5 + 7.4 / VID + 0.15, w: 7.4, h: 0.6, text: 'What to watch: the job number appearing on the phone after Dispatch, and the timestamps arriving on the portal after each tap.', fontSize: 12, color: C.accent4 });
   s.addNotes('Play the video here. Point out: dispatch on the left, job appears on the right; each driver tap, then the timestamp row on the portal.');
 }
@@ -292,7 +285,7 @@ pres.addSection({ title: 'Demo and next' });
   ], bodySize: 13 });
   card(s, { x: M + 6.25, y: 1.5, w: W - 2 * M - 6.25, h: 4.9, head: 'Next', color: C.accent1, body: [
     { text: 'BA: mark mandatory fields per stage (sheet 24) and answer the review questions (sheet 25)', options: { bullet: true, breakLine: true } },
-    { text: 'Run E2E-02 and record both journeys with step captions', options: { bullet: true, breakLine: true } },
+    { text: 'Run both journeys before each release; keep the report and video as release evidence', options: { bullet: true, breakLine: true } },
     { text: 'Next journeys: customer cancels while the driver is on the way (TC-23-002); towing job', options: { bullet: true, breakLine: true } },
     { text: 'Decide where journeys run before each release (desktop runner, cloud instance or device farm)', options: { bullet: true } },
   ], bodySize: 13 });

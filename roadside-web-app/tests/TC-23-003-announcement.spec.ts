@@ -4,6 +4,10 @@ import { JobPage } from '../pages/JobPage';
 import { AnnouncementPage } from '../pages/AnnouncementPage';
 import { ProviderApp } from '../pages/ProviderApp';
 import { sideBySide, captioned, Caption } from '../tools/sideBySide';
+import { stepTitles } from '../tools/steps';
+
+// the 8 steps of TC-23-003 as written in the suite (sheet 23-E2E Journeys)
+const S = stepTitles('TC-23-003');
 
 const PMWS = process.env.PMWS_BASE_URL || 'https://partner-roadside-uat.aspireasia.net';
 
@@ -35,16 +39,16 @@ test('TC-23-003 admin publishes an announcement on the web; drivers see it in th
   let id = '';
   let active = false;
   try {
-    await step('App: driver signed in, on the dashboard', () => app.readyOnDashboard());
+    await step(S[0], () => app.readyOnDashboard());
 
-    await step('Web: admin creates a High announcement and publishes it', async () => {
+    await step(S[1], async () => {
       await new JobPage(page).login(process.env.RSA_USER!, process.env.RSA_PASSWORD!);
       id = await ann.create(TITLE, CONTENT, 'High', tomorrow);
       active = true;
       testInfo.annotations.push({ type: 'announcement id', description: id });
     });
 
-    await step('Web: the list shows it Approved and Active', async () => {
+    await step(S[2], async () => {
       await ann.openList();
       const row = ann.row(TITLE);
       await expect(row).toContainText('Approved');
@@ -52,11 +56,11 @@ test('TC-23-003 admin publishes an announcement on the web; drivers see it in th
       await expect(row).toContainText('High');
     });
 
-    await step('Server: the mobile feed now contains it', async () => {
+    await step(S[3], async () => {
       expect(await feed()).toContain(TITLE);
     });
 
-    await step('App: News tab shows the announcement; tapping shows the content', async () => {
+    await step(S[4], async () => {
       await app.tap('main_nav_announcements_tab');
       await (await titleOnPhone()).waitForDisplayed({ timeout: 60_000 });
       await (await titleOnPhone()).click();
@@ -65,7 +69,7 @@ test('TC-23-003 admin publishes an announcement on the web; drivers see it in th
       await app.d.pause(2_000);
     });
 
-    await step('App: Home shows the high-priority banner', async () => {
+    await step(S[5], async () => {
       await app.tap('main_nav_home_tab');
       await (await app.el('home_announcement_badge')).waitForDisplayed({ timeout: 30_000 });
       // other High rows on shared UAT can come first; ours is the newest, so it should lead
@@ -73,13 +77,13 @@ test('TC-23-003 admin publishes an announcement on the web; drivers see it in th
       await app.d.pause(2_000);
     });
 
-    await step('Web: admin deactivates it', async () => {
+    await step(S[6], async () => {
       await ann.deactivate(id);
       active = false;
       expect(await feed()).not.toContain(TITLE);
     });
 
-    await step('App: News tab no longer shows it', async () => {
+    await step(S[7], async () => {
       // the list reloads each time the tab is opened
       await app.d.waitUntil(async () => {
         await app.tap('main_nav_home_tab');

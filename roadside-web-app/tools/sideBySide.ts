@@ -31,12 +31,20 @@ export function sideBySide(web: string, phone: string, out: string, phoneDelaySe
     '-map', '[v]', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-preset', 'veryfast', path.basename(out)], { cwd: dir });
 }
 
+const MIN_CAPTION_MS = 2_500;
+
 /** Wraps test.step so each step also becomes a numbered caption: "3  WEB  Admin creates ...". */
 export function captioned(t0: number, caps: Caption[], step: <T>(title: string, body: () => Promise<T>) => Promise<T>) {
   return async <T>(title: string, body: () => Promise<T>): Promise<T> => {
     const start = (Date.now() - t0) / 1000;
     try {
-      return await step(title, body);
+      // a step shorter than this flashes past in the video - hold it long enough to read the caption
+      return await step(title, async () => {
+        const r = await body();
+        const left = MIN_CAPTION_MS - (Date.now() - t0 - start * 1000);
+        if (left > 0) await new Promise((res) => setTimeout(res, left));
+        return r;
+      });
     } finally {
       const [side, ...rest] = title.split(':');
       const text = rest.length ? `${caps.length + 1}   ${side.toUpperCase()}   ${rest.join(':').trim()}` : `${caps.length + 1}   ${title}`;
