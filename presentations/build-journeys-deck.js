@@ -122,15 +122,16 @@ function lane(s, steps, { y = 1.5, colW = 1.18, gap = 0.05 } = {}) {
     box(s, { x: x + 0.06, y: rows[side] + 0.5, w: colW - 0.12, h: 0.8, text, fontSize: 9.5 });
   });
 }
-function trace(s, rows, { y = 1.45, fs = 10.5 } = {}) {
-  const head = ['#', 'Side', 'Step', 'Checked', 'Web suite cases', 'App suite cases'];
-  const data = [head, ...rows];
+const E2E = require('./e2e-steps.json');
+function trace(s, tid, { y = 1.45, fs = 10.5 } = {}) {
+  const head = ['Step', 'Side', 'Action', 'Expected result'];
+  const data = [head, ...E2E[tid].steps.map(([side, a, e], i) => [String(i + 1), side, a, e])];
   s.addTable(data.map((r, i) => r.map((t, j) => ({
     text: t,
     options: i === 0
-      ? { bold: true, color: C.background1, fill: { color: [C.text2, C.text2, C.text2, C.text2, C.accent1, C.accent2][j] }, fontSize: fs + 0.5 }
+      ? { bold: true, color: C.background1, fill: { color: C.text2 }, fontSize: fs + 0.5 }
       : { color: j === 1 ? (t === 'App' ? C.accent2 : t === 'Web' ? C.accent1 : C.accent4) : C.text1, bold: j <= 1, fill: { color: i % 2 ? C.background2 : C.background1 }, fontSize: fs },
-  }))), { x: M, y, w: W - 2 * M, colW: [0.45, 0.75, 3.4, 3.0, 2.7, 1.83], border: { type: 'solid', pt: 0.5, color: HEX.accent5 }, margin: 0.05 });
+  }))), { x: M, y, w: W - 2 * M, colW: [0.55, 0.8, 6.2, 4.58], border: { type: 'solid', pt: 0.5, color: HEX.accent5 }, margin: 0.05 });
 }
 
 // ---------- 1. title ----------
@@ -153,7 +154,7 @@ pres.addSection({ title: 'Where we are' });
   card(s, { x: M, y: 3.55, w: W - 2 * M, h: 2.85, head: 'What end-to-end adds', body: [
     { text: 'The web suite proves the portal. The app suite proves the phone. Neither proves that what the agent does on the portal reaches the driver - and that what the driver does comes back.', options: { breakLine: true } },
     { text: ' ', options: { breakLine: true, fontSize: 6 } },
-    { text: 'The two journeys test exactly that hand-off, step by step, and each step is mapped to the cases it proves in both suites.', options: { color: C.accent4 } },
+    { text: 'The two journeys test exactly that hand-off. Both are test cases in the RoadSide web suite (sheet 23-E2E Journeys), written step by step.', options: { color: C.accent4 } },
   ], bodySize: 15 });
   s.addNotes('Three numbers. 560 web cases, 72 app cases, and two journeys that connect them.');
 }
@@ -222,22 +223,10 @@ pres.addSection({ title: 'The two journeys' });
 
 // ---------- 7. E2E-01 traceability ----------
 {
-  const s = content('E2E-01: each step is mapped to the cases it proves', 'The two journeys');
-  trace(s, [
-    ['1', 'App', 'Driver signs in, truck chosen, Ready on', 'Dashboard, VIN, Ready On', '', 'M01-002, M02-002, M03-001/002'],
-    ['2', 'Web', 'Create Basic Repair job, Thai address', 'Job number; values saved', 'TC-01-001, 03-004/010/012/013/026/029/030', ''],
-    ['3', 'Web', 'Set incident pin', 'Location saved', 'TC-04-004', ''],
-    ['4', 'Web', 'Assign truck v3036, Dispatch', 'Dispatch time; status OPEN', 'TC-04-019, 04-022, 04-045', ''],
-    ['5', 'App', 'Job card appears without refresh', 'Same job no.; > 2 km', 'TC-04-025, 04-046', 'M04-001, M04-002'],
-    ['6', 'App', 'Take Job', 'Portal accept time; ONPROCESS', 'TC-05-019', 'M04-003'],
-    ['7', 'App', 'Drive ~5 km by road', 'Road distance > 2 km', '', 'M06-004'],
-    ['8', 'App', 'Arrive, mileage 48215', 'Reach time; mileage = 48215', 'TC-05-019', 'M05-001'],
-    ['9', 'App', 'Photo with camera, upload', 'Photo count 1', '', 'M07-001'],
-    ['10', 'App', 'Finish job', 'Completed screen', '', 'M05-005, M05-007'],
-    ['11', 'Web', 'Reload the job', 'CLOSED; timestamps in order, by truck, with GPS; KPI Pass', 'TC-05-023, 04-060, 05-020', ''],
-  ], { fs: 10 });
-  box(s, { x: M, y: 6.45, w: W - 2 * M, h: 0.3, text: 'Same table in the workbooks: web suite sheet 26 "E2E Journeys", app suite sheet 13 - filterable by case id.', fontSize: 11, color: C.accent4 });
-  s.addNotes('This is the traceability: when E2E-01 passes, these 25 cases across both suites are proven by a single run.');
+  const s = content('TC-23-001 in the RoadSide web suite: steps and expected results', 'The two journeys');
+  trace(s, 'TC-23-001', { y: 1.4, fs: 10 });
+  box(s, { x: M, y: 6.6, w: W - 2 * M, h: 0.3, text: 'Workbook sheet "23-E2E Journeys" - the same 11 steps, one row each. The test (TC-23-001.spec.ts) runs them in this order.', fontSize: 11, color: C.accent4 });
+  s.addNotes('This is the test case exactly as it is in the suite. Each row is one step of the automated run, and each step is a caption in the video.');
 }
 
 // ---------- 8. E2E-01 what the video shows ----------
@@ -272,19 +261,10 @@ pres.addSection({ title: 'The two journeys' });
 
 // ---------- 10. E2E-02 traceability ----------
 {
-  const s = content('E2E-02: each step is mapped to the cases it proves', 'The two journeys');
-  trace(s, [
-    ['1', 'App', 'Driver signed in, on the dashboard', 'Dashboard shown', '', 'M01-002, M03-001'],
-    ['2', 'Web', 'Create High announcement, Submit & Publish', 'Saved; approved at once', 'TC-14-004/005/006/007', ''],
-    ['3', 'Web', 'Announcement list', 'Approved, Active, High', 'TC-14-001', ''],
-    ['4', 'Server', 'GET api/pmws/announcements', 'Contains the new one', 'TC-14-019', ''],
-    ['5', 'App', 'News tab, tap the card', 'Title + content', '', 'M09-001'],
-    ['6', 'App', 'Home', 'High-priority banner', '', 'M03-008'],
-    ['7', 'Web', 'Edit, untick Active', 'Feed no longer has it', 'TC-14-010, 14-022', ''],
-    ['8', 'App', 'Re-open News', 'Announcement gone', '', 'M09-001'],
-  ], { fs: 11 });
-  box(s, { x: M, y: 5.6, w: W - 2 * M, h: 0.5, text: 'Same table in the workbooks: web suite sheet 26 "E2E Journeys", app suite sheet 13.', fontSize: 11, color: C.accent4 });
-  s.addNotes('Same idea as E2E-01: when this journey passes, these 12 cases are proven in one run.');
+  const s = content('TC-23-003 in the RoadSide web suite: steps and expected results', 'The two journeys');
+  trace(s, 'TC-23-003', { y: 1.45, fs: 11.5 });
+  box(s, { x: M, y: 6.3, w: W - 2 * M, h: 0.3, text: 'Workbook sheet "23-E2E Journeys" - the same 8 steps, one row each.', fontSize: 11, color: C.accent4 });
+  s.addNotes('Same format as TC-23-001: the test case as written in the suite, step by step.');
 }
 
 // ---------- 11. demo ----------

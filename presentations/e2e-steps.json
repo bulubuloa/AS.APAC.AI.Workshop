@@ -1,0 +1,41 @@
+{
+  "TC-23-001": {
+    "title": "E2E-01 Job: agent creates and dispatches a job; the driver takes, drives to, reaches, photographs and finishes it in the app; the portal shows it CLOSED",
+    "priority": "P1",
+    "pre": "Android emulator with the UAT provider app (com.aspire.partner.uat), truck v3036 bound to the test provider; agent login on the RSA portal (UAT); truck GPS at its base, Victory Monument (13.7649, 100.5383), ~5 km from the customer",
+    "data": "Client Honda (380), program HOT UAT Program, service Basic Repair; customer [AUTO-TEST] Jaidee; incident 13.7334, 100.5408 (Ratchadamri Rd by Lumphini Park); odometer 48215",
+    "spec": "ai-workshop/roadside-web-app/tests/TC-23-001-job-happy-path.spec.ts",
+    "status": "Automated - PASSED 20 Oct 2026 (job 26JB049153, ~4.5 min)",
+    "steps": [
+      ["App", "Sign in as the driver, choose truck v3036, switch Ready on", "Dashboard shows VIN v3036 and Ready = On"],
+      ["Web", "Sign in as the agent and create a Basic Repair job: client Honda, program HOT UAT Program, customer [AUTO-TEST] Jaidee, Thai incident address (ถ.ราชดำริ หน้าสวนลุมพินี, ปทุมวัน, กทม.), licence 1กข 2345, location note and service condition; Save", "Job number is issued; the values are kept after reload"],
+      ["Web", "Set the incident pin on the map at 13.7334, 100.5408", "Incident location is saved"],
+      ["Web", "Assign truck v3036 and click Dispatch", "Truck and dispatch time are saved; status stays OPEN"],
+      ["App", "Wait on the dashboard without refreshing", "A job card with the same job number appears, more than 2 km away (9.70 km on 20 Oct)"],
+      ["App", "Open the job and tap Take Job", "Job is accepted; the portal shows the accept time and status ONPROCESS"],
+      ["App", "Drive ~5 km by road to the customer (GPS point every ~150 m: Victory Monument - Phaya Thai - Rama I - Ratchadamri)", "App follows the route; the portal road distance is more than 2 km"],
+      ["App", "Tap Arrived, enter odometer 48215, Confirm", "Portal shows the reach time and mileage 48215"],
+      ["App", "Take a photo with the camera and tap Done", "Photo is listed in the app; portal photo count is 1"],
+      ["App", "Tap Finish job and confirm", "Completed screen is shown"],
+      ["Web", "Reload the job", "Status CLOSED; request < accept < reach < complete; ACCEPT, REACH and COMPLETE rows stamped by truck v3036 with GPS; KPI Pass"]
+    ]
+  },
+  "TC-23-003": {
+    "title": "E2E-02 Announcement: admin publishes an announcement on the web; drivers see it in the app; deactivating it removes it from the app",
+    "priority": "P1",
+    "pre": "Android emulator with the UAT provider app, driver signed in; administrator (R0001) login on the RSA portal - administrator submits are approved at once. Announcements cannot be targeted: every UAT provider app sees it, so it is always deactivated at the end",
+    "data": "Title \"[AUTO-TEST] Road closure Rama IV <timestamp>\", priority High, content \"Rama IV Rd closed between Sam Yan and Lumphini 22:00-05:00. Use Rama I or Sukhumvit.\", effective today, expiry tomorrow",
+    "spec": "ai-workshop/roadside-web-app/tests/TC-23-003-announcement.spec.ts",
+    "status": "Automated - written 22 Oct 2026, first run pending",
+    "steps": [
+      ["App", "Driver is signed in, on the dashboard", "Dashboard is shown"],
+      ["Web", "Sign in as administrator; Announcements > Create New: title, priority High, content, effective today, expiry tomorrow, Active; click Submit & Publish", "Announcement is saved and approved at once"],
+      ["Web", "Open the announcement list", "Row shows priority High, Active, status Approved"],
+      ["Server", "Read the feed the app uses: GET api/pmws/announcements", "Feed contains the new announcement"],
+      ["App", "Open the News tab and tap the card", "Card shows the title; the content expands"],
+      ["App", "Open Home", "High-priority banner shows the title"],
+      ["Web", "Edit the announcement, untick Active, Update", "Feed no longer contains it"],
+      ["App", "Re-open the News tab", "The announcement is gone"]
+    ]
+  }
+}
